@@ -13,7 +13,7 @@ public class VentanaPrincipal extends JFrame{
 		setLocationRelativeTo(null);
 		
 		System.out.println("soy muy guapo");
-		System.out.println("Soy aun más guapo");
+		System.out.println("soy aun más guapo");
 		
 		
 		setVisible(true);
