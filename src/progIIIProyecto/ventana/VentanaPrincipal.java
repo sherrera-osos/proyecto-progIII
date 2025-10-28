@@ -12,6 +12,7 @@ public class VentanaPrincipal extends JFrame{
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		
+		System.out.println("soy muy guapo");
 		
 		
 		setVisible(true);
