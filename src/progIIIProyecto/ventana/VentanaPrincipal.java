@@ -53,7 +53,7 @@ public class VentanaPrincipal extends JFrame{
 		
 		
 		public ventanaConJuegos (JFrame previo) {
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			this.previo = previo;
 			addWindowListener(this);
 			setTitle("VentanaPrincipal con Juegos"); //Provisional (Asier)
@@ -214,6 +214,7 @@ public class VentanaPrincipal extends JFrame{
 				this.dispose();
 			}
 		}
+		
 		@Override
 		public void windowClosed(WindowEvent e) {
 			previo.setVisible(true);
