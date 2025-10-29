@@ -72,7 +72,7 @@ public class VentanaPrincipal extends JFrame{
 		setLayout(new BorderLayout());
 		
 		JLabel titulo = new JLabel("NOMBRE"); //Obviamente Provisional (Asier)
-		titulo.setFont(new Font("Arial", Font.BOLD,30));
+		titulo.setFont(new Font("Papyrus", Font.BOLD,30));
 		
 		JPanel panelTitulo = new JPanel();
 		panelTitulo.add(titulo, BorderLayout.CENTER);
