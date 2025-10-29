@@ -91,7 +91,7 @@ public class VentanaPrincipal extends JFrame{
                // se crea la ventana donde iran los juegos pasando la referencia a la actual (Asier)
                new ventanaConJuegos(VentanaPrincipal.this);
               
-               // en el futuro se podria añadir una funcionalidad para meter el usuario después de darle a este boton
+               // en el futuro se podria añadir una funcionalidad para meter el usuario después de darle a este boton (Asier)
 				
 			}
 		});
