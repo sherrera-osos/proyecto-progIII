@@ -1,6 +1,7 @@
 package progIIIProyecto.ventana;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,24 +64,42 @@ public class VentanaPrincipal extends JFrame{
 		
 	}
 	
+	
+	
+	
 	public VentanaPrincipal() {
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setTitle("Proyecto ProgIII"); //NOMBRE PROVISIONAL (Samuel)
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		
-		setLayout(new BorderLayout());
+		//setLayout(new BorderLayout());
+		String imagePath = "/imagenes/fondoo.jpg";
+		PanelConFondo panelConFondo = new PanelConFondo(imagePath);
 		
-		JLabel titulo = new JLabel("NOMBRE"); //Obviamente Provisional (Asier)
-		titulo.setFont(new Font("Papyrus", Font.BOLD,30));
+		panelConFondo.setLayout(new BorderLayout());
+		//panelConFondo.setBackground(Color.CYAN); PARA VERIFICAR QUE SI SE ESTABA MOSTRANDO EL PANEL
+		
+		setContentPane(panelConFondo);
+		
+		
+		
+		
+		JLabel titulo = new JLabel("16-BITS GAMES");
+		titulo.setFont(new Font("Impact", Font.BOLD, 48));
+		titulo.setForeground(Color.WHITE);
+		
 		
 		JPanel panelTitulo = new JPanel();
+		panelTitulo.setOpaque(false);
 		panelTitulo.add(titulo, BorderLayout.CENTER);
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		add(panelTitulo, BorderLayout.CENTER);
+		panelConFondo.add(panelTitulo, BorderLayout.CENTER);
+		
 		
 		JButton botonEntrar = new JButton("Entrar");
+		botonEntrar.setOpaque(false);
 		
 		botonEntrar.addActionListener(new ActionListener() {
 			
@@ -98,7 +117,7 @@ public class VentanaPrincipal extends JFrame{
 		
 		JPanel panelBotonEntrar = new JPanel();
 		panelBotonEntrar.add(botonEntrar);
-		add(panelBotonEntrar, BorderLayout.SOUTH);
+		panelConFondo.add(panelBotonEntrar, BorderLayout.SOUTH);
 		
 		// Confirmación para salir (Asier)
 		
