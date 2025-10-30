@@ -293,6 +293,9 @@ public class VentanaPrincipal extends JFrame{
            }
 		});
 		setVisible(true);
+		//Tetas
+		//culo
+		System.out.println("Hola");
 	}
 }
 
