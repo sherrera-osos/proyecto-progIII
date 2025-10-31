@@ -16,7 +16,9 @@ import javax.swing.SwingConstants;
 
 public class VentanaPrincipal extends JFrame{
 	private static final long serialVersionUID = 1L;
-	
+	private JButton btnUsuario;
+	private JPanel pAbajo;
+	private JFrame ventanaActual;
 	public VentanaPrincipal() {
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setTitle("Proyecto ProgIII"); //NOMBRE PROVISIONAL (Samuel)
@@ -77,9 +79,32 @@ public class VentanaPrincipal extends JFrame{
                }        
            }
 		});
+		
+		
+		pAbajo = new JPanel();
+		getContentPane().add(pAbajo,BorderLayout.SOUTH);
+		
+		btnUsuario = new JButton("Usuario");
+		pAbajo.add(btnUsuario);
+		pAbajo.add(botonEntrar);
+		
+//		btnUsuario.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
+		
+		btnUsuario.addActionListener((e)->{
+			ventanaActual.setVisible(false);
+			new VentanaUsuario(ventanaActual);
+		});
+		
+		
 		setVisible(true);
-		//Tetas
-		//culo
+		
 		System.out.println("Hola");
 	}
 }
