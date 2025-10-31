@@ -70,7 +70,7 @@ public class VentanaUsuario extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ventanaActual.setVisible(false);
-				// new VentanaRegistrate(ventanaActual);
+				new VentanaRegistrate(ventanaActual);
 			}
 		});
 		

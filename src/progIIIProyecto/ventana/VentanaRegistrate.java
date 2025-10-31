@@ -15,7 +15,7 @@ public class VentanaRegistrate extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblNombreUsuario, lblContraseña, lblContraseñaRepetida, lblCorreo;
+	private JLabel lblNombreUsuario, lblContraseña, lblContraseñaRepetida, lblCorreo, lblTitulo;
 	private JPanel pArriba, pCentro, pAbajo;
 	private JTextField txtNombre,txtCorreo;
 	private JPasswordField txtContraseña, txtContraseñaRepetida;
@@ -37,10 +37,20 @@ public class VentanaRegistrate extends JFrame {
 		pCentro = new JPanel();
 		getContentPane().add(pCentro,BorderLayout.CENTER);
 		
+		lblTitulo = new JLabel("Requisitos pa registrate");
+		pArriba.add(lblTitulo);
+		
 		
 		lblNombreUsuario = new JLabel("Introduce tu nombre de usuario: ");
 		txtNombre = new JTextField(5);
-
+		lblContraseña = new JLabel("Introduce tu contraseña");
+		txtContraseña = new JPasswordField(5);
+		lblContraseñaRepetida = new JLabel("Vuelve a introducir tu contraseña");
+		txtContraseñaRepetida = new JPasswordField(5);
+		
+		
+		btnVolver  =new JButton("Volver a la pagina de iniciar sesion");
+		pAbajo.add(btnVolver);
 
 		setVisible(true);
 	}
