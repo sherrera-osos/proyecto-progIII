@@ -47,14 +47,16 @@ public class VentanaUsuario extends JFrame {
 		lblIniciarSesion = new JLabel("Inicia sesion");
 		
 		txtContraseña = new JPasswordField(10);
-		txtnombreUsuario = new JTextField(10);
+		txtnombreUsuario = new JTextField(5);
 		txtcorreo = new JTextField(10);
 		
 		btnVolver = new JButton("Volver a la pagina de inicio");
 		btnIniciarSesion  =new JButton("Iniciae sesion");
-		btnRegistrate = new JButton("Si no tienes una cuenta ya, REGISTRATE!");
+		btnRegistrate = new JButton("!REGISTRATE!");
 		
 		pAbajo.add(btnVolver);
+		pAbajo.add(btnRegistrate);
+		
 		pArriba.add(lblIniciarSesion);
 		
 		pCentro.add(lblNombre);
@@ -78,7 +80,8 @@ public class VentanaUsuario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				ventanaActual.setVisible(false);
+				ventanaAnterior.setVisible(true);
 			}
 		});
 		

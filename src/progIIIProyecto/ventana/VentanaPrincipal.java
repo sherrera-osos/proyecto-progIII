@@ -20,6 +20,7 @@ public class VentanaPrincipal extends JFrame{
 	private JPanel pAbajo;
 	private JFrame ventanaActual;
 	public VentanaPrincipal() {
+		ventanaActual = this;
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setTitle("Proyecto ProgIII"); //NOMBRE PROVISIONAL (Samuel)
 		setSize(800, 600);
