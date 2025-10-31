@@ -19,7 +19,7 @@ public class VentanaUsuario extends JFrame {
 	private JButton btnRegistrate, btnVolver, btnIniciarSesion;
 	private JPanel pCentro,pAbajo,pArriba;
 	private JFrame ventanaActual,ventanaAnterior;
-	private JTextField txtnombreUsuario, txtcorreo;
+	private JTextField txtnombreUsuario;
 	private JPasswordField txtContraseña;
 	private JLabel lblIniciarSesion, lblNombre, lblContrasenia;
 	
@@ -27,6 +27,7 @@ public class VentanaUsuario extends JFrame {
 		ventanaActual = this;
 		ventanaAnterior = va;
 		
+		setTitle("Panatalla de usuario");
 		setBounds(300,200,400,400);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
@@ -48,7 +49,6 @@ public class VentanaUsuario extends JFrame {
 		
 		txtContraseña = new JPasswordField(10);
 		txtnombreUsuario = new JTextField(5);
-		txtcorreo = new JTextField(10);
 		
 		btnVolver = new JButton("Volver a la pagina de inicio");
 		btnIniciarSesion  =new JButton("Iniciae sesion");
