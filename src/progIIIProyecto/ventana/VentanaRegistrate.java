@@ -32,13 +32,14 @@ public class VentanaRegistrate extends JFrame {
 		
 		pAbajo = new JPanel();
 		getContentPane().add(pAbajo,BorderLayout.SOUTH);
-		
 		pArriba = new JPanel();
 		getContentPane().add(pArriba,BorderLayout.NORTH);
-		
-		
 		pCentro = new JPanel();
 		getContentPane().add(pCentro,BorderLayout.CENTER);
+		
+		
+		lblNombreUsuario = new JLabel("Introduce tu nombre de usuario: ");
+		txtNombre = new JTextField(5);
 
 
 		setVisible(true);
