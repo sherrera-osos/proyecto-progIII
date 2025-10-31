@@ -19,7 +19,7 @@ public class VentanaRegistrate extends JFrame {
 	private JPanel pArriba, pCentro, pAbajo;
 	private JTextField txtNombre,txtCorreo;
 	private JPasswordField txtContraseña, txtContraseñaRepetida;
-	private JButton btnVolver;
+	private JButton btnVolver, btnCrearUsuario;
 	private JFrame ventanaActual, ventanaAnterior;
 	
 	public VentanaRegistrate(JFrame va) {
@@ -42,16 +42,40 @@ public class VentanaRegistrate extends JFrame {
 		
 		
 		lblNombreUsuario = new JLabel("Introduce tu nombre de usuario: ");
-		txtNombre = new JTextField(5);
+		txtNombre = new JTextField(38);
 		lblContraseña = new JLabel("Introduce tu contraseña");
-		txtContraseña = new JPasswordField(5);
+		txtContraseña = new JPasswordField(38);
 		lblContraseñaRepetida = new JLabel("Vuelve a introducir tu contraseña");
-		txtContraseñaRepetida = new JPasswordField(5);
+		txtContraseñaRepetida = new JPasswordField(38);
+		lblCorreo = new JLabel("Introduce tu correo electronico");
+		txtCorreo = new JTextField(38);
+		btnCrearUsuario = new JButton("Crear Usuario");
 		
-		
+		pCentro.add(lblNombreUsuario);
+		pCentro.add(txtNombre);
+		pCentro.add(lblContraseña);
+		pCentro.add(txtContraseña);
+		pCentro.add(lblContraseñaRepetida);
+		pCentro.add(txtContraseñaRepetida);
+		pCentro.add(lblCorreo);
+		pCentro.add(txtCorreo);
+		pCentro.add(btnCrearUsuario);
+
+
 		btnVolver  =new JButton("Volver a la pagina de iniciar sesion");
 		pAbajo.add(btnVolver);
 
+		
+		btnVolver.addActionListener((e)->{
+			ventanaActual.setVisible(false);
+			ventanaAnterior.setVisible(true);
+		});
+		
+		btnCrearUsuario.addActionListener((e)->{
+			
+			
+		});
+		
 		setVisible(true);
 	}
 }
