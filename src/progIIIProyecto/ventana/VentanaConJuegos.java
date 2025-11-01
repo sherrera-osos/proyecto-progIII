@@ -48,7 +48,7 @@ public class VentanaConJuegos extends JFrame implements WindowListener {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.previo = previo;
 		addWindowListener(this);
-		setTitle("VentanaPrincipal con Juegos"); //Provisional (Asier)
+		setTitle("VentanaPrincipal con Juegos"); //Provisional 
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		

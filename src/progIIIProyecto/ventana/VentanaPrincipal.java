@@ -22,7 +22,7 @@ public class VentanaPrincipal extends JFrame{
 	public VentanaPrincipal() {
 		ventanaActual = this;
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setTitle("Proyecto ProgIII"); //NOMBRE PROVISIONAL (Samuel)
+		setTitle("Proyecto ProgIII"); //NOMBRE PROVISIONAL 
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 
@@ -57,12 +57,12 @@ public class VentanaPrincipal extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-               // se hace invisible la ventana actual (Asier)
+               // se hace invisible la ventana actual 
                setVisible(false);
-               // se crea la ventana donde iran los juegos pasando la referencia a la actual (Asier)
+               // se crea la ventana donde iran los juegos pasando la referencia a la actual
                new VentanaConJuegos(VentanaPrincipal.this);
               
-               // en el futuro se podria añadir una funcionalidad para meter el usuario después de darle a este boton (Asier)
+               // en el futuro se podria añadir una funcionalidad para meter el usuario después de darle a este boton
 			}
 		});
 		
@@ -70,7 +70,7 @@ public class VentanaPrincipal extends JFrame{
 		panelBotonEntrar.add(botonEntrar);
 		panelConFondo.add(panelBotonEntrar, BorderLayout.SOUTH);
 		
-		// Confirmación para salir (Asier)
+		// Confirmación para salir 
 		
 		addWindowListener(new WindowAdapter() {
            public void windowClosing(WindowEvent e) {
