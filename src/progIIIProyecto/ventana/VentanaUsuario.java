@@ -9,6 +9,7 @@ import javax.sound.midi.SysexMessage;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -36,7 +37,7 @@ public class VentanaUsuario extends JFrame {
 		getContentPane().add(pAbajo,BorderLayout.SOUTH);
 		
 		pCentro = new JPanel();
-		pCentro.setLayout(new GridLayout(2,2,10,10));
+		pCentro.setLayout(new GridLayout(3,2,5,5));
 		getContentPane().add(pCentro,BorderLayout.CENTER);
 		
 		pArriba = new JPanel();
@@ -51,7 +52,7 @@ public class VentanaUsuario extends JFrame {
 		txtnombreUsuario = new JTextField(5);
 		
 		btnVolver = new JButton("Volver a la pagina de inicio");
-		btnIniciarSesion  =new JButton("Iniciae sesion");
+		btnIniciarSesion  =new JButton("Iniciar sesion");
 		btnRegistrate = new JButton("!REGISTRATE!");
 		
 		pAbajo.add(btnVolver);
@@ -63,7 +64,35 @@ public class VentanaUsuario extends JFrame {
 		pCentro.add(txtnombreUsuario);
 		pCentro.add(lblContrasenia);
 		pCentro.add(txtContraseña);
+		pCentro.add(btnIniciarSesion);
+
 		
+		
+		
+		btnIniciarSesion.addActionListener((e)->{
+			String nombre = txtnombreUsuario.getText();
+			String contraseña = txtContraseña.getText();
+			
+			boolean datos = true;
+
+			if (nombre.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Te falta poner tu nombre de usuario","Error", JOptionPane.ERROR_MESSAGE);
+				datos = false;
+
+			}
+			if (contraseña.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Te falta poner tu contraseña","Error", JOptionPane.ERROR_MESSAGE);
+				datos = false;
+
+			}
+			
+			if (datos) {
+				JOptionPane.showMessageDialog(null, "Bienvenido "+ nombre);
+				ventanaActual.setVisible(false);
+				ventanaAnterior.setVisible(true);
+			}
+			
+		});
 		
 		btnRegistrate.addActionListener(new ActionListener() {
 			

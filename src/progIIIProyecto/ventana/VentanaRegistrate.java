@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -72,7 +73,40 @@ public class VentanaRegistrate extends JFrame {
 		});
 		
 		btnCrearUsuario.addActionListener((e)->{
+			String nombre = txtNombre.getText();
+			String correo = txtCorreo.getText();
+			String c1 = txtContraseña.getText();
+			String c2 = txtContraseñaRepetida.getText();
 			
+			boolean datos = true;
+			
+			if (nombre.isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir el nombre de usuario.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				datos = false;
+			}
+			if (correo.isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir el correo de usuario.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				datos = false;
+
+			}
+			if (c1.isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir la contraseña.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				datos = false;
+
+			}
+			if (c2.isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir de nuevo la contraseña.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				datos = false;
+
+			}
+			
+			if (datos) {
+				JOptionPane.showMessageDialog(null, "!Te has creado un nuevo usuario en PROYECTO!");
+				
+				ventanaActual.setVisible(false);
+				ventanaAnterior.setVisible(true);
+			}
+						
 			
 		});
 		
