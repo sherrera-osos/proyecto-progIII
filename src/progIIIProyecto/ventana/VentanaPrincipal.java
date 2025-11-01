@@ -105,8 +105,6 @@ public class VentanaPrincipal extends JFrame{
 		
 		
 		setVisible(true);
-		
-		System.out.println("Hola");
 	}
 }
 
