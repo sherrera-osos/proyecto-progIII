@@ -41,9 +41,8 @@ public class VentanaConJuegos extends JFrame implements WindowListener {
 
 	private JList<String> listaSugerencias; 
 	private JScrollPane scrollListaSugerencias; 
-	private DefaultListModel<String> modeloLista; 
-	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","Juego4","Juego5","Juego6","Juego7","Juego8","Juego9","Juego10"};
-	private String[] listaIconos = {"/imagenes/serpiente.jpg","/imagenes/buscaminas.png","/imagenes/blackjack.jpg","","","","","","",""};
+	private DefaultListModel<String> modeloLista;
+	private ArrayList<String> todosLosNombres;
 	
 	public VentanaConJuegos (JFrame previo) {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -79,6 +78,7 @@ public class VentanaConJuegos extends JFrame implements WindowListener {
 		panelJuegos.setBackground(moradoOscuro);	
 		
 		listaBotones = new ArrayList<>();
+		todosLosNombres = new ArrayList<>(); 
 
 		ActionListener listenerJuego = new ActionListener() {
 			@Override
@@ -88,15 +88,75 @@ public class VentanaConJuegos extends JFrame implements WindowListener {
 			}
 		};
 		
-		for (int i = 0; i<todosLosNombres.length; i++) {
-			ImageIcon icono = new ImageIcon(VentanaConJuegos.class.getResource(listaIconos[i]));
-			JButton botonJuego = new JButton(icono);
-			botonJuego.setToolTipText(todosLosNombres[i]);
-			botonJuego.addActionListener(listenerJuego);
-			listaBotones.add(botonJuego);
-			panelJuegos.add(botonJuego);
-			
-		}
+		ImageIcon icono1 = new ImageIcon(VentanaConJuegos.class.getResource("/imagenes/serpiente.jpg"));
+		JButton botonJuego1 = new JButton("SERPIENTE",icono1);
+		botonJuego1.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego1);
+		todosLosNombres.add(botonJuego1.getText());
+		panelJuegos.add(botonJuego1);
+		
+		//Botón del juego buscaminas
+		ImageIcon icono2 = new ImageIcon(VentanaConJuegos.class.getResource("/imagenes/buscaminas.png"));
+		JButton botonJuego2 = new JButton("BUSCAMINAS",icono2);
+		botonJuego2.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego2);
+		todosLosNombres.add(botonJuego2.getText());
+		panelJuegos.add(botonJuego2);
+		
+		//Botón del juego blackjack
+		ImageIcon icono3 = new ImageIcon(VentanaConJuegos.class.getResource("/imagenes/blackjack.jpg"));
+		JButton botonJuego3 = new JButton("BLACKJACK", icono3);
+		botonJuego3.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego3);
+		todosLosNombres.add(botonJuego3.getText());
+		panelJuegos.add(botonJuego3);
+
+		//Botón del juego del tren
+		ImageIcon icono4 = new ImageIcon(VentanaConJuegos.class.getResource("/imagenes/tren.jpg"));
+		Image imagen4 = icono4.getImage();
+		Image imagenEscalada4 = imagen4.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada4);
+		JButton botonJuego4 = new JButton("TREN", iconoEscalado);
+		botonJuego4.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego4);
+		todosLosNombres.add(botonJuego4.getText());
+		panelJuegos.add(botonJuego4);
+		
+		JButton botonJuego5 = new JButton("Juego 5");
+		botonJuego5.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego5);
+		todosLosNombres.add(botonJuego5.getText());
+		panelJuegos.add(botonJuego5);
+		
+		JButton botonJuego6 = new JButton("Juego 6");
+		botonJuego6.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego6);
+		todosLosNombres.add(botonJuego6.getText());
+		panelJuegos.add(botonJuego6);
+		
+		JButton botonJuego7 = new JButton("Juego 7");
+		botonJuego7.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego7);
+		todosLosNombres.add(botonJuego7.getText());
+		panelJuegos.add(botonJuego7);
+		
+		JButton botonJuego8 = new JButton("Juego 8");
+		botonJuego8.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego8);
+		todosLosNombres.add(botonJuego8.getText());
+		panelJuegos.add(botonJuego8);
+		
+		JButton botonJuego9 = new JButton("Juego 9");
+		botonJuego9.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego9);
+		todosLosNombres.add(botonJuego9.getText());
+		panelJuegos.add(botonJuego9);
+		
+		JButton botonJuego10 = new JButton("Juego 10");
+		botonJuego10.addActionListener(listenerJuego);
+		listaBotones.add(botonJuego10);
+		todosLosNombres.add(botonJuego10.getText());
+		panelJuegos.add(botonJuego10);
 		
 		add(panelJuegos, BorderLayout.CENTER);
 		
