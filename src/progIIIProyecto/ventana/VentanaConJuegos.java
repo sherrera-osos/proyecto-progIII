@@ -138,8 +138,13 @@ public class VentanaConJuegos extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new VentanaCambiarApariencia(VentanaConJuegos.this);
-				
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaCambiarApariencia(VentanaConJuegos.this);				
+					}
+				});
 			}
 		});
 		
@@ -150,8 +155,13 @@ public class VentanaConJuegos extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new VentanaInformacion(VentanaConJuegos.this);
-				
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaInformacion(VentanaConJuegos.this);
+					}
+				});	
 			}
 		});
 		
@@ -180,8 +190,13 @@ public class VentanaConJuegos extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new VentanaUsuario(VentanaConJuegos.this);
-				
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaUsuario(VentanaConJuegos.this);	
+					}
+				});
 			}
 		});
 		
@@ -192,8 +207,13 @@ public class VentanaConJuegos extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new VentanaRegistrate(VentanaConJuegos.this);
-				
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaRegistrate(VentanaConJuegos.this);
+					}
+				});
 			}
 		});
 		
@@ -206,7 +226,14 @@ public class VentanaConJuegos extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new VentanaPerfil(VentanaConJuegos.this);
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaPerfil(VentanaConJuegos.this);
+					}
+				});
+				
 			}
 		});
 		itemVerPerfil.setEnabled(true); //Cuando tengamos el sistema de usuarios, este item estara desactivado a menos que hayas metido un usuario

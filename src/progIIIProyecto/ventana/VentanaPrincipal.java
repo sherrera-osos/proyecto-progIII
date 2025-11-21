@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class VentanaPrincipal extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -60,8 +61,14 @@ public class VentanaPrincipal extends JFrame{
                // se hace invisible la ventana actual 
                setVisible(false);
                // se crea la ventana donde iran los juegos pasando la referencia a la actual
-               new VentanaConJuegos(VentanaPrincipal.this);
-              
+               SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaConJuegos(VentanaPrincipal.this);
+					}
+				});
+                         
                // en el futuro se podria añadir una funcionalidad para meter el usuario después de darle a este boton
 			}
 		});
@@ -100,7 +107,13 @@ public class VentanaPrincipal extends JFrame{
 		
 		btnUsuario.addActionListener((e)->{
 			ventanaActual.setVisible(false);
-			new VentanaUsuario(ventanaActual);
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					new VentanaUsuario(ventanaActual);
+				}
+			});
 		});
 		
 		

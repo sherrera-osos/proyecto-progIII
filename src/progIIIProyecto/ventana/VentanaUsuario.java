@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class VentanaUsuario extends JFrame {
 
@@ -99,7 +100,13 @@ public class VentanaUsuario extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ventanaActual.setVisible(false);
-				new VentanaRegistrate(ventanaActual);
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaRegistrate(ventanaActual);
+					}
+				});
 			}
 		});
 		
