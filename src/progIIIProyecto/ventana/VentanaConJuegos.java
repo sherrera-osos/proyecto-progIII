@@ -3,14 +3,12 @@ package progIIIProyecto.ventana;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -20,6 +18,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -31,15 +32,10 @@ import javax.swing.event.DocumentListener;
 
 public class VentanaConJuegos extends JFrame{
 	private static final long serialVersionUID = 1L;
-	
-	private JFrame previo;
-	
-
 	private JPanel panelJuegos;
 	private JTextField campoBusqueda;
 	private ArrayList<JButton> listaBotones; 
 	
-
 	private JList<String> listaSugerencias; 
 	private JScrollPane scrollListaSugerencias; 
 	private DefaultListModel<String> modeloLista;
@@ -48,7 +44,6 @@ public class VentanaConJuegos extends JFrame{
 	
 	public VentanaConJuegos (JFrame previo) {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.previo = previo;
 		setTitle("VentanaPrincipal con Juegos"); //Provisional 
 		setSize(800, 600);
 		setLocationRelativeTo(null);
@@ -87,6 +82,8 @@ public class VentanaConJuegos extends JFrame{
 				JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + b.getText());
 			}
 		};
+		
+		// CONSTRUCTOR DE BOTONES
 		
 		for (int i = 0; i<todosLosNombres.length; i++) {
 			ImageIcon icono = new ImageIcon(VentanaConJuegos.class.getResource(listaIconos[i]));
@@ -128,6 +125,110 @@ public class VentanaConJuegos extends JFrame{
 				}
 			}
 		});
+		
+		// MENU
+		
+		JMenuBar barraMenu = new JMenuBar();
+		setJMenuBar(barraMenu);
+		
+		JMenu menuConfiguracion = new JMenu("Configuración");
+		
+		JMenuItem itemCambiarApariencia = new JMenuItem("Cambiar apariencia");
+		itemCambiarApariencia.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaCambiarApariencia(VentanaConJuegos.this);
+				
+			}
+		});
+		
+		menuConfiguracion.add(itemCambiarApariencia);
+		
+		JMenuItem itemInformacion = new JMenuItem("Información del programa");
+		itemInformacion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaInformacion(VentanaConJuegos.this);
+				
+			}
+		});
+		
+		menuConfiguracion.add(itemInformacion);
+		
+		menuConfiguracion.addSeparator();
+		
+		JMenuItem itemSalir = new JMenuItem("Salir");
+		itemSalir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int response = JOptionPane.showConfirmDialog(VentanaConJuegos.this, "¿Deseas salir a la página principal?", "Salir", JOptionPane.YES_NO_OPTION); //Provisional (Asier)
+				if (response == JOptionPane.YES_OPTION) {
+					VentanaConJuegos.this.dispose();
+				}
+			}
+		});
+		
+		menuConfiguracion.add(itemSalir);
+		
+		JMenu menuUsuario = new JMenu("Usuario");
+		
+		JMenuItem itemIniciarSesion = new JMenuItem("Iniciar sesión");
+		itemIniciarSesion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaUsuario(VentanaConJuegos.this);
+				
+			}
+		});
+		
+		menuUsuario.add(itemIniciarSesion);
+		
+		JMenuItem itemRegistrarse = new JMenuItem("Registrarse");
+		itemRegistrarse.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaRegistrate(VentanaConJuegos.this);
+				
+			}
+		});
+		
+		menuUsuario.add(itemRegistrarse);
+		
+		menuUsuario.addSeparator();
+		
+		JMenuItem itemVerPerfil = new JMenuItem("Ver perfil");
+		itemVerPerfil.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaPerfil(VentanaConJuegos.this);
+			}
+		});
+		itemVerPerfil.setEnabled(true); //Cuando tengamos el sistema de usuarios, este item estara desactivado a menos que hayas metido un usuario
+		
+		menuUsuario.add(itemVerPerfil);
+		
+		JMenu menuEstadisticas = new JMenu("Estadísticas");
+		
+		for (int i = 0; i<todosLosNombres.length; i++) {
+			JMenuItem itemEstadisticasJuego = new JMenuItem(todosLosNombres[i]);
+			menuEstadisticas.add(itemEstadisticasJuego);
+		}
+		
+		JMenu menuLogros = new JMenu("Logros");
+		menuLogros.setEnabled(false); //Se activara si metes tu usuario
+		
+		barraMenu.add(menuConfiguracion);
+		barraMenu.add(menuUsuario);
+		barraMenu.add(menuEstadisticas);
+		barraMenu.add(menuLogros);
+		
+		// CERRADO DE VENTANA
 		
 		addWindowListener(new WindowAdapter() {
 			
