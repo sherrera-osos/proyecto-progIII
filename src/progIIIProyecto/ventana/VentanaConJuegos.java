@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -243,7 +242,29 @@ public class VentanaConJuegos extends JFrame{
 		JMenu menuEstadisticas = new JMenu("Estadísticas");
 		
 		for (int i = 0; i<todosLosNombres.length; i++) {
+			final int ii = i;
 			JMenuItem itemEstadisticasJuego = new JMenuItem(todosLosNombres[i]);
+			itemEstadisticasJuego.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							switch (ii) {
+							case 0:
+								new VentanaEjemploEstadisticas(VentanaConJuegos.this);
+								break;
+							default:
+								System.out.println("No hay estadísticas para este juego");
+							}
+							
+						}
+					});
+					
+				}
+			});
 			menuEstadisticas.add(itemEstadisticasJuego);
 		}
 		
@@ -270,7 +291,7 @@ public class VentanaConJuegos extends JFrame{
 				previo.setVisible(true);
 			}
 		});
-		
+	
 		setVisible(true);
 	}
 		
