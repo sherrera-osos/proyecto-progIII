@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -92,6 +93,10 @@ public class VentanaRegistrate extends JFrame {
 		JRadioButton Mas = new JRadioButton("Masculino");
 		JRadioButton Fem = new JRadioButton("Femenino");
 		JRadioButton Otr = new JRadioButton("Otro");
+		ButtonGroup group = new ButtonGroup();
+		group.add(Mas);
+		group.add(Fem);
+		group.add(Otr);
 		gen.add(Mas);
 		gen.add(Fem);
 		gen.add(Otr);

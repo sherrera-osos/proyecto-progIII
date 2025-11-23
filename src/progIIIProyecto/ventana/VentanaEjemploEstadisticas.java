@@ -3,13 +3,16 @@ package progIIIProyecto.ventana;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Collections;
 import java.util.TreeMap;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -19,33 +22,48 @@ public class VentanaEjemploEstadisticas extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private JTable tablaEstadisticas;
+	private TreeMap<Integer, String> mapa;
 	
 	public VentanaEjemploEstadisticas(JFrame previo) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setSize(800, 600);
+		setMinimumSize(new Dimension(880, 460));
 		setTitle("Ventana Ejemplo estadisticas");
 		setLocationRelativeTo(previo);
 		
 		// Esta parte del mapa habra que sacarla de la base de datos
 		
-		String[] listaUsuarios = {"Usuario1","Usuario2","Usuario3","Usuario4","Usuario5"};
-		Integer[] listaPuntos = {100,50,30,20,15};
+		String[] listaUsuarios = {"Usuario1","Usuario2","Usuario3","Usuario4","Usuario5","Usuario6","Usuario7","Usuario8","Usuario9","Usuario10","Usuario11","Usuario12","Usuario13","Usuario14","Usuario15"};
+		Integer[] listaPuntos = {12,50,30,70,15,45,28,12,20,22,37,23,4,45,67,54};
 		
 		TreeMap<Integer, String> mapaUsuariosYPuntos = new TreeMap<Integer, String>(Collections.reverseOrder());
 		for (int i = 0;i<listaUsuarios.length;i++) {
 			mapaUsuariosYPuntos.put(listaPuntos[i], listaUsuarios[i]);
 		}
 		
+		this.mapa = mapaUsuariosYPuntos;
+		
 		// ---
 		
+		initTables();
+		
+		this.pack();
+		setVisible(true);
+	}
+	
+	// función que inicializa la tabla
+	
+	public void initTables() {
+		
 		// Se crea la tabla con el modelo
-		VentanaEjemploEstadisticasModel modelo = new VentanaEjemploEstadisticasModel(mapaUsuariosYPuntos);	
-		JTable tablaEstadisticas = new JTable(modelo);
+		VentanaEjemploEstadisticasModel modelo = new VentanaEjemploEstadisticasModel(this.mapa);	
+		this.tablaEstadisticas = new JTable(modelo);
 		tablaEstadisticas.setGridColor(Color.BLACK);
 		tablaEstadisticas.setRowHeight(40);
-		tablaEstadisticas.getColumnModel().getColumn(0).setPreferredWidth(180);
-		tablaEstadisticas.getColumnModel().getColumn(1).setPreferredWidth(480);
-		tablaEstadisticas.getColumnModel().getColumn(2).setPreferredWidth(200);
+		tablaEstadisticas.getTableHeader().setResizingAllowed(false);
+		tablaEstadisticas.getColumnModel().getColumn(0).setMinWidth(180);
+		tablaEstadisticas.getColumnModel().getColumn(1).setMinWidth(480);
+		tablaEstadisticas.getColumnModel().getColumn(2).setMinWidth(200);
 		
 		// Renderizado personalizado para la cabecera
 		tablaEstadisticas.getTableHeader().setDefaultRenderer(new TableCellRenderer() {
@@ -57,7 +75,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 				
 				result.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				result.setHorizontalAlignment(JLabel.CENTER);
-				result.setFont(new Font("Arial", Font.BOLD, 32));
+				result.setFont(new Font("Arial", Font.BOLD, 28));
 				
 				result.setOpaque(true);
 				return result;
@@ -83,7 +101,11 @@ public class VentanaEjemploEstadisticas extends JFrame{
 					result.setBackground(Color.ORANGE);
 				} else {
 					result.setFont(new Font("Arial", Font.PLAIN, 24));
-					result.setBackground(tablaEstadisticas.getBackground());
+					if (row%2 == 0) {
+						result.setBackground(new Color(210, 227, 219));
+					} else {
+						result.setBackground(new Color(250, 250, 250));
+					}
 				}
 				
 				result.setHorizontalAlignment(JLabel.CENTER);
@@ -93,15 +115,12 @@ public class VentanaEjemploEstadisticas extends JFrame{
 			}
 		});
 		
-		// Añadidos los renderers a la tabla
-		this.add(tablaEstadisticas.getTableHeader(), BorderLayout.NORTH);
-		this.add(tablaEstadisticas, BorderLayout.CENTER);
-		
-		this.pack();
-		setVisible(true);
+		// Añadidos los renderers a un JscrollPane que se añadira a la tabla
+		JScrollPane scrollPaneEstadisticas = new JScrollPane(tablaEstadisticas);
+		this.add(scrollPaneEstadisticas, BorderLayout.CENTER);
 	}
 	
-	// El modelo de la tabla (Dependiendo del juego se pueden añadir más columnas
+	// El modelo de la tabla (Dependiendo del juego se pueden añadir más columnas)
 	
 	public class VentanaEjemploEstadisticasModel extends AbstractTableModel {
 
