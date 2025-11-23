@@ -52,7 +52,7 @@ public class VentanaPrincipal extends JFrame{
 		
 		
 		JButton botonEntrar = new JButton("Entrar");
-		botonEntrar.setOpaque(false);
+		botonEntrar.setBackground(new Color(0, 153, 255));
 		
 		botonEntrar.addActionListener(new ActionListener() {
 			
@@ -90,9 +90,11 @@ public class VentanaPrincipal extends JFrame{
 		
 		
 		pAbajo = new JPanel();
+		pAbajo.setBackground(new Color(75, 0, 130));
 		getContentPane().add(pAbajo,BorderLayout.SOUTH);
 		
 		btnUsuario = new JButton("Usuario");
+		btnUsuario.setBackground(new Color(0, 153, 255));
 		pAbajo.add(btnUsuario);
 		pAbajo.add(botonEntrar);
 		
@@ -106,7 +108,6 @@ public class VentanaPrincipal extends JFrame{
 //		});
 		
 		btnUsuario.addActionListener((e)->{
-			ventanaActual.setVisible(false);
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override

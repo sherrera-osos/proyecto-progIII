@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.sound.midi.SysexMessage;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,22 +14,23 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
 
 public class VentanaUsuario extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JButton btnRegistrate, btnVolver, btnIniciarSesion;
-	private JPanel pCentro,pAbajo,pArriba;
+	private JPanel pData,pAbajo;
 	private JFrame ventanaActual,ventanaAnterior;
 	private JTextField txtnombreUsuario;
 	private JPasswordField txtContraseña;
-	private JLabel lblIniciarSesion, lblNombre, lblContrasenia;
+	private JLabel lblNombre, lblContrasenia;
 	
 	public VentanaUsuario(JFrame va) {
 		ventanaActual = this;
 		ventanaAnterior = va;
 		
-		setTitle("Panatalla de usuario");
+		setTitle("Pantalla de usuario");
 		setBounds(300,200,400,400);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
@@ -37,37 +38,38 @@ public class VentanaUsuario extends JFrame {
 		pAbajo = new JPanel();
 		getContentPane().add(pAbajo,BorderLayout.SOUTH);
 		
-		pCentro = new JPanel();
-		pCentro.setLayout(new GridLayout(3,2,5,5));
-		getContentPane().add(pCentro,BorderLayout.CENTER);
+		//CREAMOS EL PANEL DONDE METEREMOS LOS SUBPANELES CON LA INFO
+		pData = new JPanel();
+		getContentPane().add(pData, BorderLayout.CENTER);
+		//DE ESTA MANERA PERMITE TAMAÑOS DIFERENTES DE SUBPANELES
+		pData.setLayout(new BoxLayout(pData, BoxLayout.Y_AXIS));
 		
-		pArriba = new JPanel();
-		getContentPane().add(pArriba,BorderLayout.NORTH);
+		//-----------------1ER SUB PANEL-------------------
+		JPanel infoP = new JPanel();
+		infoP.setLayout(new GridLayout(3,2));
+		infoP.setBorder(new TitledBorder("Datos Personales"));
 		
+		lblNombre = new JLabel("Introduce tu nombre de usuario");
+		txtnombreUsuario = new JTextField(10);
+		infoP.add(lblNombre);
+		infoP.add(txtnombreUsuario);
 		
 		lblContrasenia = new JLabel("Introduce la contraseña");
-		lblNombre = new JLabel("Introduce tu nombre de usuario");
-		lblIniciarSesion = new JLabel("Inicia sesion");
-		
 		txtContraseña = new JPasswordField(10);
-		txtnombreUsuario = new JTextField(5);
+		infoP.add(lblContrasenia);
+		infoP.add(txtContraseña);
 		
-		btnVolver = new JButton("Volver a la pagina de inicio");
-		btnIniciarSesion  =new JButton("Iniciar sesion");
-		btnRegistrate = new JButton("!REGISTRATE!");
+		btnIniciarSesion  =new JButton("ACCEDER");
+		btnRegistrate = new JButton("REGISTRARSE");
+		infoP.add(btnIniciarSesion);
+		infoP.add(btnRegistrate);
+		pData.add(infoP);
+	
+			
 		
+		
+		btnVolver = new JButton("Volver");
 		pAbajo.add(btnVolver);
-		pAbajo.add(btnRegistrate);
-		
-		pArriba.add(lblIniciarSesion);
-		
-		pCentro.add(lblNombre);
-		pCentro.add(txtnombreUsuario);
-		pCentro.add(lblContrasenia);
-		pCentro.add(txtContraseña);
-		pCentro.add(btnIniciarSesion);
-
-		
 		
 		
 		btnIniciarSesion.addActionListener((e)->{

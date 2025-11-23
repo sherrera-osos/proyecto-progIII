@@ -1,14 +1,19 @@
 package progIIIProyecto.ventana;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 public class VentanaRegistrate extends JFrame {
 
@@ -16,8 +21,8 @@ public class VentanaRegistrate extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblNombreUsuario, lblContraseña, lblContraseñaRepetida, lblCorreo, lblTitulo;
-	private JPanel pArriba, pCentro, pAbajo;
+	private JLabel lblNombreUsuario, lblContraseña, lblContraseñaRepetida, lblCorreo;
+	private JPanel pAbajo;
 	private JTextField txtNombre,txtCorreo;
 	private JPasswordField txtContraseña, txtContraseñaRepetida;
 	private JButton btnVolver, btnCrearUsuario;
@@ -27,45 +32,81 @@ public class VentanaRegistrate extends JFrame {
 		ventanaActual = this;
 		ventanaAnterior = va;
 		
-		setTitle("Ventana de registrase");
+		setTitle("Registrarse");
 		setBounds(300,200,400,400);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
-		pAbajo = new JPanel();
-		getContentPane().add(pAbajo,BorderLayout.SOUTH);
-		pArriba = new JPanel();
-		getContentPane().add(pArriba,BorderLayout.NORTH);
-		pCentro = new JPanel();
-		getContentPane().add(pCentro,BorderLayout.CENTER);
+		JPanel info = new JPanel();
+		info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
 		
-		lblTitulo = new JLabel("Requisitos pa registrate");
-		pArriba.add(lblTitulo);
-		
+		JPanel subInfo = new JPanel();
+		subInfo.setLayout(new GridLayout(4,2));
+		subInfo.setBorder(new TitledBorder("Requisitos para registrarse"));
 		
 		lblNombreUsuario = new JLabel("Introduce tu nombre de usuario: ");
-		txtNombre = new JTextField(38);
+		txtNombre = new JTextField(10);
+		subInfo.add(lblNombreUsuario);
+		subInfo.add(txtNombre);
+
 		lblContraseña = new JLabel("Introduce tu contraseña");
-		txtContraseña = new JPasswordField(38);
-		lblContraseñaRepetida = new JLabel("Vuelve a introducir tu contraseña");
-		txtContraseñaRepetida = new JPasswordField(38);
-		lblCorreo = new JLabel("Introduce tu correo electronico");
-		txtCorreo = new JTextField(38);
-		btnCrearUsuario = new JButton("Crear Usuario");
+		txtContraseña = new JPasswordField(10);
+		subInfo.add(lblContraseña);
+		subInfo.add(txtContraseña);
 		
-		pCentro.add(lblNombreUsuario);
-		pCentro.add(txtNombre);
-		pCentro.add(lblContraseña);
-		pCentro.add(txtContraseña);
-		pCentro.add(lblContraseñaRepetida);
-		pCentro.add(txtContraseñaRepetida);
-		pCentro.add(lblCorreo);
-		pCentro.add(txtCorreo);
-		pCentro.add(btnCrearUsuario);
+		lblContraseñaRepetida = new JLabel("Vuelve a introducir tu contraseña");
+		txtContraseñaRepetida = new JPasswordField(10);
+		subInfo.add(lblContraseñaRepetida);
+		subInfo.add(txtContraseñaRepetida);
+		
+		lblCorreo = new JLabel("Introduce tu correo electronico");
+		txtCorreo = new JTextField(10);
+		btnCrearUsuario = new JButton("Crear Usuario");
+		subInfo.add(lblCorreo);
+		subInfo.add(txtCorreo);
+		
+		info.add(subInfo);
+		
+		//--------PANEL DE INFORMACIÓN ADICIONAL----------
+		JPanel infoA =  new JPanel();
+		infoA.setLayout(new GridLayout(2,2));
+		infoA.setBorder(new TitledBorder("Información Adicional"));
+		
+		JLabel tel = new JLabel("Teléfono");
+		JTextField aTel = new JTextField(10);
+		infoA.add(tel);
+		infoA.add(aTel);
+		
+		JLabel pais = new JLabel("País:");
+		// CREAMOS LAS OPCIONES DEL COMBOBOX
+		String[] opciones = {"Seleccionar País","Colombia","España","Francia","Alemania","Italia","Portugal","Países Bajos","Bélgica","Suiza","Suecia","Noruega","Dinamarca"};
+		JComboBox<String> sel = new JComboBox<String>(opciones);
+		infoA.add(pais);
+		infoA.add(sel);
+		
+		info.add(infoA);
+		
+		//-----------------PANEL DE GÉNERO----------
+		
+		JPanel gen = new JPanel();
+		gen.setBorder(new TitledBorder("Género"));
+		JRadioButton Mas = new JRadioButton("Masculino");
+		JRadioButton Fem = new JRadioButton("Femenino");
+		JRadioButton Otr = new JRadioButton("Otro");
+		gen.add(Mas);
+		gen.add(Fem);
+		gen.add(Otr);
+		
+		info.add(gen);
+
+		getContentPane().add(info, BorderLayout.CENTER);
+		
+		pAbajo = new JPanel();
+		getContentPane().add(pAbajo,BorderLayout.SOUTH);
 
 
-		btnVolver  =new JButton("Volver a la pagina de iniciar sesion");
+		btnVolver  =new JButton("Volver");
 		pAbajo.add(btnVolver);
-
+		pAbajo.add(btnCrearUsuario);
 		
 		btnVolver.addActionListener((e)->{
 			ventanaActual.setVisible(false);

@@ -38,8 +38,8 @@ public class VentanaConJuegos extends JFrame{
 	private JList<String> listaSugerencias; 
 	private JScrollPane scrollListaSugerencias; 
 	private DefaultListModel<String> modeloLista;
-	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","Juego4","Juego5","Juego6","Juego7","Juego8","Juego9","Juego10"};
-	private String[] listaIconos = {"/imagenes/serpiente.jpg","/imagenes/buscaminas.png","/imagenes/blackjack.jpg","","","","","","",""};
+	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","SLOT MACHINE","Juego5","Juego6","Juego7","Juego8","Juego9","Juego10"};
+	private String[] listaIconos = {"/imagenes/serpiente.jpg","/imagenes/buscaminas.png","/imagenes/blackjack.jpg","/imagenes/SlotMachine.jpg","","","","","",""};
 	
 	public VentanaConJuegos (JFrame previo) {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -77,8 +77,27 @@ public class VentanaConJuegos extends JFrame{
 		ActionListener listenerJuego = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Object source = (JButton)e.getSource();
 				JButton b = (JButton)e.getSource();
-				JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + b.getText());
+				
+				if(source==listaBotones.get(3)) {//PROBAREMOS CON EL SLOTMACHINE
+					setVisible(false);
+					
+					//SE CREA LA VENTANA CON EL JUEGO 4
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							new slotMachine(VentanaConJuegos.this);
+							
+						}
+						
+					});
+				}
+				
+				//JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + b.getText());
+			
+				
 			}
 		};
 		
@@ -93,6 +112,7 @@ public class VentanaConJuegos extends JFrame{
 			panelJuegos.add(botonJuego);
 			
 		}
+		
 		
 		add(panelJuegos, BorderLayout.CENTER);
 		
