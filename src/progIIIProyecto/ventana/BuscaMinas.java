@@ -10,12 +10,10 @@ import java.util.Random;
 
 public class BuscaMinas extends JFrame {
 
-    //Constantes del Juego
     private static final int FILAS = 10; 
     private static final int COLUMNAS = 10; 
     private static final int NUM_MINAS = 15; 
 
-    // Estructuras de Datos
     private JButton[][] botones;
     private int[][] tableroLogico;
     private boolean juegoTerminado = false;
@@ -23,7 +21,7 @@ public class BuscaMinas extends JFrame {
     private JFrame ventanaPrevia;
 
     public BuscaMinas(JFrame previo) {
-        super("Buscaminas");
+        super("BuscaMinas");
         this.ventanaPrevia = previo;
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
