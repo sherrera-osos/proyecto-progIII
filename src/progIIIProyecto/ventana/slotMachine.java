@@ -2,8 +2,11 @@ package progIIIProyecto.ventana;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,7 +14,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 public class slotMachine extends JFrame{
@@ -21,7 +29,7 @@ private static final long serialVersionUID = 1L;
 	private JLabel[] slots;
 	private JButton startButton = new JButton("START");
 	private JButton stopButton = new JButton("STOP");
-	private JButton btnVolver = new JButton("VOLVER");
+	private JButton btnVolver = new JButton("EXIT");
 	
 	private ArrayList<String> figuras = new ArrayList<String>();
 	
@@ -49,15 +57,15 @@ private static final long serialVersionUID = 1L;
 
 		
 		//CREAMOS EL PANEL PRINCIPAL, DONDE ESTARÁ LA MAQUINA
-		JPanel panelPrinci = new JPanel(new GridLayout(1, 3, 50, 100));
-		slots = new JLabel[3];
+		JPanel panelPrinci = new JPanel(new GridLayout(2, 3, 40, 15));
+		slots = new JLabel[6];
 		panelPrinci.setBackground(new Color(75, 0, 130));
 		
 		//AÑADIMOS EL PANEL PRINCIPAL A LA VENTANA
 		this.add(panelPrinci);
 		
 		//COMO SON SOLO 3 ESPACIOS DE SLOTS
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 6; i++) {
 			//HACEMOS QUE EL SLOT ELEGIDO SE ACTUALICE
 			slots[i] = new JLabel();
 			Random random = new Random();
@@ -71,11 +79,104 @@ private static final long serialVersionUID = 1L;
 		
 		
 		
+		//CREAMOS UN MENU EN EL CUAL PODREMOS AÑADIR DIFERENTES FUNCIONALIDADES
+		JMenuBar barraMenu = new JMenuBar();
+		barraMenu.setBackground(new Color(75, 0, 130));
+		barraMenu.setBorderPainted(false);//PARA QUE NO APAREZCA EL BORDE
+		this.setJMenuBar(barraMenu);
+		add(barraMenu, BorderLayout.NORTH);
+		
+		
+		JMenu fichero = new JMenu("Opciones");
+		fichero.setForeground(Color.WHITE);
+		barraMenu.add(fichero);
+		
+		JMenuItem verInfo = new JMenuItem("Ver Información");
+		JMenuItem verPuntaje = new JMenuItem("¿Cómo funciona el puntaje?");
+		JMenuItem verEstadisticas = new JMenuItem("Ver Estadisticas");
+		JMenuItem cambiarEstilo = new JMenuItem("Cambiar Estilo / Apariencia");
+		
+		
+		verInfo.addActionListener((e)->{
+			JFrame ventVerInfo = new JFrame();
+			ventVerInfo.setSize(300, 400);
+			ventVerInfo.setLocationRelativeTo(null);
+			ventVerInfo.setTitle("Información sobre La Maquina De La Suerte");
+			
+			JTextArea txt = new JTextArea();
+			txt.setEditable(false);
+			txt.setLineWrap(true);//AJUSTA LA LINEA AUTOMATICO
+			txt.setWrapStyleWord(true);//HACE QUE SEPARE POR PALABRAS Y NO POR CARACTERES
+			txt.setFocusable(false);//NO MUESTRA EL CURSOR
+			txt.setText(
+				    "La máquina cuenta con 6 rodillos independientes, cada uno girando a velocidad constante hasta que presiones STOP."
+		    	    + "Al iniciar un giro con START, cada rodillo comienza a mostrar símbolos aleatorios."
+		    	    + "Cuando detienes la máquina, los 6 rodillos se congelan y forman la jugada final."
+		    	    + "¡Que la suerte esté de tu lado!");
+			
+			txt.setBackground(new Color(61, 0, 76));
+			
+			Font retroFont = new Font("Monospaced", Font.BOLD, 17);
+	        txt.setFont(retroFont);
+			txt.setForeground(new Color(210, 160, 255));
+			ventVerInfo.add(txt, BorderLayout.CENTER);
+			
+			
+			
+			JPanel aPanel = new JPanel();
+			aPanel.setBackground(new Color(61, 0, 76));
+			ventVerInfo.add(aPanel, BorderLayout.SOUTH);
+			
+			JButton btnOk = new JButton("Entendido!");
+			btnOk.setBackground(new Color(61, 0, 76));
+			btnOk.setForeground(Color.WHITE);
+			btnOk.setFont(new Font("Monospaced", Font.BOLD, 20));
+			
+			
+			//LE QUITAMOS EL BORDE AL BOTÓN
+			btnOk.setBorderPainted(false);
+			btnOk.setFocusPainted(false);
+			
+			btnOk.addActionListener((e2)->{
+				ventVerInfo.setVisible(false);
+			});
+			aPanel.add(btnOk);
+			
+			
+			ventVerInfo.setVisible(true);
+		});
+		
+		fichero.add(verInfo);
+		fichero.add(verPuntaje);
+		fichero.add(verEstadisticas);
+		fichero.add(cambiarEstilo);
+		
+		
+		
 		//CREAMOS EL PANEL PARA LOS BOTONES
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(startButton);
 		buttonPanel.add(stopButton);
 		buttonPanel.add(btnVolver);
+		
+		startButton.setBackground(new Color(75, 0, 130));
+		startButton.setFont(new Font("Monospaced", Font.BOLD, 20));
+		startButton.setForeground(Color.WHITE);
+		startButton.setBorderPainted(false);
+		startButton.setFocusPainted(false);
+		
+		stopButton.setBackground(new Color(75, 0, 130));
+		stopButton.setFont(new Font("Monospaced", Font.BOLD, 20));
+		stopButton.setForeground(Color.WHITE);
+		stopButton.setBorderPainted(false);
+		stopButton.setFocusPainted(false);
+		
+		btnVolver.setBackground(new Color(75, 0, 130));
+		btnVolver.setFont(new Font("Monospaced", Font.BOLD, 20));
+		btnVolver.setForeground(Color.WHITE);
+		btnVolver.setBorderPainted(false);
+		btnVolver.setFocusPainted(false);
+		
 		buttonPanel.setBackground(new Color(75, 0, 130));
 		this.add(buttonPanel, BorderLayout.SOUTH);
 		
@@ -108,6 +209,23 @@ private static final long serialVersionUID = 1L;
 			stopGame();
 		});
 		
+		
+		// CERRADO DE VENTANA
+		
+		addWindowListener(new WindowAdapter() {
+			
+			public void windowClosing(WindowEvent e) {
+				int response = JOptionPane.showConfirmDialog(slotMachine.this, "¿Deseas salir a la página anterior?", "Salir", JOptionPane.YES_NO_OPTION);
+				if (response == JOptionPane.YES_OPTION) {
+					slotMachine.this.dispose();
+				}
+			}
+			
+			public void windowClosed(WindowEvent e) {
+				previo.setVisible(true);
+			}
+		});
+		
 		//POR DEFECTO DEJAMOS QUE EL BOTON DE STOP ESTE ACTIVADO
 		stopButton.setEnabled(false);
 		setVisible(true);
@@ -119,7 +237,7 @@ private static final long serialVersionUID = 1L;
 		hilos = new ArrayList<Thread>();
 		
 		//HACEMOS EL FOR PARA LOS 3 HILOS
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 6; i++) {
 			final int num = i;
 			
 			t = new Thread(new Runnable() {
