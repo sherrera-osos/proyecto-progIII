@@ -1,7 +1,7 @@
 package progIIIProyecto.main;
 
 import javax.swing.SwingUtilities;
-
+	
 import progIIIProyecto.ventana.VentanaPrincipal;
 
 public class Main {
