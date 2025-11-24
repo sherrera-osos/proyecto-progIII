@@ -76,28 +76,31 @@ public class VentanaConJuegos extends JFrame{
 
 		ActionListener listenerJuego = new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				Object source = (JButton)e.getSource();
-				JButton b = (JButton)e.getSource();
-				
-				if(source==listaBotones.get(3)) {//PROBAREMOS CON EL SLOTMACHINE
-					setVisible(false);
-					
-					//SE CREA LA VENTANA CON EL JUEGO 4
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							new slotMachine(VentanaConJuegos.this);
-							
-						}
-						
-					});
-				}
-				
-				//JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + b.getText());
+			public void actionPerformed(ActionEvent e) {JButton b = (JButton)e.getSource();
 			
-				
+			// IDENTIFICACIÓN DEL BOTÓN POR ÍNDICE
+			int indiceBoton = listaBotones.indexOf(b);
+			
+			if(indiceBoton == 1) { //BUSCAMINAS
+				setVisible(false);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new BuscaMinas(VentanaConJuegos.this); // Lanza Buscaminas
+					}
+				});
+			} else if(indiceBoton == 3) { // SLOT MACHINE 
+				setVisible(false);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new slotMachine(VentanaConJuegos.this);	
+					}	
+				});
+			} else {
+				// Comportamiento por defecto para otros botones
+				JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + todosLosNombres[indiceBoton]);
+				}
 			}
 		};
 		
