@@ -28,7 +28,6 @@ public class Juego2048  extends JFrame{
 		setBounds(500,200, 400, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		setVisible(true);
 		
 		
 		pNorte = new JPanel(new FlowLayout());
@@ -58,7 +57,8 @@ public class Juego2048  extends JFrame{
 
 			}
 		}
-		
+		setVisible(true);
+
 		
 	}
 	public void actualizarColorCelda(int i, int j) {
@@ -85,8 +85,6 @@ public class Juego2048  extends JFrame{
 	    }
 	}
 
-	
-	
 
 	public static void main(String[] args) {
 		Juego2048 j2028 = new Juego2048();
