@@ -169,7 +169,7 @@ public class BlackJack {
 		
 		System.out.println("Despues de mezclar");
 		System.out.println(mazo);
-		System.out.println("soy dios");
+		
 		
 	}
 
