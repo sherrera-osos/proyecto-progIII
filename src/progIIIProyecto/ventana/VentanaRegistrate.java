@@ -16,6 +16,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import progIIIProyecto.domain.Pais;
+
 public class VentanaRegistrate extends JFrame {
 
 	/**
@@ -79,8 +81,8 @@ public class VentanaRegistrate extends JFrame {
 		
 		JLabel pais = new JLabel("País:");
 		// CREAMOS LAS OPCIONES DEL COMBOBOX
-		String[] opciones = {"Seleccionar País","Colombia","España","Francia","Alemania","Italia","Portugal","Países Bajos","Bélgica","Suiza","Suecia","Noruega","Dinamarca"};
-		JComboBox<String> sel = new JComboBox<String>(opciones);
+		Pais[] opciones = Pais.values();
+		JComboBox<Pais> sel = new JComboBox<Pais>(opciones);
 		infoA.add(pais);
 		infoA.add(sel);
 		
