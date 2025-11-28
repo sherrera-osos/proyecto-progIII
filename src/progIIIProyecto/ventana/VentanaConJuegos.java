@@ -292,7 +292,25 @@ public class VentanaConJuegos extends JFrame{
 		}
 		
 		JMenu menuLogros = new JMenu("Logros");
-		menuLogros.setEnabled(false); //Se activara si metes tu usuario
+		
+		JMenuItem itemLogrosPorJuego = new JMenuItem("Logros por juego");
+		itemLogrosPorJuego.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						new VentanaLogros(VentanaConJuegos.this);
+					}
+				});
+				
+			}
+		});
+		menuLogros.add(itemLogrosPorJuego);
+		
+		menuLogros.setEnabled(true); //Se activara si metes tu usuario
 		
 		barraMenu.add(menuConfiguracion);
 		barraMenu.add(menuUsuario);

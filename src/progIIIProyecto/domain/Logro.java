@@ -27,10 +27,6 @@ public class Logro {
 		return codigo;
 	}
 
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -69,10 +65,6 @@ public class Logro {
 
 	public void setCalidad(Calidad calidad) {
 		this.calidad = calidad;
-	}
-
-	public static int getCodigoNuevo() {
-		return codigoNuevo;
 	}
 
 	@Override

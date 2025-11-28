@@ -27,7 +27,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 	
 	public VentanaEjemploEstadisticas(JFrame previo) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setMinimumSize(new Dimension(880, 460));
+		setMinimumSize(new Dimension(1200, 300));
 		setTitle("Ventana Ejemplo estadisticas");
 		setLocationRelativeTo(previo);
 		
@@ -159,6 +159,10 @@ public class VentanaEjemploEstadisticas extends JFrame{
 			return null;
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		new VentanaEjemploEstadisticas(null);
 	}
 
 }
