@@ -89,6 +89,14 @@ public class VentanaConJuegos extends JFrame{
 						new BuscaMinas(VentanaConJuegos.this); // Lanza Buscaminas
 					}
 				});
+			} else if (indiceBoton == 2) { // BLACKJACK
+				setVisible(true);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new BlackJack(VentanaConJuegos.this);	
+					}	
+				});
 			} else if(indiceBoton == 3) { // SLOT MACHINE 
 				setVisible(false);
 				SwingUtilities.invokeLater(new Runnable() {

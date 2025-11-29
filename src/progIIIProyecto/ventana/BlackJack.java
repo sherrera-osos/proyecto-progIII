@@ -1,9 +1,27 @@
 package progIIIProyecto.ventana;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlackJack {
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class BlackJack extends JFrame{
+	private static final long serialVersionUID = 1L;
+
+
+
+
+
 
 	private class Carta{
 		String valor;
@@ -18,17 +36,6 @@ public class BlackJack {
 			}
 		}
 
-		public void setValor(String valor) {
-			this.valor = valor;
-		}
-
-		public String getTipo() {
-			return tipo;
-		}
-
-		public void setTipo(String tipo) {
-			this.tipo = tipo;
-		}
 
 		String tipo;
 		
@@ -40,12 +47,16 @@ public class BlackJack {
 
 		@Override
 		public String toString() {
-			return "Carta [valor=" + valor + ", tipo=" + tipo + "]";
+			return valor + "-" + tipo;
 		}
 
 		public boolean isAs() {
 			return valor == "A";
-		}		
+		}
+		
+		public String getImagePath() {
+			return "resources/cartas/" + toString() + ".png";
+		}
 		
 		
 	}
@@ -66,17 +77,179 @@ public class BlackJack {
 	private int cantAsJugador;
 	
 	
+	// Ventana
+	int anchoVentana = 600;
+	int altoVentana = anchoVentana;
 	
-	BlackJack(){
+	int anchoCarta = 110;
+	int altoCarta = 154;
+	
+	JFrame ventana = new JFrame();
+	JPanel panelJuego = new JPanel() {
+		
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			try {
+				// Dibujar la carta escondida
+				Image imgCartaEscondida = new ImageIcon("resources/cartas/BACK.png").getImage();
+				
+				if (!btnStay.isEnabled()) {
+					imgCartaEscondida = new ImageIcon(cartaEscondida.getImagePath()).getImage();
+				}
+				
+				g.drawImage(imgCartaEscondida, 20, 20, anchoCarta, altoCarta, null);
+				
+				
+				// Dibujar mano del dealer
+				for (int i = 0; i < manoDealer.size(); i++) {
+					Carta carta = manoDealer.get(i);
+					Image imgCarta = new ImageIcon(carta.getImagePath()).getImage();
+					g.drawImage(imgCarta, anchoCarta + 25 + (anchoCarta + 5)*i, 20, anchoCarta, altoCarta, null);
+				}
+				
+				// Dibujar mano del jugador
+				for (int j = 0; j < manoJugador.size(); j++) {
+					Carta carta = manoJugador.get(j);
+					Image imgCarta = new ImageIcon(carta.getImagePath()).getImage();
+					g.drawImage(imgCarta, 20 + (anchoCarta + 5)*j, 320, anchoCarta, altoCarta, null);
+				}
+				
+				// Dibujar puntajes
+				g.setFont(new Font("Arial", Font.BOLD, 20));
+				g.setColor(Color.WHITE);
+				
+				// Puntaje jugador
+				g.drawString("Jugador: " + reduceAsJugador(), 20, 500);
+				
+				// Puntaje Dealer
+				if (btnStay.isEnabled()) {
+					int sumaVisible = 0;
+					for (Carta c : manoDealer) {
+						 sumaVisible += c.getValor();
+					}
+					g.drawString("Dealer: " + sumaVisible + "+ ?", 20, 200);
+				} else {
+					g.drawString("Dealer: " + reduceAsDealer(), 20, 200);
+				}
+				
+				if (!btnStay.isEnabled()) {
+					sumaDealer = reduceAsDealer();
+					sumaJugador = reduceAsJugador();
+					System.out.println("STAY: ");
+					System.out.println(sumaDealer);
+					System.out.println(sumaJugador);
+					
+					String mensaje = "";
+					if (sumaJugador > 21) {
+						mensaje = "Has perdido";
+					} else if (sumaDealer > 21) {
+						mensaje = "¡HAS GANADO!";
+					} else if (sumaJugador == sumaDealer) {
+						mensaje = "Empate";
+					} else if (sumaJugador > sumaDealer) {
+						mensaje = "¡HAS GANADO!";
+					} else if (sumaDealer > sumaJugador) {
+						mensaje = "Has perdido";
+					}
+					
+					g.setFont(new Font("Arial", Font.PLAIN, 30));
+					g.setColor(Color.white);
+					g.drawString(mensaje, 220, 250);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	};
+	JPanel panelBotones = new JPanel();
+	JButton btnHit = new JButton("Hit");
+	JButton btnStay = new JButton("Stay");
+	JButton btnReset = new JButton("Volver a Jugar");
+	
+	BlackJack(VentanaConJuegos ventanaConJuegos){
 		empezarJuego();
+		
+		ventana.setVisible(true);
+		ventana.setSize(anchoVentana, altoVentana);
+		ventana.setLocationRelativeTo(null);
+		ventana.setResizable(false);
+		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		panelJuego.setLayout(new BorderLayout());
+		panelJuego.setBackground(new Color(53, 101, 77));
+		ventana.add(panelJuego);
+		
+		btnHit.setFocusable(false);
+		panelBotones.add(btnHit);
+		btnStay.setFocusable(false);
+		panelBotones.add(btnStay);
+		btnReset.setFocusable(false);
+		btnReset.setEnabled(false);
+		panelBotones.add(btnReset);
+		ventana.add(panelBotones, BorderLayout.SOUTH);
+		
+		
+		// LISTENERS de los botones
+		// Hit
+		btnHit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Carta carta = mazo.remove(mazo.size() - 1);
+				sumaJugador += carta.getValor();
+				cantAsJugador += carta.isAs() ? 1 : 0;
+				manoJugador.add(carta);
+				panelJuego.repaint();
+				
+				if (reduceAsJugador() > 21) { // Por ejemplo: A + 2 + J --> 1 + 2 + J
+					btnHit.setEnabled(false);
+					btnStay.setEnabled(false);
+					btnReset.setEnabled(true);
+				}
+			}
+		});
+		
+		// Stay
+		
+		btnStay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnHit.setEnabled(false);
+				btnStay.setEnabled(false);
+				
+				while(sumaDealer < 17) {
+					Carta carta = mazo.remove(mazo.size() - 1);
+					sumaDealer += carta.getValor();
+					cantAsDealer += carta.isAs() ? 1 : 0;
+					manoDealer.add(carta);
+				}
+				
+				btnReset.setEnabled(true);
+				
+				panelJuego.repaint();
+				
+			}
+		});
+		
+		// Reset
+		btnReset.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				empezarJuego();
+				btnHit.setEnabled(true);
+				btnStay.setEnabled(true);
+				btnReset.setEnabled(false);
+				panelJuego.repaint();
+				
+			}
+		});
+		
+		panelJuego.repaint();
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	private void empezarJuego() {
@@ -128,18 +301,6 @@ public class BlackJack {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	private void construirMazo() {
 		mazo = new ArrayList<BlackJack.Carta>();
 		String[] valor = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K"};
@@ -172,13 +333,29 @@ public class BlackJack {
 		System.out.println("a");
 	}
 
+	private int reduceAsJugador() {
+		while(sumaJugador > 21 && cantAsJugador > 0) {
+			sumaJugador -= 10;
+			cantAsJugador -= 1;
+		}
+		
+		return sumaJugador;
+	}
 
-
+	private int reduceAsDealer() {
+		while(sumaDealer > 21 && cantAsDealer > 0) {
+			sumaDealer -= 10;
+			cantAsDealer -= 1;
+		}
+		
+		return sumaDealer;
+	}
+	
 
 
 
 	public static void main(String[] args) throws Exception{
-		BlackJack blackJack = new BlackJack();
+		BlackJack blackJack = new BlackJack(null);
 	}
 }
 
