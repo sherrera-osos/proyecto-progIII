@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
@@ -28,6 +30,9 @@ public class VentanaLogros extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int numeroOros = 0;
+	private int numeroPlatas = 0;
+	private int numeroBronces = 0;
 	
 	public VentanaLogros(JFrame previo) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -98,6 +103,7 @@ public class VentanaLogros extends JFrame{
 						
 					} else if (column == 1) {
 						result.setText((String) value);
+						result.setFont(new Font("Arial", Font.PLAIN, 16));
 						result.setBackground(new Color(250, 250, 250));
 						
 					} else if (column == 2) {
@@ -127,11 +133,60 @@ public class VentanaLogros extends JFrame{
 			tablaLogrosJuego.setBorder(new LineBorder(Color.BLACK));
 			
 			panelPrincipal.add(panelLogrosJuego);
+			
+			// Aprovechamos este for para meter el for del contador dentro
+			
+			for (Logro logro : listaLogros) {
+				if (logro.isConseguido()) {
+					if (logro.getCalidad().equals(Calidad.ORO)) {
+						numeroOros += 1;
+					} else if (logro.getCalidad().equals(Calidad.PLATA)) {
+						numeroPlatas += 1;
+					} else if (logro.getCalidad().equals(Calidad.BRONCE)) {
+						numeroBronces += 1;
+					}
+				}
+			}
+			
 		}
 		
 		JScrollPane jScrollPane = new JScrollPane(panelPrincipal);
 		add(jScrollPane, BorderLayout.CENTER);
 		
+		//Añadimos el contador de trofeos que ira arriba
+		
+		JPanel panelContador = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		
+		// Se añadiran los iconos más tarde
+		JLabel jLabelIconoBronce = new JLabel("B");
+		jLabelIconoBronce.setFont(new Font("Arial", Font.PLAIN, 16));
+		jLabelIconoBronce.setBorder(new LineBorder(Color.BLACK));
+		panelContador.add(jLabelIconoBronce);
+		
+		JLabel jLabelBronce = new JLabel("Bronce: " + numeroBronces + "   ");
+		jLabelBronce.setFont(new Font("Arial", Font.PLAIN, 16));
+		panelContador.add(jLabelBronce);
+		
+		JLabel jLabelIconoPlata = new JLabel("P");
+		jLabelIconoPlata.setFont(new Font("Arial", Font.PLAIN, 16));
+		jLabelIconoPlata.setBorder(new LineBorder(Color.BLACK));
+		panelContador.add(jLabelIconoPlata);
+		
+		JLabel jLabelPlata = new JLabel("Plata: " + numeroPlatas + "   ");
+		jLabelPlata.setFont(new Font("Arial", Font.PLAIN, 16));
+		panelContador.add(jLabelPlata);
+		
+		JLabel jLabelIconoOro = new JLabel("O");
+		jLabelIconoOro.setFont(new Font("Arial", Font.PLAIN, 16));
+		jLabelIconoOro.setBorder(new LineBorder(Color.BLACK));
+		panelContador.add(jLabelIconoOro);
+		
+		JLabel jLabelOro = new JLabel("Oro: " + numeroOros + "         ");
+		jLabelOro.setFont(new Font("Arial", Font.PLAIN, 16));
+		panelContador.add(jLabelOro);
+		
+		add(panelContador, BorderLayout.NORTH);
+	
 		setVisible(true);
 	}
 	
