@@ -76,6 +76,9 @@ public class BlackJack extends JFrame{
 	private int sumaJugador;
 	private int cantAsJugador;
 	
+	private int contadorVictorias = 0;
+	private boolean puntuacionSumada = false;
+	
 	
 	// Ventana
 	int anchoVentana = 600;
@@ -153,10 +156,43 @@ public class BlackJack extends JFrame{
 						mensaje = "Has perdido";
 					}
 					
+					if (!puntuacionSumada) {
+						if (mensaje.equals("¡HAS GANADO!")) {
+							contadorVictorias++;
+						} else if (mensaje.equals("Has perdido")) {
+							contadorVictorias--;
+						}
+						
+						puntuacionSumada = true;
+					}
+					
 					g.setFont(new Font("Arial", Font.PLAIN, 30));
 					g.setColor(Color.white);
 					g.drawString(mensaje, 220, 250);
+					
+					
 				}
+				
+				// MARCADOR
+	            int xRecuadro = anchoVentana - 140 - 20;
+	            int yRecuadro = 20;
+
+	            g.setColor(new Color(0, 0, 0, 180)); 
+	            g.fillRect(xRecuadro, yRecuadro, 140, 45);
+	            
+	            g.setColor(new Color(200, 200, 200)); // Blanco grisáceo
+	            g.drawRect(xRecuadro, yRecuadro, 140, 45);
+	            g.setFont(new Font("Arial", Font.BOLD, 22));
+
+	            // 4. LÓGICA DE COLOR
+	            if (contadorVictorias < 0) {
+	                g.setColor(new Color(255, 50, 50)); 
+	            } else {
+	                g.setColor(Color.WHITE);
+	            }
+	            String textoMarcador = "Marcador: " + contadorVictorias;
+	            g.drawString(textoMarcador, xRecuadro + 1, yRecuadro + 30);
+				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -253,6 +289,8 @@ public class BlackJack extends JFrame{
 	
 	
 	private void empezarJuego() {
+		// Puntuación
+		puntuacionSumada = false;		
 		// Mazo
 		construirMazo();
 		mezclarMazo();
