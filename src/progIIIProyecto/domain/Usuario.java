@@ -10,19 +10,16 @@ public class Usuario {
 	private Pais pais;
 	private Genero genero;
 	
-	private static int codigoNuevo = 1;
-	
-	public Usuario(String nombre, String contr, int tlf, String correo, Pais pais, Genero genero) {
+	public Usuario(int codigo, String nombre, String contr, int tlf, String correo, Pais pais, Genero genero) {
 		super();
-		this.codigo = codigoNuevo;
+		this.codigo = codigo;
 		this.nombre = nombre;
 		this.contr = contr;
 		this.tlf = tlf;
 		this.correo = correo;
 		this.pais = pais;
 		this.genero = genero;
-		
-		codigoNuevo +=1;
+
 	}
 
 	@Override

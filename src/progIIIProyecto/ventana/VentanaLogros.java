@@ -70,7 +70,7 @@ public class VentanaLogros extends JFrame{
 		listaListaLogros.add(listaLogrosJuego3);
 		listaListaLogros.add(listaLogrosJuego4);
 		
-		Usuario usuarioRelacionado = new Usuario("Usuario1", "Contraseña1234", 666666666, "usuario1@gmail.com", Pais.Colombia, Genero.Otro);
+		Usuario usuarioRelacionado = new Usuario(111, "Usuario1", "Contraseña1234", 666666666, "usuario1@gmail.com", Pais.Colombia, Genero.Otro);
 		
 		// -------------------------------------------
 		
