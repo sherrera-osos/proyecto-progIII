@@ -10,7 +10,8 @@ import java.util.Random;
 
 public class BuscaMinas extends JFrame {
 
-    private static final int FILAS = 10; 
+	private static final long serialVersionUID = 1L;
+	private static final int FILAS = 10; 
     private static final int COLUMNAS = 10; 
     private static final int NUM_MINAS = 15; 
 
@@ -18,12 +19,16 @@ public class BuscaMinas extends JFrame {
     private int[][] tableroLogico;
     private boolean juegoTerminado = false;
     
+    private int casillasSinMinasRestantes;
+    
     private JFrame ventanaPrevia;
 
     public BuscaMinas(JFrame previo) {
         super("BuscaMinas");
         this.ventanaPrevia = previo;
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
+        this.casillasSinMinasRestantes = (FILAS * COLUMNAS) - NUM_MINAS;
         
         inicializarTableroLogico();
         
@@ -45,7 +50,11 @@ public class BuscaMinas extends JFrame {
             }
             @Override
             public void windowClosed(WindowEvent e) {
-                ventanaPrevia.setVisible(true);
+            	if (ventanaPrevia != null) {
+                    ventanaPrevia.setVisible(true);
+                } else {
+                    System.exit(0);
+                }
             }
         });
         
@@ -93,9 +102,7 @@ public class BuscaMinas extends JFrame {
                 int nuevaFila = fila + i;
                 int nuevaColumna = columna + j;
                 
-                if (nuevaFila >= 0 && nuevaFila < FILAS && 
-                    nuevaColumna >= 0 && nuevaColumna < COLUMNAS) {
-                    
+                if (isValid(nuevaFila, nuevaColumna)) {
                     if (tableroLogico[nuevaFila][nuevaColumna] == -1) {
                         contador++;
                     }
@@ -103,6 +110,9 @@ public class BuscaMinas extends JFrame {
             }
         }
         return contador;
+    }
+    private boolean isValid(int f, int c) {
+        return f >= 0 && f < FILAS && c >= 0 && c < COLUMNAS;
     }
 
     //2. GUI Y EVENTOS: Creación de Botones y Manejo de Clicks
@@ -112,7 +122,11 @@ public class BuscaMinas extends JFrame {
         for (int i = 0; i < FILAS; i++) {
             for (int j = 0; j < COLUMNAS; j++) {
                 JButton boton = new JButton(" ");
+                
                 boton.setPreferredSize(new Dimension(50, 50)); 
+                boton.setMargin(new Insets(0,0,0,0)); 
+                boton.setFont(new Font("Arial", Font.BOLD, 18)); 
+                boton.setFocusPainted(false); 
                 
                 boton.putClientProperty("fila", i);
                 boton.putClientProperty("columna", j);
@@ -123,11 +137,16 @@ public class BuscaMinas extends JFrame {
                         if (juegoTerminado) return;
                         
                         JButton celda = (JButton) e.getSource();
+                        
+                        if (!celda.isEnabled()) return;
+
                         int fila = (int) celda.getClientProperty("fila");
                         int columna = (int) celda.getClientProperty("columna");
 
                         if (e.getButton() == MouseEvent.BUTTON1) {
-                            destaparCelda(fila, columna);
+                            if (!celda.getText().equals("🚩")) {
+                                destaparCelda(fila, columna);
+                            }
                         } else if (e.getButton() == MouseEvent.BUTTON3) {
                             marcarCelda(celda);
                         }
@@ -143,57 +162,93 @@ public class BuscaMinas extends JFrame {
     //3. LÓGICA DE INTERACCIÓN (DESTAPAR Y MARCAR)
 
     private void destaparCelda(int fila, int columna) {
-        JButton celda = botones[fila][columna];
+    	if (!isValid(fila, columna)) return;
         
-        if (!celda.isEnabled() || celda.getText().equals("🚩") || juegoTerminado) { 
-            return;
-        }
+        JButton celda = botones[fila][columna];
+        if (!celda.isEnabled()) return; 
 
-        celda.setEnabled(false);
+        celda.setEnabled(false); 
+        celda.setBackground(Color.WHITE); 
         
         int valor = tableroLogico[fila][columna];
-        
         if (valor == -1) {
             celda.setText("💣");
             celda.setBackground(Color.RED);
-            juegoTerminado = true;
-            JOptionPane.showMessageDialog(this, "¡BOOM! Has perdido.", "Fin del Juego", JOptionPane.ERROR_MESSAGE);
-            mostrarTodasMinas();
-        } else if (valor > 0) {
-            celda.setText(String.valueOf(valor));
-            celda.setForeground(getColorParaNumero(valor));
+            perderJuego();
         } else {
-            celda.setText("");
-            destapeRecursivo(fila, columna);
+            casillasSinMinasRestantes--;
+
+            if (valor > 0) {
+                celda.setText(String.valueOf(valor));
+                celda.setForeground(getColorParaNumero(valor));
+            } else {
+                celda.setText("");
+                destapeRecursivo(fila, columna);
+            }
+            
+            verificarVictoria();
         }
     }
 
     private void destapeRecursivo(int fila, int columna) {
-        if (fila < 0 || fila >= FILAS || columna < 0 || columna >= COLUMNAS || !botones[fila][columna].isEnabled()) {
-            return;
-        }
+    	for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int f = fila + i;
+                int c = columna + j;
 
-        JButton celda = botones[fila][columna];
-        
-        if (celda.getText().equals("🚩")) {
-            return;
-        }
-        
-        celda.setEnabled(false);
-        int valor = tableroLogico[fila][columna];
-
-        if (valor > 0) {
-            celda.setText(String.valueOf(valor));
-            celda.setForeground(getColorParaNumero(valor));
-            return;
-        } else if (valor == 0) {
-            celda.setText("");
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    if (i != 0 || j != 0) {
-                        destapeRecursivo(fila + i, columna + j);
+                if (isValid(f, c)) {
+                    JButton celda = botones[f][c];
+                    
+                    if (celda.isEnabled() && !celda.getText().equals("🚩")) {
+                        
+                        int valorVecino = tableroLogico[f][c];
+                        celda.setEnabled(false);
+                        celda.setBackground(Color.WHITE);
+                        
+                        casillasSinMinasRestantes--; 
+                        
+                        if (valorVecino == 0) {
+                            celda.setText("");
+                            destapeRecursivo(f, c);
+                        } else {
+                            celda.setText(String.valueOf(valorVecino));
+                            celda.setForeground(getColorParaNumero(valorVecino));
+                        }
                     }
                 }
+            }
+        }
+    }
+    
+    private void verificarVictoria() {
+        if (casillasSinMinasRestantes == 0 && !juegoTerminado) {
+            juegoTerminado = true;
+            for (int i = 0; i < FILAS; i++) {
+                for (int j = 0; j < COLUMNAS; j++) {
+                    if (tableroLogico[i][j] == -1) {
+                        botones[i][j].setText("🚩");
+                        botones[i][j].setForeground(Color.RED);
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(this, "¡FELICIDADES! Has despejado el campo minado.", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    private void perderJuego() {
+        juegoTerminado = true;
+        mostrarTodasMinas();
+        JOptionPane.showMessageDialog(this, "¡BOOM! Has perdido.", "Fin del Juego", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void mostrarTodasMinas() {
+        for (int i = 0; i < FILAS; i++) {
+            for (int j = 0; j < COLUMNAS; j++) {
+                if (tableroLogico[i][j] == -1) {
+                    botones[i][j].setText("💣");
+                    
+                }
+                botones[i][j].setEnabled(false);
             }
         }
     }
@@ -203,8 +258,10 @@ public class BuscaMinas extends JFrame {
         
         if (celda.getText().equals("🚩")) {
             celda.setText(" ");
+            celda.setForeground(null);
         } else {
             celda.setText("🚩");
+            celda.setForeground(Color.BLACK);
         }
     }
 
@@ -213,27 +270,17 @@ public class BuscaMinas extends JFrame {
     private Color getColorParaNumero(int numero) {
         switch (numero) {
             case 1: return Color.BLUE;
-            case 2: new Color(34, 139, 34);
+            case 2: return new Color(34, 139, 34);
             case 3: return Color.RED;
-            case 4: new Color(0, 0, 128);
-            case 5: new Color(128, 0, 0); 
-            case 6: new Color(64, 224, 208); 
+            case 4: return new Color(0, 0, 128);
+            case 5: return new Color(128, 0, 0); 
+            case 6: return new Color(64, 224, 208);
+            case 7: return Color.BLACK;
+            case 8: return Color.GRAY;
             default: return Color.BLACK;
         }
     }
     
-    private void mostrarTodasMinas() {
-        for (int i = 0; i < FILAS; i++) {
-            for (int j = 0; j < COLUMNAS; j++) {
-                if (tableroLogico[i][j] == -1 && botones[i][j].isEnabled()) {
-                    if (!botones[i][j].getBackground().equals(Color.RED)) {
-                        botones[i][j].setText("💣");
-                    }
-                }
-                botones[i][j].setEnabled(false);
-            }
-        }
-    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new BuscaMinas(null); 
