@@ -6,14 +6,21 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.datatransfer.Clipboard;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 public class Juego2048  extends JFrame{
 	
@@ -21,26 +28,66 @@ public class Juego2048  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel pNorte,pCentro;
+	private JPanel pNorte,pCentro,pSur;
 	private JLabel puntuacion;
 	private JPanel matriz [][];
 	private JLabel numeros[][];
     private int tablero[][] = new int[4][4];
+    private JButton btnSalir;
+    // private static JFrame ventanaActual;
+	//private JFrame ventanaAnterior;
+    private JLabel cronometroLabel;
+    private Timer timer;
+    private int segundos = 0;
+    
     	
 	public Juego2048() {
 		setTitle("2048");
-		setBounds(500,200, 400, 400);
+		setBounds(500,200, 500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		setFocusable(true);
+			
+		//ventanaActual = this;
+		//ventanaAnterior = va;
 		
-		
-		pNorte = new JPanel(new FlowLayout());
+		pSur = new JPanel();
+		pNorte = new JPanel(new BorderLayout());
 		pCentro = new JPanel(new GridLayout(4,4));		
 		getContentPane().add(pNorte,BorderLayout.NORTH);
 		getContentPane().add(pCentro,BorderLayout.CENTER);
-
+		getContentPane().add(pSur,BorderLayout.SOUTH);
+		pNorte.setBackground(new Color(169,229,131));
+		pSur.setBackground(new Color(169,229,131));
+		
+		
 		puntuacion = new JLabel("Puntos: 0");
-		pNorte.add(puntuacion); 
+		puntuacion.setFont(new Font("Serif", Font.BOLD, 18));
+		pNorte.add(puntuacion, BorderLayout.WEST);
+
+		cronometroLabel = new JLabel("Tiempo: 0s");
+		cronometroLabel.setFont(new Font("Serif", Font.BOLD, 18));
+		cronometroLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		pNorte.add(cronometroLabel, BorderLayout.EAST);
+
+		JLabel lbl = new JLabel("HOLA");
+		JLabel lbl1 = new JLabel("HOLA");
+
+		pSur.add(lbl);
+		pNorte.add(lbl1);
+		
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_A ||
+					e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_D) {
+					// Si el timer es null (nunca se ha iniciado)
+					if (timer == null) { 
+						iniciarCronometroLogic(); // Inicia el timer
+					}
+				}
+			}
+		});
 
 		matriz = new JPanel[4][4];
 		numeros = new JLabel[4][4];
@@ -52,7 +99,7 @@ public class Juego2048  extends JFrame{
 				matriz[i][j].setBackground(new Color(197,183,170));
 				
 				numeros[i][j] = new JLabel("0");
-				numeros[i][j].setFont(new Font("Serif",Font.BOLD,27));
+				numeros[i][j].setFont(new Font("Serif",Font.BOLD,24));
 				numeros[i][j].setHorizontalAlignment(SwingConstants.CENTER);
 				
 		        matriz[i][j].add(numeros[i][j]);
@@ -65,10 +112,39 @@ public class Juego2048  extends JFrame{
 		generarNuevoNumero();
 		actualizarPantalla();
 		
+		btnSalir = new JButton("Salir");
+		pSur.add(btnSalir);
+		btnSalir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
+		
 		setVisible(true);
 
 		
 	}
+
+	public void iniciarCronometroLogic() {
+		if (timer != null) {
+			timer.stop();
+			}
+		segundos = 0;
+		cronometroLabel.setText("Tiempo: 0s");
+		timer = new Timer(1000, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		segundos++;
+		cronometroLabel.setText("Tiempo: " + segundos + "s");
+			}
+		});
+		timer.start();
+				}
+		
+	
 	public void actualizarColorCelda(int i, int j) {
 	    int valor = tablero[i][j];
 
@@ -172,7 +248,7 @@ public class Juego2048  extends JFrame{
 				    numeros[i][j].setText(String.valueOf(tablero[i][j]));
 				}
 				actualizarColorCelda(i, j);
-			}
+			}	
 			
 		}
 	}	

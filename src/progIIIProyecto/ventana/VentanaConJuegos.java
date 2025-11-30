@@ -105,6 +105,15 @@ public class VentanaConJuegos extends JFrame{
 						new slotMachine(VentanaConJuegos.this);	
 					}	
 				});
+				
+			} else if(indiceBoton == 0) { // 2048
+				setVisible(false);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new Juego2048(VentanaConJuegos.this);	
+					}	
+				});
 			} else {
 				// Comportamiento por defecto para otros botones
 				JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + todosLosNombres[indiceBoton]);
