@@ -6,15 +6,22 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.datatransfer.Clipboard;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class Juego2048  extends JFrame{
 	
@@ -22,11 +29,15 @@ public class Juego2048  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel pNorte,pCentro;
+	private JPanel pNorte,pCentro,pSur;
 	private JLabel puntuacion;
 	private JPanel matriz [][];
 	private JLabel numeros[][];
     private int tablero[][] = new int[4][4];
+    private JButton btnSalir,btnInformacion, btnReiniciar;
+    private Thread cronometro;
+    private final int tiempoMaximo = 10;
+    private JLabel lblTiempo;
     	
 	public Juego2048() {
 		setTitle("2048");
@@ -35,18 +46,157 @@ public class Juego2048  extends JFrame{
 		setResizable(false);
 		
 		
-		pNorte = new JPanel(new FlowLayout());
-		pCentro = new JPanel(new GridLayout(4,4));		
+		pNorte = new JPanel();
+		pNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 45, 10));
+		pCentro = new JPanel(new GridLayout(4,4));
+		pSur = new JPanel();
+		getContentPane().add(pSur,BorderLayout.SOUTH);
 		getContentPane().add(pNorte,BorderLayout.NORTH);
 		getContentPane().add(pCentro,BorderLayout.CENTER);
 
-		puntuacion = new JLabel("Puntos: 100");
-		pNorte.add(puntuacion); 
+		
+		btnInformacion = new JButton("Informacion");
+		btnInformacion.setBackground(new Color(255, 244, 229));
+		btnInformacion.setBorderPainted(false);
+		btnInformacion.setFocusPainted(false);
 
+		
+		pNorte.add(btnInformacion,BorderLayout.WEST);
+		puntuacion = new JLabel("Puntos: 10");
+		pNorte.add(puntuacion); 
+		
+		
+		btnSalir = new JButton("SALIR");
+		btnSalir.setBackground(new Color(180, 120, 80));
+		btnSalir.setForeground(Color.WHITE);
+		btnSalir.setBorderPainted(false);
+		pSur.add(btnSalir);
+	
+		
+		btnReiniciar = new JButton("REINICIAR");
+		btnReiniciar.setBackground(new Color(180, 120, 80));
+		btnReiniciar.setForeground(Color.WHITE);
+		btnReiniciar.setBorderPainted(false);
+		pSur.add(btnReiniciar);
+
+		
+		pNorte.setBackground(new Color(255, 244, 229));
+		pSur.setBackground(new Color(219, 204, 184));
+		
+		
+		btnInformacion.addActionListener((e)->{
+			JFrame ventanaInformacion = new JFrame();
+			ventanaInformacion.setSize(500,500);
+			ventanaInformacion.setTitle("Informacion del juego");
+		    ventanaInformacion.setLayout(new BorderLayout());
+			
+			
+			JTextArea txtInformacion = new JTextArea();
+			txtInformacion.setEditable(false);
+			txtInformacion.setLineWrap(true);//AJUSTA LA LINEA AUTOMATICO
+			txtInformacion.setWrapStyleWord(true);//HACE QUE SEPARE POR PALABRAS Y NO POR CARACTERES
+			txtInformacion.setFocusable(false);//NO MUESTRA EL CURSOR
+			txtInformacion.setText(
+						    "¡Bienvenido a 2048!\n\n"
+						  + "Objetivo: Combina los números iguales en los cuadros del tablero para llegar al número 2048.\n\n"
+						  + "Cómo jugar:\n"
+						  + "- Usa las flechas del teclado para mover los cuadros.\n"
+						  + "- Cuando dos cuadros con el mismo número chocan, se fusionan sumando sus valores.\n"
+						  + "- Cada movimiento genera un nuevo cuadro (2 o 4) en un lugar vacío.\n"
+						  + "- El juego termina si ya no puedes hacer más movimientos.\n\n"
+						  + "Reglas especiales:\n"
+						  + "- Hay un cronómetro que mide tu tiempo.\n"
+						  + "- Cuanto menos tardes, mayor será tu puntuación o recompensa.\n\n"
+						  + "Consejos:\n"
+						  + "- Mantén los números grandes en un lado del tablero.\n"
+						  + "- Evita llenar todo el tablero demasiado rápido.\n"
+						  + "- Prioriza combinar cuadros grandes para avanzar más rápido.\n\n"
+						  + "¡Prepárate para jugar, desafiar tu ingenio y superar tu propio récord! 🚀"
+						);
+			
+			txtInformacion.setBackground(Color.BLACK);
+			txtInformacion.setFont(new Font("Arial",Font.ITALIC,20));
+			txtInformacion.setForeground(Color.WHITE);
+			
+			JScrollPane scroll = new JScrollPane(txtInformacion);
+			scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+			ventanaInformacion.add(scroll,BorderLayout.CENTER);			
+			
+			JButton btnJugar = new JButton("¡ENTENDIDO, A JUGAR!");
+			ventanaInformacion.add(btnJugar,BorderLayout.SOUTH);
+			btnJugar.setBackground(new Color(170,180,190));
+			
+			btnJugar.addActionListener((e2)->{
+				ventanaInformacion.setVisible(false);
+				
+			});
+			ventanaInformacion.setLocationRelativeTo(null); // Centrar en pantalla
+			ventanaInformacion.setVisible(true);
+			
+		});
+		
+		lblTiempo = new JLabel("Tiempo: 00:00",SwingConstants.CENTER);
+		pNorte.add(lblTiempo);
+		
+		cronometro = new Thread(()->{
+			for (int segundosRestantes = 0; segundosRestantes<=tiempoMaximo; segundosRestantes++) {
+				int minutos = segundosRestantes / 60;
+	            int segundos = segundosRestantes % 60;
+	            
+	            String tiempoFormateado = String.format("%02d:%02d", minutos, segundos);
+				
+				SwingUtilities.invokeLater(() -> lblTiempo.setText("Tiempo: " + tiempoFormateado));
+				
+				if (segundosRestantes >=tiempoMaximo) {
+					SwingUtilities.invokeLater(() ->{
+						new JOptionPane().showMessageDialog(null, "¡Fuera de tiempo!", "Tiempo agotado", JOptionPane.ERROR_MESSAGE);
+					});
+				}
+				
+				try {
+					cronometro.sleep(1000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+
+		pCentro.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_W 
+					|| e.getKeyCode()==KeyEvent.VK_A 
+					|| e.getKeyCode()==KeyEvent.VK_S 
+					|| e.getKeyCode()==KeyEvent.VK_D ) {
+					if (!cronometro.isAlive()) { // Evitamos asi que se inicie mas de una vez
+					    cronometro.start();
+					}
+				}
+			}
+		});
+
+		btnReiniciar.addActionListener((e)->{
+			
+			for (int i = 0; i < 4; i++) { 
+				for (int j = 0; j < 4; j++) { 
+					tablero[i][j] = 0; // Reiniciamos el tablero
+					} 
+				} 
+			
+			generarNuevoNumero(); 
+			actualizarPantalla();
+		});
+		
 		matriz = new JPanel[4][4];
 		numeros = new JLabel[4][4];
+		
 		for (int i = 0; i < 4; i++) {
+			
 			 for (int j = 0; j < 4; j++) {
+				 
 				matriz[i][j] = new JPanel(new GridLayout(1,1)); // Que ocupe todo, asi apareceria en todo el centro el numero
 				matriz[i][j].setBorder(BorderFactory.createLineBorder(new Color(147,133,120),3));
 				matriz[i][j].setOpaque(true);
@@ -63,14 +213,17 @@ public class Juego2048  extends JFrame{
 
 			}
 		}
+		
 		generarNuevoNumero();
 		actualizarPantalla();
 		
 		setVisible(true);
-
+		pCentro.setFocusable(true); // Asi el panel recive un foco
+		pCentro.requestFocusInWindow(); // El panel necesita un foco, asi recive el keyListener
 		
 	}
 	public void actualizarColorCelda(int i, int j) {
+		
 	    int valor = tablero[i][j];
 
 	    switch (valor) {
