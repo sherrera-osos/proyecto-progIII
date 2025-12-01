@@ -19,6 +19,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -31,21 +32,55 @@ private static final long serialVersionUID = 1L;
 	private JButton stopButton = new JButton("STOP");
 	private JButton btnVolver = new JButton("EXIT");
 	
-	private ArrayList<String> figuras = new ArrayList<String>();
+	private ArrayList<String> pokemonesN = new ArrayList<String>();
+	private ArrayList<String> pokemonesF = new ArrayList<String>();
+	private ArrayList<String> pokemonesA = new ArrayList<String>();
+	private ArrayList<String> pokemonesE = new ArrayList<String>();
+	private ArrayList<String> pokemonesG = new ArrayList<String>();
 	
+	private int tipo = 0;
+	
+	//INICIALIZAMOS EL HILO COMO VARIABLE Y HACEMOS UNA LISTA DE HILOS
 	private Thread t;
 	private ArrayList<Thread> hilos;
 	
 	public slotMachine(JFrame previo) {
 		JFrame VentanaActual = this;
 		JFrame VentanaAnterior = previo;
-		figuras.add("diamante");
-		figuras.add("7");
-		figuras.add("Cereza");
-		figuras.add("trebol");
-		figuras.add("corona");
-		figuras.add("cerdo");
+		pokemonesE.add("zekrom");
+		pokemonesE.add("pikachu");
+		pokemonesE.add("luxray");
+		pokemonesE.add("zapdos");
+		pokemonesE.add("electivire");
+		pokemonesE.add("electrode"); 
+
+		pokemonesN.add("snorlax");
+		pokemonesN.add("eevee");
+		pokemonesN.add("mewtwo");
+		pokemonesN.add("persian");
+		pokemonesN.add("pidgey");
+		pokemonesN.add("tauros");
 		
+		pokemonesA.add("magikarp");
+		pokemonesA.add("greninja");
+		pokemonesA.add("blastoise");
+		pokemonesA.add("piplup");
+		pokemonesA.add("lapras");
+		pokemonesA.add("oshawott");
+		
+		pokemonesF.add("groudon");
+		pokemonesF.add("tepig");
+		pokemonesF.add("reshiram");
+		pokemonesF.add("charizard");
+		pokemonesF.add("infernape");
+		pokemonesF.add("arcanine");
+		
+		pokemonesG.add("lunala");
+		pokemonesG.add("gengar");
+		pokemonesG.add("mimikyu");
+		pokemonesG.add("alakazam");
+		pokemonesG.add("giratina");
+		pokemonesG.add("haunter");
 		
 		//CREAMOS LA VENTANA PRINCIPAL
 		this.setLayout(new BorderLayout());
@@ -54,7 +89,7 @@ private static final long serialVersionUID = 1L;
 		this.setResizable(false);
 		this.setSize(700, 500);
 		this.setLocationRelativeTo(null);
-
+		this.setBackground(new Color(75, 0, 130));
 		
 		//CREAMOS EL PANEL PRINCIPAL, DONDE ESTARÁ LA MAQUINA
 		JPanel panelPrinci = new JPanel(new GridLayout(2, 3, 40, 15));
@@ -70,8 +105,17 @@ private static final long serialVersionUID = 1L;
 			slots[i] = new JLabel();
 			Random random = new Random();
 			
-			this.actualizarLabel(slots[i], figuras.get(random.nextInt(figuras.size())));
-			
+			if(tipo==1) { //FUEGO
+				this.actualizarLabel(slots[i], pokemonesF.get(random.nextInt(pokemonesF.size())));
+			}else if(tipo==2) { //AGUA
+				this.actualizarLabel(slots[i], pokemonesA.get(random.nextInt(pokemonesA.size())));
+			}else if(tipo==3) { //ELECTRICO
+				this.actualizarLabel(slots[i], pokemonesE.get(random.nextInt(pokemonesE.size())));
+			}else if(tipo==4) { //GHOST
+				this.actualizarLabel(slots[i], pokemonesG.get(random.nextInt(pokemonesG.size())));
+			}else { //NORMAL
+				this.actualizarLabel(slots[i], pokemonesN.get(random.nextInt(pokemonesN.size())));
+			}
 			
 			//AÑADIMOS EL SLOT ELEGIDO AL PANEL PRINCIPAL
 			panelPrinci.add(slots[i]);
@@ -93,9 +137,17 @@ private static final long serialVersionUID = 1L;
 		
 		JMenuItem verInfo = new JMenuItem("Ver Información");
 		JMenuItem verPuntaje = new JMenuItem("¿Cómo funciona el puntaje?");
-		JMenuItem verEstadisticas = new JMenuItem("Ver Estadisticas");
-		JMenuItem cambiarEstilo = new JMenuItem("Cambiar Estilo / Apariencia");
+		JMenuItem verEstadisticas = new JMenuItem("Ver Estadisticas");		
 		
+		JButton btnOk = new JButton("Entendido!");
+		btnOk.setBackground(new Color(61, 0, 76));
+		btnOk.setForeground(Color.WHITE);
+		btnOk.setFont(new Font("Monospaced", Font.BOLD, 20));
+		
+		
+		//LE QUITAMOS EL BORDE AL BOTÓN
+		btnOk.setBorderPainted(false);
+		btnOk.setFocusPainted(false);
 		
 		verInfo.addActionListener((e)->{
 			JFrame ventVerInfo = new JFrame();
@@ -121,21 +173,9 @@ private static final long serialVersionUID = 1L;
 			txt.setForeground(new Color(210, 160, 255));
 			ventVerInfo.add(txt, BorderLayout.CENTER);
 			
-			
-			
 			JPanel aPanel = new JPanel();
 			aPanel.setBackground(new Color(61, 0, 76));
 			ventVerInfo.add(aPanel, BorderLayout.SOUTH);
-			
-			JButton btnOk = new JButton("Entendido!");
-			btnOk.setBackground(new Color(61, 0, 76));
-			btnOk.setForeground(Color.WHITE);
-			btnOk.setFont(new Font("Monospaced", Font.BOLD, 20));
-			
-			
-			//LE QUITAMOS EL BORDE AL BOTÓN
-			btnOk.setBorderPainted(false);
-			btnOk.setFocusPainted(false);
 			
 			btnOk.addActionListener((e2)->{
 				ventVerInfo.setVisible(false);
@@ -145,13 +185,29 @@ private static final long serialVersionUID = 1L;
 			
 			ventVerInfo.setVisible(true);
 		});
-		
+		//----------------------
+		verPuntaje.addActionListener((e)->{
+			JFrame ventVerPuntaje = new JFrame();
+			ventVerPuntaje.setSize(400,500);
+			ventVerPuntaje.setLocationRelativeTo(null);
+			ventVerPuntaje.setTitle("Información del puntaje");
+			
+			JTable tabla = new JTable();
+			
+			
+			
+			JPanel pSur = new JPanel();
+			pSur.setBackground(new Color(61, 0, 76));
+			ventVerPuntaje.add(pSur, BorderLayout.SOUTH);
+			pSur.add(btnOk);
+			btnOk.addActionListener((e2)->{
+				ventVerPuntaje.setVisible(false);
+			});
+			ventVerPuntaje.setVisible(true);
+		});
 		fichero.add(verInfo);
 		fichero.add(verPuntaje);
-		fichero.add(verEstadisticas);
-		fichero.add(cambiarEstilo);
-		
-		
+		fichero.add(verEstadisticas);		
 		
 		//CREAMOS EL PANEL PARA LOS BOTONES
 		JPanel buttonPanel = new JPanel();
@@ -177,10 +233,9 @@ private static final long serialVersionUID = 1L;
 		btnVolver.setBorderPainted(false);
 		btnVolver.setFocusPainted(false);
 		
-		buttonPanel.setBackground(new Color(75, 0, 130));
 		this.add(buttonPanel, BorderLayout.SOUTH);
-		
-		
+		buttonPanel.setBackground(new Color(75, 0, 130));
+
 		//LE DAMOS A LOS BOTONES UNA FUNCIONALIDAD;
 		
 		btnVolver.addActionListener((e)->{
@@ -228,6 +283,89 @@ private static final long serialVersionUID = 1L;
 		
 		//POR DEFECTO DEJAMOS QUE EL BOTON DE STOP ESTE ACTIVADO
 		stopButton.setEnabled(false);
+		
+		JMenu estilo = new JMenu("Apariencia");
+		estilo.setForeground(Color.WHITE);
+		barraMenu.add(estilo);
+		
+		JMenuItem fuego = new JMenuItem("FUEGO");
+		JMenuItem agua = new JMenuItem("AGUA");
+		JMenuItem electrico = new JMenuItem("ELECTRICO");
+		JMenuItem ghost = new JMenuItem("GHOST");
+		JMenuItem normal = new JMenuItem("NORMAL");
+		
+		fuego.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(200, 55, 40));
+			barraMenu.setBackground(new Color(200, 55, 40));
+			buttonPanel.setBackground(new Color(78, 26, 4));
+			panelPrinci.setBackground(new Color(200, 55, 40));
+			startButton.setBackground(new Color(255, 106, 0));
+			stopButton.setBackground(new Color(255, 143, 51));
+			btnVolver.setBackground(new Color(255, 106, 0));
+			tipo=1;
+		});
+		
+		
+		agua.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(0, 168, 232));
+			barraMenu.setBackground(new Color(0, 168, 232));
+			buttonPanel.setBackground(new Color(1, 58, 99));
+			panelPrinci.setBackground(new Color(0, 168, 232));
+			startButton.setBackground(new Color(0, 168, 232));
+			stopButton.setBackground(new Color(0, 119, 182));
+			btnVolver.setBackground(new Color(0, 168, 232));
+			tipo=2;
+		});
+		
+		electrico.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(255, 234, 0));
+			barraMenu.setBackground(new Color(45, 45, 45));
+			buttonPanel.setBackground(new Color(45, 45, 45));
+			panelPrinci.setBackground(new Color(255, 234, 0));
+			startButton.setBackground(new Color(255, 234, 0));
+			stopButton.setBackground(new Color(255, 214, 0));
+			btnVolver.setBackground(new Color(255, 234, 0));
+			startButton.setForeground(new Color(45, 45, 45));
+			stopButton.setForeground(new Color(45, 45, 45));
+			btnVolver.setForeground(new Color(45, 45, 45));
+			tipo=3;
+		});
+		
+		ghost.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(28, 0, 51));
+			barraMenu.setBackground(new Color(28, 0, 51));
+			buttonPanel.setBackground(new Color(28, 0, 51));
+			panelPrinci.setBackground(new Color(28, 0, 51));
+			startButton.setBackground(new Color(28, 0, 51));
+			stopButton.setBackground(new Color(28, 0, 51));
+			btnVolver.setBackground(new Color(28, 0, 51));
+			startButton.setForeground(Color.WHITE);
+			stopButton.setForeground(Color.WHITE);
+			btnVolver.setForeground(Color.WHITE);
+			tipo=4;
+		});
+		
+		normal.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(75, 0, 130));
+			barraMenu.setBackground(new Color(75, 0, 130));
+			buttonPanel.setBackground(new Color(75, 0, 130));
+			panelPrinci.setBackground(new Color(75, 0, 130));
+			startButton.setBackground(new Color(75, 0, 130));
+			stopButton.setBackground(new Color(75, 0, 130));
+			btnVolver.setBackground(new Color(75, 0, 130));
+			startButton.setForeground(Color.WHITE);
+			stopButton.setForeground(Color.WHITE);
+			btnVolver.setForeground(Color.WHITE);
+			tipo=0;
+		});
+		
+		
+		estilo.add(fuego);
+		estilo.add(agua);
+		estilo.add(electrico);
+		estilo.add(ghost);
+		estilo.add(normal);
+
 		setVisible(true);
 	}
 	
@@ -253,8 +391,17 @@ private static final long serialVersionUID = 1L;
 						
 						//HACEMOS EL INVOKELATER USANDO LA EXPRESION DEL 
 						//EJERCICIO INICIAL
-						SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],figuras.get(random.nextInt(figuras.size()))));
-						
+						if(tipo==0) { //NORMAL
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesN.get(random.nextInt(pokemonesN.size()))));
+						}else if(tipo==1) { //FUEGO
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesF.get(random.nextInt(pokemonesF.size()))));
+						}else if(tipo==2) { //AGUA
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesA.get(random.nextInt(pokemonesA.size()))));
+						}else if(tipo==3) { //ELECTRICO
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesE.get(random.nextInt(pokemonesE.size()))));
+						}else if(tipo==4) { //GHOST
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesG.get(random.nextInt(pokemonesG.size()))));
+						}
 						//HACEMOS EL TRY/CATCH
 						try {
 							Thread.sleep(100);
@@ -289,9 +436,9 @@ private static final long serialVersionUID = 1L;
 	
 	
 	//#########################################################################################################################//
-	private void actualizarLabel(JLabel label, String figura) {
+	private void actualizarLabel(JLabel label, String pokemon) {
 		
-		java.net.URL imagePath = getClass().getResource("/imagenes/"+figura+".jpg");
+		java.net.URL imagePath = getClass().getResource("/imagenes/"+pokemon+".jpg");
 		
 		if(imagePath != null) {
 			
@@ -305,7 +452,7 @@ private static final long serialVersionUID = 1L;
 	        
 		}else {
 			//SI NO ENCUENTRA NADA, MUESTRA EL NOMBRE DEL POKEMON EN LUGAR DE LA IMAGEN
-			label.setText(figura);
+			label.setText(pokemon);
 		}
 		
 		label.setHorizontalAlignment(JLabel.CENTER);
