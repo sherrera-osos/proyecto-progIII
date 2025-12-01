@@ -7,12 +7,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class BlackJack extends JFrame{
@@ -211,7 +214,23 @@ public class BlackJack extends JFrame{
 		ventana.setSize(anchoVentana, altoVentana);
 		ventana.setLocationRelativeTo(null);
 		ventana.setResizable(false);
-		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ventana.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		ventana.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int respuesta = JOptionPane.showConfirmDialog(ventana, 
+																"¿Quieres salis del juego y volver al menú?",
+																"Salir",
+																JOptionPane.YES_NO_OPTION);
+				
+				if (respuesta == JOptionPane.YES_OPTION) {
+					ventana.dispose(); // Solo cierra BlackJack
+					
+					ventanaConJuegos.setVisible(true);
+				}
+			}
+		});
 		
 		panelJuego.setLayout(new BorderLayout());
 		panelJuego.setBackground(new Color(53, 101, 77));

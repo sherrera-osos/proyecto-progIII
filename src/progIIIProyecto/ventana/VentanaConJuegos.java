@@ -90,7 +90,7 @@ public class VentanaConJuegos extends JFrame{
 					}
 				});
 			} else if (indiceBoton == 2) { // BLACKJACK
-				setVisible(true);
+				setVisible(false);
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
