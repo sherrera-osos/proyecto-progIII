@@ -21,6 +21,9 @@ public class BuscaMinas extends JFrame {
     
     private int casillasSinMinasRestantes;
     
+    private int puntuacion = 0;
+    private JLabel lblPuntuacion;
+    
     private JFrame ventanaPrevia;
 
     public BuscaMinas(JFrame previo) {
@@ -29,8 +32,20 @@ public class BuscaMinas extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         this.casillasSinMinasRestantes = (FILAS * COLUMNAS) - NUM_MINAS;
-        
+        setLayout(new BorderLayout());
         inicializarTableroLogico();
+        JPanel panelInfo = new JPanel();
+        panelInfo.setBackground(Color.LIGHT_GRAY);
+        panelInfo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        lblPuntuacion = new JLabel("Puntuación: 0");
+        lblPuntuacion.setFont(new Font("Arial", Font.BOLD, 20));
+        lblPuntuacion.setForeground(Color.BLACK);
+        lblPuntuacion.setOpaque(true); 
+        lblPuntuacion.setBackground(Color.LIGHT_GRAY); 
+
+        panelInfo.add(lblPuntuacion);
+        add(panelInfo, BorderLayout.NORTH);
         
         JPanel panelTablero = new JPanel(new GridLayout(FILAS, COLUMNAS));
         inicializarBotones(panelTablero);
@@ -176,6 +191,7 @@ public class BuscaMinas extends JFrame {
             celda.setBackground(Color.RED);
             perderJuego();
         } else {
+        	sumarPuntos();
             casillasSinMinasRestantes--;
 
             if (valor > 0) {
@@ -205,6 +221,7 @@ public class BuscaMinas extends JFrame {
                         celda.setEnabled(false);
                         celda.setBackground(Color.WHITE);
                         
+                        sumarPuntos();
                         casillasSinMinasRestantes--; 
                         
                         if (valorVecino == 0) {
@@ -220,6 +237,13 @@ public class BuscaMinas extends JFrame {
         }
     }
     
+    private void sumarPuntos() {
+        puntuacion += 10;
+        lblPuntuacion.setText("Puntuación: " + puntuacion);
+        
+        lblPuntuacion.paintImmediately(lblPuntuacion.getVisibleRect()); 
+    }
+    
     private void verificarVictoria() {
         if (casillasSinMinasRestantes == 0 && !juegoTerminado) {
             juegoTerminado = true;
@@ -231,17 +255,35 @@ public class BuscaMinas extends JFrame {
                     }
                 }
             }
-            JOptionPane.showMessageDialog(this, "¡FELICIDADES! Has despejado el campo minado.", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                // Creamos un mensaje compuesto
+            	String mensaje = "¡FELICIDADES! Has despejado el campo.\n\nPuntuación Final: " + puntuacion;
+                
+                JOptionPane.showMessageDialog(BuscaMinas.this, 
+                    mensaje, 
+                    "¡Victoria!", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            });
         }
     }
     
     private void perderJuego() {
         juegoTerminado = true;
         mostrarTodasMinas();
-        JOptionPane.showMessageDialog(this, "¡BOOM! Has perdido.", "Fin del Juego", JOptionPane.ERROR_MESSAGE);
+        this.getRootPane().paintImmediately(0, 0, getWidth(), getHeight());
+        SwingUtilities.invokeLater(() -> {
+            // Creamos un mensaje compuesto. 
+            // Java pintará primero el texto de derrota y DEBAJO el de la puntuación.
+        	String mensaje = "¡BOOM! Has perdido.\n\nPuntuación Final: " + puntuacion;
+            JOptionPane.showMessageDialog(BuscaMinas.this, 
+                mensaje, 
+                "Fin del Juego", 
+                JOptionPane.ERROR_MESSAGE);
+        });
     }
     
-    private void mostrarTodasMinas() {
+
+	private void mostrarTodasMinas() {
         for (int i = 0; i < FILAS; i++) {
             for (int j = 0; j < COLUMNAS; j++) {
                 if (tableroLogico[i][j] == -1) {
