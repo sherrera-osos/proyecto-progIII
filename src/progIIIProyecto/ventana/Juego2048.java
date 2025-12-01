@@ -40,7 +40,7 @@ public class Juego2048  extends JFrame{
 		getContentPane().add(pNorte,BorderLayout.NORTH);
 		getContentPane().add(pCentro,BorderLayout.CENTER);
 
-		puntuacion = new JLabel("Puntos: 0");
+		puntuacion = new JLabel("Puntos: 100");
 		pNorte.add(puntuacion); 
 
 		matriz = new JPanel[4][4];
