@@ -394,6 +394,7 @@ public class BlackJack extends JFrame{
 
 	public static void main(String[] args) throws Exception{
 		BlackJack blackJack = new BlackJack(null);
+		blackJack.setVisible(true);
 	}
 }
 
