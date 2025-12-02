@@ -2,6 +2,8 @@ package progIIIProyecto.ventana;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -16,7 +18,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Genero;
 import progIIIProyecto.domain.Pais;
+import progIIIProyecto.domain.Usuario;
 
 public class VentanaRegistrate extends JFrame {
 
@@ -37,7 +42,7 @@ public class VentanaRegistrate extends JFrame {
 		
 		setTitle("Registrarse");
 		setBounds(300,200,400,400);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		JPanel info = new JPanel();
 		info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
@@ -116,46 +121,83 @@ public class VentanaRegistrate extends JFrame {
 		pAbajo.add(btnCrearUsuario);
 		
 		btnVolver.addActionListener((e)->{
-			ventanaActual.setVisible(false);
+			this.dispose();
 			ventanaAnterior.setVisible(true);
 		});
 		
 		btnCrearUsuario.addActionListener((e)->{
-			String nombre = txtNombre.getText();
-			String correo = txtCorreo.getText();
-			String c1 = txtContraseña.getText();
-			String c2 = txtContraseñaRepetida.getText();
 			
-			boolean datos = true;
+			// He tenido que sacar las contraseñas a String aparte porque sino no se puede
 			
-			if (nombre.isEmpty()) {
+			String contraseña = "";
+			for (char caracter : txtContraseña.getPassword()) {
+				contraseña += caracter;
+			}
+			
+			String contraseñaRepetida = "";
+			for (char caracter : txtContraseñaRepetida.getPassword()) {
+				contraseñaRepetida += caracter;
+			}
+			
+			// Aquí sacamos el género de los JRadioButton
+			
+			Genero generoElegido = Genero.Otro;
+			
+			if (Mas.isSelected()) {
+				generoElegido = Genero.Masculino;
+			} else if (Fem.isSelected()) {
+				generoElegido = Genero.Femenino;
+			}
+			
+			/// Aquí sacamos el telefono para poder ponerle un valor predetrminado en caso de que no se haya metido ninguno
+			int tlf = 0;
+			if(!aTel.getText().isEmpty()) {
+				tlf = Integer.parseInt(aTel.getText());
+			} 
+			
+			// Las condiciones para que todo vaya bien y se cree usuario y los errores en caso contrario
+							
+			if (txtNombre.getText().isEmpty() && !contraseña.isEmpty() && !contraseñaRepetida.isEmpty() && !txtCorreo.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(null,"Falta introducir el nombre de usuario.", "ERROR", JOptionPane.ERROR_MESSAGE);
-				datos = false;
-			}
-			if (correo.isEmpty()) {
-				JOptionPane.showMessageDialog(null,"Falta introducir el correo de usuario.", "ERROR", JOptionPane.ERROR_MESSAGE);
-				datos = false;
-
-			}
-			if (c1.isEmpty()) {
-				JOptionPane.showMessageDialog(null,"Falta introducir la contraseña.", "ERROR", JOptionPane.ERROR_MESSAGE);
-				datos = false;
-
-			}
-			if (c2.isEmpty()) {
-				JOptionPane.showMessageDialog(null,"Falta introducir de nuevo la contraseña.", "ERROR", JOptionPane.ERROR_MESSAGE);
-				datos = false;
-
-			}
-			
-			if (datos) {
-				JOptionPane.showMessageDialog(null, "!Te has creado un nuevo usuario en PROYECTO!");
 				
-				ventanaActual.setVisible(false);
+			} else if (!txtNombre.getText().isEmpty() && contraseña.isEmpty() && !contraseñaRepetida.isEmpty() && !txtCorreo.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir la contraseña.", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+			} else if (!txtNombre.getText().isEmpty() && !contraseña.isEmpty() && contraseñaRepetida.isEmpty() && !txtCorreo.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir de nuevo la contraseña.", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+			} else if (!txtNombre.getText().isEmpty() && !contraseña.isEmpty() && !contraseñaRepetida.isEmpty() && txtCorreo.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir el correo de usuario.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				
+			} else if (txtNombre.getText().isEmpty() || contraseña.isEmpty() || contraseñaRepetida.isEmpty() || txtCorreo.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null,"Falta introducir más de uno de los campos obligatorios.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			
+			} else if (!contraseña.equals(contraseñaRepetida)) {
+				JOptionPane.showMessageDialog(null,"Las contraseñas introducidas no coinciden.", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+				
+			} else {
+				Usuario usuarioNuevo = new Usuario(txtNombre.getText(), contraseña, tlf, txtCorreo.getText(),(Pais) sel.getSelectedItem(), generoElegido);
+				GestorBD gestorBD = new GestorBD();
+				gestorBD.subirUsuario(usuarioNuevo);
+				
+				JOptionPane.showMessageDialog(null, "¡Te has creado un nuevo usuario en PROYECTO!");
+				
+				ventanaActual.dispose();
 				ventanaAnterior.setVisible(true);
+				
 			}
 						
 			
+		});
+		
+		// CERRADO DE VENTANA
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				VentanaRegistrate.this.dispose();
+				ventanaAnterior.setVisible(true);
+			}
 		});
 		
 		setVisible(true);
