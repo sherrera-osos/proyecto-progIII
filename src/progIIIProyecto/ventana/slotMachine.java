@@ -99,7 +99,7 @@ private static final long serialVersionUID = 1L;
 		//AÑADIMOS EL PANEL PRINCIPAL A LA VENTANA
 		this.add(panelPrinci);
 		
-		//COMO SON SOLO 3 ESPACIOS DE SLOTS
+		//COMO SON 6 ESPACIOS DE SLOTS
 		for (int i = 0; i < 6; i++) {
 			//HACEMOS QUE EL SLOT ELEGIDO SE ACTUALICE
 			slots[i] = new JLabel();
@@ -205,6 +205,15 @@ private static final long serialVersionUID = 1L;
 			});
 			ventVerPuntaje.setVisible(true);
 		});
+		
+		//----------------------
+		//ESTADISTICAS
+		verEstadisticas.addActionListener((e)->{
+			new estadisticasSM(VentanaActual, tipo);
+		});
+		//----------------------
+
+		
 		fichero.add(verInfo);
 		fichero.add(verPuntaje);
 		fichero.add(verEstadisticas);		
@@ -236,35 +245,7 @@ private static final long serialVersionUID = 1L;
 		this.add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBackground(new Color(75, 0, 130));
 
-		//LE DAMOS A LOS BOTONES UNA FUNCIONALIDAD;
-		
-		btnVolver.addActionListener((e)->{
-			VentanaActual.setVisible(false);
-			VentanaAnterior.setVisible(true);
-		});
-		
-		
-		//HACEMOS QUE CUANDO PULSE EL BOTON DE START, SE ACTIVE
-		//Y SE DESACTIVE EL DE STOP
-		startButton.addActionListener(e -> {
-			startButton.setEnabled(false);
-			stopButton.setEnabled(true);
-			
-			//HACEMOS QUE EL BOTON DE START INICE EL JUEGO
-			startGame();
-		});
-		
-		//HACEMOS LO MISMO CON EL BOTON DE STOP
-		
-		stopButton.addActionListener(e -> {
-			stopButton.setEnabled(false);
-			startButton.setEnabled(true);
-			
-			//HACEMOS QUE EL BOTON DE STOP PARE EL JUEGO
-			stopGame();
-		});
-		
-		
+		//--------------------------------------------------------------------------------
 		// CERRADO DE VENTANA
 		
 		addWindowListener(new WindowAdapter() {
@@ -280,9 +261,8 @@ private static final long serialVersionUID = 1L;
 				previo.setVisible(true);
 			}
 		});
-		
-		//POR DEFECTO DEJAMOS QUE EL BOTON DE STOP ESTE ACTIVADO
-		stopButton.setEnabled(false);
+		//--------------------------------------------------------------------------------
+
 		
 		JMenu estilo = new JMenu("Apariencia");
 		estilo.setForeground(Color.WHITE);
@@ -366,6 +346,43 @@ private static final long serialVersionUID = 1L;
 		estilo.add(ghost);
 		estilo.add(normal);
 
+		//--------------------------------------------------------------------------------
+
+		
+		//LE DAMOS A LOS BOTONES UNA FUNCIONALIDAD;
+
+		btnVolver.addActionListener((e)->{
+			VentanaActual.setVisible(false);
+			VentanaAnterior.setVisible(true);
+		});
+		
+		
+		//HACEMOS QUE CUANDO PULSE EL BOTON DE START, SE ACTIVE
+		//Y SE DESACTIVE EL DE STOP
+		startButton.addActionListener(e -> {
+			startButton.setEnabled(false);
+			stopButton.setEnabled(true);
+			estilo.setEnabled(false);
+			
+			//HACEMOS QUE EL BOTON DE START INICE EL JUEGO
+			startGame();
+		});
+		
+		//HACEMOS LO MISMO CON EL BOTON DE STOP
+		
+		stopButton.addActionListener(e -> {
+			stopButton.setEnabled(false);
+			startButton.setEnabled(true);
+			estilo.setEnabled(true);
+			
+			//HACEMOS QUE EL BOTON DE STOP PARE EL JUEGO
+			stopGame();
+		});
+		
+		//POR DEFECTO DEJAMOS QUE EL BOTON DE STOP ESTE ACTIVADO
+		stopButton.setEnabled(false);
+		
+		
 		setVisible(true);
 	}
 	
@@ -374,7 +391,7 @@ private static final long serialVersionUID = 1L;
 	private void startGame() {
 		hilos = new ArrayList<Thread>();
 		
-		//HACEMOS EL FOR PARA LOS 3 HILOS
+		//HACEMOS EL FOR PARA LOS 6 HILOS
 		for (int i = 0; i < 6; i++) {
 			final int num = i;
 			
