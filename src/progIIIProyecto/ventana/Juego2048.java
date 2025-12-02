@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class Juego2048  extends JFrame{
+public class Juego2048  extends JFrame {
 	
 	/**
 	 * 
@@ -171,11 +171,67 @@ public class Juego2048  extends JFrame{
 					|| e.getKeyCode()==KeyEvent.VK_A 
 					|| e.getKeyCode()==KeyEvent.VK_S 
 					|| e.getKeyCode()==KeyEvent.VK_D ) {
-					if (!cronometro.isAlive()) { // Evitamos asi que se inicie mas de una vez
-					    cronometro.start();
+//					if (!cronometro.isAlive()) { // Evitamos asi que se inicie mas de una vez
+//					    cronometro.start();
+//					}
+					if(e.getKeyCode()==KeyEvent.VK_W){
+						System.out.println("entra");
+						for(int i=1;i<tablero.length;i++) {
+							for(int j=0;j<tablero[i].length;j++) {
+								if(tablero[i][j]!=0) {
+									int f = i-1;
+									while(f>=0 && tablero[f][j]==0) {
+										f--;
+									}
+									if(f<0) {
+										tablero[0][j] = tablero[i][j];
+										tablero[i][j] = 0;
+										actualizarColorCelda(0, j);
+										actualizarColorCelda(i, j);
+									}else {
+										if(tablero[f][j] == tablero[i][j]) {
+											tablero[f][j] = tablero[f][j] + tablero[i][j];
+											tablero[i][j] = 0;
+											actualizarColorCelda(f, j);
+											actualizarColorCelda(i, j);
+										}else {
+											//if(f<tablero.length-1) {
+												tablero[f+1][j] = tablero[i][j];
+												if(f+1!=i) {
+													tablero[i][j] = 0;
+												}
+												actualizarColorCelda(f+1, j);
+												actualizarColorCelda(i, j);
+											//}
+										}
+									}
+								}
+								
+//								if(f<0 && tablero[0][j]==0) {
+//									f++;
+//								}
+//								if(tablero[f][j] == tablero[i][j]) {
+//									tablero[f][j] = tablero[f][j] + tablero[i][j];
+//									tablero[i][j] = 0;
+//									actualizarColorCelda(f, j);
+//									actualizarColorCelda(i, j);
+//									
+//								}
+//								else if(f>=0) {
+//									tablero[f][j] = tablero[i][j];
+//									tablero[i][j] = 0;
+//									actualizarColorCelda(f, j);
+//									actualizarColorCelda(i, j);
+//									
+//								}
+							}
+						}
 					}
+		
 				}
-			}
+				generarNuevoNumero();
+				actualizarPantalla();
+				}
 		});
 
 		btnReiniciar.addActionListener((e)->{
