@@ -30,11 +30,13 @@ public class BuscaMinas extends JFrame {
     private JLabel lblPuntuacion;
     
     private JFrame ventanaPrevia;
+    
+    private boolean reiniciando = false;
 
     public BuscaMinas(JFrame previo) {
         super("BuscaMinas");
         this.ventanaPrevia = previo;
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         this.casillasSinMinasRestantes = (FILAS * COLUMNAS) - NUM_MINAS;
         setLayout(new BorderLayout());
@@ -72,17 +74,14 @@ public class BuscaMinas extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int response = JOptionPane.showConfirmDialog(BuscaMinas.this, "¿Deseas volver a la ventana principal?", "Salir del juego", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    BuscaMinas.this.dispose();
-                }
-            }
-            @Override
-            public void windowClosed(WindowEvent e) {
-            	if (ventanaPrevia != null) {
-                    ventanaPrevia.setVisible(true);
-                } else {
-                    System.exit(0);
+            	if (!reiniciando) {
+            		if (timer != null) timer.stop();
+                    if (ventanaPrevia != null) {
+                        ventanaPrevia.setVisible(true);
+                        ventanaPrevia.toFront();
+                    } else {
+                        System.exit(0);
+                    }
                 }
             }
         });
@@ -275,14 +274,7 @@ public class BuscaMinas extends JFrame {
                     }
                 }
             }
-            SwingUtilities.invokeLater(() -> {
-            	String mensaje = "¡FELICIDADES! Has despejado el campo.\n\nPuntuación Final: " + puntuacion;
-                
-                JOptionPane.showMessageDialog(BuscaMinas.this, 
-                    mensaje, 
-                    "¡Victoria!", 
-                    JOptionPane.INFORMATION_MESSAGE);
-            });
+            gestionarFinalJuego("¡FELICIDADES! Has despejado el campo.\nPuntuación Final: " + puntuacion, "¡Victoria!");
         }
     }
     
@@ -291,16 +283,28 @@ public class BuscaMinas extends JFrame {
         timer.stop();
         mostrarTodasMinas();
         this.getRootPane().paintImmediately(0, 0, getWidth(), getHeight());
+        gestionarFinalJuego("¡BOOM! Has perdido.\nPuntuación Final: " + puntuacion, "Fin del Juego");
+    }
+    
+    private void gestionarFinalJuego(String mensaje, String titulo) {
         SwingUtilities.invokeLater(() -> {
-            String mensaje = "¡BOOM! Has perdido.\n\nPuntuación Final: " + puntuacion;
-            JOptionPane.showMessageDialog(BuscaMinas.this, 
-                mensaje, 
-                "Fin del Juego", 
-                JOptionPane.ERROR_MESSAGE);
+            
+            int eleccion = JOptionPane.showConfirmDialog(
+                    this,
+                    mensaje + "\n\n¿Desea volver a jugar?",
+                    titulo,
+                    JOptionPane.YES_NO_OPTION 
+            );
+
+            if (eleccion == JOptionPane.YES_OPTION) {
+                reiniciando = true;
+                dispose();
+                new BuscaMinas(ventanaPrevia);
+            } else {
+            }
         });
     }
     
-
 	private void mostrarTodasMinas() {
         for (int i = 0; i < FILAS; i++) {
             for (int j = 0; j < COLUMNAS; j++) {
