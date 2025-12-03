@@ -30,11 +30,7 @@ public class estadisticasSM extends JFrame{
 		
 		JPanel sur = new JPanel();
 		this.add(sur, BorderLayout.SOUTH);
-		if(tipo == 0) {
-			sur.setBackground(new Color(55, 0, 95));
-			btnVolver.setBackground(new Color(55, 0, 95));
-			btnVolver.setForeground(Color.WHITE);
-		} else if(tipo == 1) { //FUEGO
+		if(tipo == 1) { //FUEGO
 			sur.setBackground(new Color(78, 26, 4));
 			btnVolver.setBackground(new Color(78, 26, 4));
 			btnVolver.setForeground(Color.WHITE);
@@ -46,6 +42,21 @@ public class estadisticasSM extends JFrame{
 			sur.setBackground(new Color(45, 45, 45));
 			btnVolver.setBackground(new Color(255, 234, 0));
 			btnVolver.setForeground(Color.BLACK);
+		} else if(tipo == 4) { //NORMAL
+			sur.setBackground(Color.GRAY);
+			btnVolver.setBackground(Color.GRAY);
+			btnVolver.setForeground(Color.BLACK);
+			
+		} else if(tipo == 5) { //BICHO
+			sur.setBackground(new Color(121, 163, 29));
+			btnVolver.setBackground(new Color(121, 163, 29));
+			btnVolver.setForeground(Color.BLACK);
+			
+		} else if(tipo == 6) { //PLANTA
+			sur.setBackground(new Color(31, 156, 84));
+			btnVolver.setBackground(new Color(31, 156, 84));
+			btnVolver.setForeground(Color.BLACK);
+			
 		} else { //GHOST
 			sur.setBackground(new Color(28, 0, 51));
 			btnVolver.setBackground(new Color(28, 0, 51));
@@ -107,14 +118,18 @@ public class estadisticasSM extends JFrame{
 
 				//PARA QUE DEPENDIENDO DEL ESTILO EN EL QUE ESTEMOS
 				//LA TABLA APAREZCA DE UN COLOR O DE OTRO
-				if(tipo == 0) { //NORMAL
-					resultado.setBackground(new Color(120, 0, 200));
-				} else if(tipo ==1) { //FUEGO
+				if(tipo ==1) { //FUEGO
 					resultado.setBackground(new Color(200, 55, 40));
 				} else if(tipo ==2) { //AGUA
 					resultado.setBackground(new Color(0, 168, 232));
 				} else if(tipo ==3) { // ELECTRICO
 					resultado.setBackground(new Color(255, 234, 0));
+				} else if(tipo ==4) { // NORMAL
+					resultado.setBackground(Color.GRAY);
+				} else if(tipo ==5) { // BICHO
+					resultado.setBackground(new Color(121, 163, 29));
+				} else if(tipo ==6) { // PLANTA
+					resultado.setBackground(new Color(31, 156, 84));
 				} else { //GHOST
 					resultado.setBackground(new Color(28, 0, 51));
 				}
