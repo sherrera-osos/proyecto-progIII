@@ -37,6 +37,8 @@ private static final long serialVersionUID = 1L;
 	private ArrayList<String> pokemonesA = new ArrayList<String>();
 	private ArrayList<String> pokemonesE = new ArrayList<String>();
 	private ArrayList<String> pokemonesG = new ArrayList<String>();
+	private ArrayList<String> pokemonesB = new ArrayList<String>();
+	private ArrayList<String> pokemonesP = new ArrayList<String>();
 	
 	private int tipo = 0;
 	
@@ -50,23 +52,23 @@ private static final long serialVersionUID = 1L;
 		pokemonesE.add("zekrom");
 		pokemonesE.add("pikachu");
 		pokemonesE.add("luxray");
-		pokemonesE.add("zapdos");
+		pokemonesE.add("emolga");
 		pokemonesE.add("electivire");
-		pokemonesE.add("electrode"); 
+		pokemonesE.add("eelektross"); 
 
 		pokemonesN.add("snorlax");
 		pokemonesN.add("eevee");
-		pokemonesN.add("mewtwo");
+		pokemonesN.add("furret");
 		pokemonesN.add("persian");
-		pokemonesN.add("pidgey");
+		pokemonesN.add("pidgeot");
 		pokemonesN.add("tauros");
 		
 		pokemonesA.add("magikarp");
-		pokemonesA.add("greninja");
+		pokemonesA.add("samurott");
 		pokemonesA.add("blastoise");
 		pokemonesA.add("piplup");
 		pokemonesA.add("lapras");
-		pokemonesA.add("oshawott");
+		pokemonesA.add("mudkip");
 		
 		pokemonesF.add("groudon");
 		pokemonesF.add("tepig");
@@ -77,10 +79,24 @@ private static final long serialVersionUID = 1L;
 		
 		pokemonesG.add("lunala");
 		pokemonesG.add("gengar");
-		pokemonesG.add("mimikyu");
-		pokemonesG.add("alakazam");
+		pokemonesG.add("banette");
+		pokemonesG.add("cofagrigus");
 		pokemonesG.add("giratina");
-		pokemonesG.add("haunter");
+		pokemonesG.add("sableye");
+		
+		pokemonesB.add("volcarona");
+		pokemonesB.add("venomoth");
+		pokemonesB.add("heracross");
+		pokemonesB.add("scizor");
+		pokemonesB.add("leavanny");
+		pokemonesB.add("vespiquen");
+		
+		pokemonesP.add("venusaur");
+		pokemonesP.add("servine");
+		pokemonesP.add("breloom");
+		pokemonesP.add("maractus");
+		pokemonesP.add("roserade");
+		pokemonesP.add("tropius");
 		
 		//CREAMOS LA VENTANA PRINCIPAL
 		this.setLayout(new BorderLayout());
@@ -89,12 +105,12 @@ private static final long serialVersionUID = 1L;
 		this.setResizable(false);
 		this.setSize(700, 500);
 		this.setLocationRelativeTo(null);
-		this.setBackground(new Color(75, 0, 130));
+		this.setBackground(Color.LIGHT_GRAY);
 		
 		//CREAMOS EL PANEL PRINCIPAL, DONDE ESTARÁ LA MAQUINA
 		JPanel panelPrinci = new JPanel(new GridLayout(2, 3, 40, 15));
 		slots = new JLabel[6];
-		panelPrinci.setBackground(new Color(75, 0, 130));
+		panelPrinci.setBackground(Color.LIGHT_GRAY);
 		
 		//AÑADIMOS EL PANEL PRINCIPAL A LA VENTANA
 		this.add(panelPrinci);
@@ -113,6 +129,10 @@ private static final long serialVersionUID = 1L;
 				this.actualizarLabel(slots[i], pokemonesE.get(random.nextInt(pokemonesE.size())));
 			}else if(tipo==4) { //GHOST
 				this.actualizarLabel(slots[i], pokemonesG.get(random.nextInt(pokemonesG.size())));
+			}else if (tipo == 5){ //BICHO
+				this.actualizarLabel(slots[i], pokemonesB.get(random.nextInt(pokemonesB.size())));
+			}else if (tipo == 6){ //PLANTA
+				this.actualizarLabel(slots[i], pokemonesP.get(random.nextInt(pokemonesP.size())));
 			}else { //NORMAL
 				this.actualizarLabel(slots[i], pokemonesN.get(random.nextInt(pokemonesN.size())));
 			}
@@ -125,7 +145,7 @@ private static final long serialVersionUID = 1L;
 		
 		//CREAMOS UN MENU EN EL CUAL PODREMOS AÑADIR DIFERENTES FUNCIONALIDADES
 		JMenuBar barraMenu = new JMenuBar();
-		barraMenu.setBackground(new Color(75, 0, 130));
+		barraMenu.setBackground(Color.LIGHT_GRAY);
 		barraMenu.setBorderPainted(false);//PARA QUE NO APAREZCA EL BORDE
 		this.setJMenuBar(barraMenu);
 		add(barraMenu, BorderLayout.NORTH);
@@ -224,26 +244,26 @@ private static final long serialVersionUID = 1L;
 		buttonPanel.add(stopButton);
 		buttonPanel.add(btnVolver);
 		
-		startButton.setBackground(new Color(75, 0, 130));
+		startButton.setBackground(Color.LIGHT_GRAY);
 		startButton.setFont(new Font("Monospaced", Font.BOLD, 20));
 		startButton.setForeground(Color.WHITE);
 		startButton.setBorderPainted(false);
 		startButton.setFocusPainted(false);
 		
-		stopButton.setBackground(new Color(75, 0, 130));
+		stopButton.setBackground(Color.LIGHT_GRAY);
 		stopButton.setFont(new Font("Monospaced", Font.BOLD, 20));
 		stopButton.setForeground(Color.WHITE);
 		stopButton.setBorderPainted(false);
 		stopButton.setFocusPainted(false);
 		
-		btnVolver.setBackground(new Color(75, 0, 130));
+		btnVolver.setBackground(Color.LIGHT_GRAY);
 		btnVolver.setFont(new Font("Monospaced", Font.BOLD, 20));
 		btnVolver.setForeground(Color.WHITE);
 		btnVolver.setBorderPainted(false);
 		btnVolver.setFocusPainted(false);
 		
 		this.add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.setBackground(new Color(75, 0, 130));
+		buttonPanel.setBackground(Color.GRAY);
 
 		//--------------------------------------------------------------------------------
 		// CERRADO DE VENTANA
@@ -271,8 +291,10 @@ private static final long serialVersionUID = 1L;
 		JMenuItem fuego = new JMenuItem("FUEGO");
 		JMenuItem agua = new JMenuItem("AGUA");
 		JMenuItem electrico = new JMenuItem("ELECTRICO");
-		JMenuItem ghost = new JMenuItem("GHOST");
+		JMenuItem ghost = new JMenuItem("FANTASMA");
 		JMenuItem normal = new JMenuItem("NORMAL");
+		JMenuItem planta = new JMenuItem("PLANTA");
+		JMenuItem bicho = new JMenuItem("BICHO");
 		
 		fuego.addActionListener((e)->{
 			VentanaActual.setBackground(new Color(200, 55, 40));
@@ -303,7 +325,7 @@ private static final long serialVersionUID = 1L;
 			buttonPanel.setBackground(new Color(45, 45, 45));
 			panelPrinci.setBackground(new Color(255, 234, 0));
 			startButton.setBackground(new Color(255, 234, 0));
-			stopButton.setBackground(new Color(255, 214, 0));
+			stopButton.setBackground(new Color(255, 234, 0));
 			btnVolver.setBackground(new Color(255, 234, 0));
 			startButton.setForeground(new Color(45, 45, 45));
 			stopButton.setForeground(new Color(45, 45, 45));
@@ -326,25 +348,54 @@ private static final long serialVersionUID = 1L;
 		});
 		
 		normal.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(75, 0, 130));
-			barraMenu.setBackground(new Color(75, 0, 130));
-			buttonPanel.setBackground(new Color(75, 0, 130));
-			panelPrinci.setBackground(new Color(75, 0, 130));
-			startButton.setBackground(new Color(75, 0, 130));
-			stopButton.setBackground(new Color(75, 0, 130));
-			btnVolver.setBackground(new Color(75, 0, 130));
+			VentanaActual.setBackground(Color.LIGHT_GRAY);
+			barraMenu.setBackground(Color.LIGHT_GRAY);
+			buttonPanel.setBackground(Color.GRAY);
+			panelPrinci.setBackground(Color.LIGHT_GRAY);
+			startButton.setBackground(Color.LIGHT_GRAY);
+			stopButton.setBackground(Color.LIGHT_GRAY);
+			btnVolver.setBackground(Color.LIGHT_GRAY);
 			startButton.setForeground(Color.WHITE);
 			stopButton.setForeground(Color.WHITE);
 			btnVolver.setForeground(Color.WHITE);
 			tipo=0;
 		});
 		
+		bicho.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(178, 240, 43));
+			barraMenu.setBackground(new Color(178, 240, 43));
+			buttonPanel.setBackground(new Color(121, 163, 29));
+			panelPrinci.setBackground(new Color(178, 240, 43));
+			startButton.setBackground(new Color(178, 240, 43));
+			stopButton.setBackground(new Color(178, 240, 43));
+			btnVolver.setBackground(new Color(178, 240, 43));
+			startButton.setForeground(Color.WHITE);
+			stopButton.setForeground(Color.WHITE);
+			btnVolver.setForeground(Color.WHITE);
+			tipo=5;
+		});
 		
+		planta.addActionListener((e)->{
+			VentanaActual.setBackground(new Color(49, 247, 133));
+			barraMenu.setBackground(new Color(49, 247, 133));
+			buttonPanel.setBackground(new Color(31, 156, 84));
+			panelPrinci.setBackground(new Color(49, 247, 133));
+			startButton.setBackground(new Color(49, 247, 133));
+			stopButton.setBackground(new Color(49, 247, 133));
+			btnVolver.setBackground(new Color(49, 247, 133));
+			startButton.setForeground(Color.WHITE);
+			stopButton.setForeground(Color.WHITE);
+			btnVolver.setForeground(Color.WHITE);
+			tipo=6;
+		});
+		
+		estilo.add(planta);
 		estilo.add(fuego);
 		estilo.add(agua);
 		estilo.add(electrico);
 		estilo.add(ghost);
 		estilo.add(normal);
+		estilo.add(bicho);
 
 		//--------------------------------------------------------------------------------
 
@@ -418,6 +469,10 @@ private static final long serialVersionUID = 1L;
 							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesE.get(random.nextInt(pokemonesE.size()))));
 						}else if(tipo==4) { //GHOST
 							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesG.get(random.nextInt(pokemonesG.size()))));
+						}else if(tipo==5) { //BICHO
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesB.get(random.nextInt(pokemonesB.size()))));
+						}else if(tipo==6) { //PLANTA
+							SwingUtilities.invokeLater(() -> actualizarLabel(slots[num],pokemonesP.get(random.nextInt(pokemonesP.size()))));
 						}
 						//HACEMOS EL TRY/CATCH
 						try {
@@ -455,7 +510,7 @@ private static final long serialVersionUID = 1L;
 	//#########################################################################################################################//
 	private void actualizarLabel(JLabel label, String pokemon) {
 		
-		java.net.URL imagePath = getClass().getResource("/imagenes/"+pokemon+".jpg");
+		java.net.URL imagePath = getClass().getResource("/imagenes/"+pokemon+".png");
 		
 		if(imagePath != null) {
 			
@@ -474,5 +529,9 @@ private static final long serialVersionUID = 1L;
 		
 		label.setHorizontalAlignment(JLabel.CENTER);
 		label.setOpaque(true);
+	}
+	
+	public static void main(String[] args) {
+		new slotMachine(null);
 	}
 }
