@@ -149,10 +149,15 @@ public class VentanaRegistrate extends JFrame {
 				generoElegido = Genero.Femenino;
 			}
 			
-			/// Aquí sacamos el telefono para poder ponerle un valor predetrminado en caso de que no se haya metido ninguno
+			/// Aquí sacamos el telefono para poder ponerle un valor predeterminado en caso de que no se haya metido ninguno y comprobar que sea un int
+			boolean esTlfInt = true;
 			int tlf = 0;
 			if(!aTel.getText().isEmpty()) {
-				tlf = Integer.parseInt(aTel.getText());
+				try {
+					tlf = Integer.parseInt(aTel.getText());
+				} catch (Exception e1) {
+					esTlfInt = false;
+				}
 			} 
 			
 			// Las condiciones para que todo vaya bien y se cree usuario y los errores en caso contrario
@@ -174,7 +179,10 @@ public class VentanaRegistrate extends JFrame {
 			
 			} else if (!contraseña.equals(contraseñaRepetida)) {
 				JOptionPane.showMessageDialog(null,"Las contraseñas introducidas no coinciden.", "ERROR", JOptionPane.ERROR_MESSAGE);
-
+				
+			} else if (!esTlfInt) {
+				JOptionPane.showMessageDialog(null,"Valores ilegales en campo 'Telefono'", "ERROR", JOptionPane.ERROR_MESSAGE);
+				aTel.setText("");
 				
 			} else {
 				Usuario usuarioNuevo = new Usuario(txtNombre.getText(), contraseña, tlf, txtCorreo.getText(),(Pais) sel.getSelectedItem(), generoElegido);
