@@ -233,7 +233,7 @@ public class BlackJack extends JFrame{
 		});
 		
 		panelJuego.setLayout(new BorderLayout());
-		panelJuego.setBackground(new Color(53, 101, 77));
+		panelJuego.setBackground(new Color(138, 0, 20));
 		ventana.add(panelJuego);
 		
 		btnHit.setFocusable(false);

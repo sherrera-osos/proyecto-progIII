@@ -38,8 +38,8 @@ public class VentanaConJuegos extends JFrame{
 	private JList<String> listaSugerencias; 
 	private JScrollPane scrollListaSugerencias; 
 	private DefaultListModel<String> modeloLista;
-	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","SLOT MACHINE","Juego5","Juego6","Juego7","Juego8","Juego9","Juego10"};
-	private String[] listaIconos = {"/imagenes/serpiente.jpg","/imagenes/buscaminas.png","/imagenes/blackjack.jpg","/imagenes/SlotMachine.jpg","","","","","",""};
+	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","SLOT MACHINE"};
+	private String[] listaIconos = {"/imagenes/2048.jpg","/imagenes/buscaminas1.jpeg","/imagenes/blackjack3 (1).jpg","/imagenes/SlotMachine.jpg"};
 	
 	public VentanaConJuegos (JFrame previo) {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -67,7 +67,7 @@ public class VentanaConJuegos extends JFrame{
 		add(panelBusquedaCompleto, BorderLayout.NORTH);
 		
 		panelJuegos = new JPanel();
-		panelJuegos.setLayout(new GridLayout(5, 2, 10, 10));
+		panelJuegos.setLayout(new GridLayout(2, 2, 10, 10));
 		
 		Color moradoOscuro = new Color(75,0,130);
 		panelJuegos.setBackground(moradoOscuro);	
