@@ -19,6 +19,11 @@ public class BuscaMinas extends JFrame {
     private int[][] tableroLogico;
     private boolean juegoTerminado = false;
     
+    private Timer timer;
+    private int segundosTranscurridos = 0;
+    private JLabel lblTiempo;
+    private boolean juegoIniciado = false;
+    
     private int casillasSinMinasRestantes;
     
     private int puntuacion = 0;
@@ -41,16 +46,25 @@ public class BuscaMinas extends JFrame {
         lblPuntuacion = new JLabel("Puntuación: 0");
         lblPuntuacion.setFont(new Font("Arial", Font.BOLD, 20));
         lblPuntuacion.setForeground(Color.BLACK);
-        lblPuntuacion.setOpaque(true); 
-        lblPuntuacion.setBackground(Color.LIGHT_GRAY); 
-
         panelInfo.add(lblPuntuacion);
+        panelInfo.add(Box.createHorizontalStrut(20)); 
+
+        lblTiempo = new JLabel("Tiempo: 0s");
+        lblTiempo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTiempo.setForeground(Color.BLUE); 
+        panelInfo.add(lblTiempo);
+        
         add(panelInfo, BorderLayout.NORTH);
         
         JPanel panelTablero = new JPanel(new GridLayout(FILAS, COLUMNAS));
         inicializarBotones(panelTablero);
         
         add(panelTablero, BorderLayout.CENTER);
+        
+        timer = new Timer(1000, e -> {
+            segundosTranscurridos++;
+            lblTiempo.setText("Tiempo: " + segundosTranscurridos + "s");
+        });
         
         pack();
         setLocationRelativeTo(null);
@@ -154,12 +168,17 @@ public class BuscaMinas extends JFrame {
                         JButton celda = (JButton) e.getSource();
                         
                         if (!celda.isEnabled()) return;
+                        
+                        if (!juegoIniciado) {
+                            juegoIniciado = true;
+                            timer.start();
+                        }
 
                         int fila = (int) celda.getClientProperty("fila");
                         int columna = (int) celda.getClientProperty("columna");
 
                         if (e.getButton() == MouseEvent.BUTTON1) {
-                            if (!celda.getText().equals("🚩")) {
+                            if (!celda.getText().equals("P")) {
                                 destaparCelda(fila, columna);
                             }
                         } else if (e.getButton() == MouseEvent.BUTTON3) {
@@ -187,7 +206,7 @@ public class BuscaMinas extends JFrame {
         
         int valor = tableroLogico[fila][columna];
         if (valor == -1) {
-            celda.setText("💣");
+            celda.setText("B");
             celda.setBackground(Color.RED);
             perderJuego();
         } else {
@@ -196,7 +215,7 @@ public class BuscaMinas extends JFrame {
 
             if (valor > 0) {
                 celda.setText(String.valueOf(valor));
-                celda.setForeground(getColorParaNumero(valor));
+                celda.setForeground(Color.BLACK);
             } else {
                 celda.setText("");
                 destapeRecursivo(fila, columna);
@@ -215,7 +234,7 @@ public class BuscaMinas extends JFrame {
                 if (isValid(f, c)) {
                     JButton celda = botones[f][c];
                     
-                    if (celda.isEnabled() && !celda.getText().equals("🚩")) {
+                    if (celda.isEnabled() && !celda.getText().equals("P")) {
                         
                         int valorVecino = tableroLogico[f][c];
                         celda.setEnabled(false);
@@ -229,7 +248,7 @@ public class BuscaMinas extends JFrame {
                             destapeRecursivo(f, c);
                         } else {
                             celda.setText(String.valueOf(valorVecino));
-                            celda.setForeground(getColorParaNumero(valorVecino));
+                            celda.setForeground(Color.BLACK);
                         }
                     }
                 }
@@ -247,16 +266,16 @@ public class BuscaMinas extends JFrame {
     private void verificarVictoria() {
         if (casillasSinMinasRestantes == 0 && !juegoTerminado) {
             juegoTerminado = true;
+            timer.stop();
             for (int i = 0; i < FILAS; i++) {
                 for (int j = 0; j < COLUMNAS; j++) {
                     if (tableroLogico[i][j] == -1) {
-                        botones[i][j].setText("🚩");
+                        botones[i][j].setText("P");
                         botones[i][j].setForeground(Color.RED);
                     }
                 }
             }
             SwingUtilities.invokeLater(() -> {
-                // Creamos un mensaje compuesto
             	String mensaje = "¡FELICIDADES! Has despejado el campo.\n\nPuntuación Final: " + puntuacion;
                 
                 JOptionPane.showMessageDialog(BuscaMinas.this, 
@@ -269,12 +288,11 @@ public class BuscaMinas extends JFrame {
     
     private void perderJuego() {
         juegoTerminado = true;
+        timer.stop();
         mostrarTodasMinas();
         this.getRootPane().paintImmediately(0, 0, getWidth(), getHeight());
         SwingUtilities.invokeLater(() -> {
-            // Creamos un mensaje compuesto. 
-            // Java pintará primero el texto de derrota y DEBAJO el de la puntuación.
-        	String mensaje = "¡BOOM! Has perdido.\n\nPuntuación Final: " + puntuacion;
+            String mensaje = "¡BOOM! Has perdido.\n\nPuntuación Final: " + puntuacion;
             JOptionPane.showMessageDialog(BuscaMinas.this, 
                 mensaje, 
                 "Fin del Juego", 
@@ -287,7 +305,7 @@ public class BuscaMinas extends JFrame {
         for (int i = 0; i < FILAS; i++) {
             for (int j = 0; j < COLUMNAS; j++) {
                 if (tableroLogico[i][j] == -1) {
-                    botones[i][j].setText("💣");
+                    botones[i][j].setText("B");
                     
                 }
                 botones[i][j].setEnabled(false);
@@ -298,30 +316,16 @@ public class BuscaMinas extends JFrame {
     private void marcarCelda(JButton celda) {
         if (!celda.isEnabled()) return; 
         
-        if (celda.getText().equals("🚩")) {
+        if (celda.getText().equals("P")) {
             celda.setText(" ");
             celda.setForeground(null);
         } else {
-            celda.setText("🚩");
+            celda.setText("P");
             celda.setForeground(Color.BLACK);
         }
     }
 
     //4. FUNCIONES AUXILIARES
-
-    private Color getColorParaNumero(int numero) {
-        switch (numero) {
-            case 1: return Color.BLUE;
-            case 2: return new Color(34, 139, 34);
-            case 3: return Color.RED;
-            case 4: return new Color(0, 0, 128);
-            case 5: return new Color(128, 0, 0); 
-            case 6: return new Color(64, 224, 208);
-            case 7: return Color.BLACK;
-            case 8: return Color.GRAY;
-            default: return Color.BLACK;
-        }
-    }
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
