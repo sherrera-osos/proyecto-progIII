@@ -10,6 +10,7 @@ public class Main {
 			@Override
 			public void run() {
 				new VentanaPrincipal();
+				System.out.println("Prueba recuperación");
 				
 			}
 		});
