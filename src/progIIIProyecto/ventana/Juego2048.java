@@ -36,7 +36,7 @@ public class Juego2048  extends JFrame {
     private int tablero[][] = new int[4][4];
     private JButton btnSalir,btnInformacion, btnReiniciar;
     private Thread cronometro;
-    private final int tiempoMaximo = 10;
+    private final int tiempoMaximo = 30;
     private JLabel lblTiempo;
     private int ptuTotal;
     	
@@ -85,6 +85,30 @@ public class Juego2048  extends JFrame {
 		pNorte.setBackground(new Color(255, 244, 229));
 		pSur.setBackground(new Color(219, 204, 184));
 		
+
+		
+		matriz = new JPanel[4][4];
+		numeros = new JLabel[4][4];
+		
+		for (int i = 0; i < 4; i++) {	
+			 for (int j = 0; j < 4; j++) {
+				 
+				matriz[i][j] = new JPanel(new GridLayout(1,1)); // Que ocupe todo, asi apareceria en todo el centro el numero
+				matriz[i][j].setBorder(BorderFactory.createLineBorder(new Color(147,133,120),3));
+				matriz[i][j].setOpaque(true);
+				matriz[i][j].setBackground(new Color(197,183,170));
+				
+				numeros[i][j] = new JLabel("0");
+				numeros[i][j].setFont(new Font("Serif",Font.BOLD,27));
+				numeros[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+				
+		        matriz[i][j].add(numeros[i][j]);
+				pCentro.add(matriz[i][j]);
+				
+				actualizarColorCelda(i, j);
+
+			}
+		}
 		
 		btnInformacion.addActionListener((e)->{
 			JFrame ventanaInformacion = new JFrame();
@@ -142,184 +166,36 @@ public class Juego2048  extends JFrame {
 		lblTiempo = new JLabel("Tiempo: 00:00",SwingConstants.CENTER);
 		pNorte.add(lblTiempo);
 		
-		cronometro = new Thread(()->{
-			for (int segundosRestantes = 0; segundosRestantes<=tiempoMaximo; segundosRestantes++) {
-				int minutos = segundosRestantes / 60;
-	            int segundos = segundosRestantes % 60;
-	            
-	            String tiempoFormateado = String.format("%02d:%02d", minutos, segundos);
-				
-				SwingUtilities.invokeLater(() -> lblTiempo.setText("Tiempo: " + tiempoFormateado));
-				
-				if (segundosRestantes >=tiempoMaximo) {
-					SwingUtilities.invokeLater(() ->{
-						new JOptionPane().showMessageDialog(null, "¡Fuera de tiempo!", "Tiempo agotado", JOptionPane.ERROR_MESSAGE);
-					});
-				}
-				
-				try {
-					cronometro.sleep(1000);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		
-
-		pCentro.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode()==KeyEvent.VK_W 
-					|| e.getKeyCode()==KeyEvent.VK_A 
-					|| e.getKeyCode()==KeyEvent.VK_S 
-					|| e.getKeyCode()==KeyEvent.VK_D ) {
-//					if (!cronometro.isAlive()) { // Evitamos asi que se inicie mas de una vez
-//					    cronometro.start();
-//					}
-					
-					if(e.getKeyCode()==KeyEvent.VK_W){
-						
-						System.out.println("entra");
-						for(int i=1;i<tablero.length;i++) {
-							for(int j=0;j<tablero[i].length;j++) {
-								
-								if(tablero[i][j]!=0) {
-									
-									int f = i-1;
-									while(f>=0 && tablero[f][j]==0) {
-										f--;
-									}
-									
-									if(f<0) {
-										
-										tablero[0][j] = tablero[i][j];
-										tablero[i][j] = 0;
-										actualizarColorCelda(0, j);
-										actualizarColorCelda(i, j);
-										
-									}else {
-										
-										if (tablero[f][j] == tablero[i][j]) {
-											
-											tablero[f][j] = tablero[f][j] + tablero[i][j];
-											ptuTotal += tablero[f][j];
-											
-											actualizarPuntuacion();
-											tablero[i][j] = 0;
-											
-											actualizarColorCelda(f, j);
-											actualizarColorCelda(i, j);
-											
-										}else {
-											
-												tablero[f+1][j] = tablero[i][j];
-												if(f+1!=i) {
-													tablero[i][j] = 0;
-												}
-												
-												actualizarColorCelda(f+1, j);
-												actualizarColorCelda(i, j);
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					if (e.getKeyCode()==KeyEvent.VK_S) {
-						
-						System.out.println("Baja");
-						for (int i = tablero.length - 2; i >= 0; i--) {  // Ahora comenzamos desde la penultima fila
-					        for (int j = 0; j < tablero[i].length; j++) {
-					        	
-					            if (tablero[i][j] != 0) {
-					            	
-					            	int f = i + 1;
-					                while (f < tablero.length && tablero[f][j] == 0) { // Ahora el limite es hacia abajp
-					                    f++;
-					                }
-					                
-					                if (f >= tablero.length) {
-					                	
-					                    tablero[tablero.length - 1][j] = tablero[i][j];
-					                    tablero[i][j] = 0;
-					                    actualizarColorCelda(tablero.length - 1, j);
-					                    actualizarColorCelda(i, j);
-
-					                } else {
-					                	
-					                    if (tablero[f][j] == tablero[i][j]) {
-					                    	
-					                        tablero[f][j] += tablero[i][j];
-					                        ptuTotal += tablero[f][j];
-					                        
-											actualizarPuntuacion();
-					                        tablero[i][j] = 0;
-					                        
-					                        actualizarColorCelda(f, j);
-					                        actualizarColorCelda(i, j);
-
-					                    } else {
-					                    	
-					                        tablero[f - 1][j] = tablero[i][j];
-					                        if (f - 1 != i) {
-					                        	
-					                            tablero[i][j] = 0;
-					                        }
-					                        
-					                        actualizarColorCelda(f - 1, j);
-					                        actualizarColorCelda(i, j);
-					                    }
-					                }
-					            }
-					        }
-					    }
-					}
-				}
-				generarNuevoNumero();
-				actualizarPantalla();
-				}
-		});
-
 		btnReiniciar.addActionListener((e)->{
 			
 			for (int i = 0; i < 4; i++) { 
 				for (int j = 0; j < 4; j++) { 
 					tablero[i][j] = 0; // Reiniciamos el tablero
 					} 
-				} 
+				}
 			
-			generarNuevoNumero(); 
+			if(cronometro.isAlive()) {
+				cronometro.interrupt();
+			}
+			lblTiempo.setText("Tiempo: 00:00");
+			
+			ptuTotal = 0;
+			actualizarPuntuacion();	
+			generarNuevoNumero();
 			actualizarPantalla();
+			pCentro.requestFocusInWindow(); // El panel necesita un foco, asi recive el keyListener
+			movimientosNumeros();
+			
 		});
 		
-		matriz = new JPanel[4][4];
-		numeros = new JLabel[4][4];
-		
-		for (int i = 0; i < 4; i++) {
-			
-			 for (int j = 0; j < 4; j++) {
-				 
-				matriz[i][j] = new JPanel(new GridLayout(1,1)); // Que ocupe todo, asi apareceria en todo el centro el numero
-				matriz[i][j].setBorder(BorderFactory.createLineBorder(new Color(147,133,120),3));
-				matriz[i][j].setOpaque(true);
-				matriz[i][j].setBackground(new Color(197,183,170));
-				
-				numeros[i][j] = new JLabel("0");
-				numeros[i][j].setFont(new Font("Serif",Font.BOLD,27));
-				numeros[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-				
-		        matriz[i][j].add(numeros[i][j]);
-				pCentro.add(matriz[i][j]);
-				
-				actualizarColorCelda(i, j);
-
-			}
-		}
+		btnSalir.addActionListener((e)->{
+			System.exit(0);
+		});
 		
 		generarNuevoNumero();
 		actualizarPantalla();
 		actualizarPuntuacion();
+		movimientosNumeros();
 		
 		setVisible(true);
 		pCentro.setFocusable(true); // Asi el panel recive un foco
@@ -394,6 +270,7 @@ public class Juego2048  extends JFrame {
 				}
 			}
 		}
+		System.out.println("tablero lleno");
 		return true;
 	}
 	
@@ -431,14 +308,286 @@ public class Juego2048  extends JFrame {
 				if (tablero[i][j] == 0) {
 				    numeros[i][j].setText("");
 				} else {
-				    numeros[i][j].setText(String.valueOf(tablero[i][j]));
+				    numeros[i][j].setText(String.valueOf(tablero[i][j])); // Que se ponga este valor
 				}
 				actualizarColorCelda(i, j);
 			}
 			
 		}
 	}
+	
+	public void movimientosNumeros() {
+		pCentro.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_W 
+					|| e.getKeyCode()==KeyEvent.VK_A 
+					|| e.getKeyCode()==KeyEvent.VK_S 
+					|| e.getKeyCode()==KeyEvent.VK_D ) {
+					if (cronometro == null || !cronometro.isAlive()) { // Evitamos asi que se inicie mas de una vez
+						crearCronometro();
+					    cronometro.start();
+					}
+					
+					if(e.getKeyCode()==KeyEvent.VK_W){						
+						System.out.println("Arriba");
+						for(int i=1;i<tablero.length;i++) {
+							for(int j=0;j<tablero[i].length;j++) {
+								
+								if(tablero[i][j]!=0) {
+									int f = i-1;
+									while(f>=0 && tablero[f][j]==0) {
+										f--;
+									}
+									if(f<0) {
+										
+										tablero[0][j] = tablero[i][j];
+										tablero[i][j] = 0;
+										actualizarColorCelda(0, j);
+										actualizarColorCelda(i, j);
+										
+									}else {
+										
+										if (tablero[f][j] == tablero[i][j]) {
+											tablero[f][j] = tablero[f][j] + tablero[i][j];
+											ptuTotal += tablero[f][j];
+											
+											actualizarPuntuacion();
+											tablero[i][j] = 0;
+											
+											actualizarColorCelda(f, j);
+											actualizarColorCelda(i, j);
+											
+										}else {
+												tablero[f+1][j] = tablero[i][j];
+												if(f+1!=i) {
+													tablero[i][j] = 0;
+												}
+												
+												actualizarColorCelda(f+1, j);
+												actualizarColorCelda(i, j);
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					if (e.getKeyCode()==KeyEvent.VK_S) {
+						System.out.println("Baja");
+						for (int i = tablero.length - 2; i >= 0; i--) {  // Ahora comenzamos desde la penultima fila
+					        for (int j = 0; j < tablero[i].length; j++) {
+					        	
+					            if (tablero[i][j] != 0) {
+					            	int f = i + 1;
+					                while (f < tablero.length && tablero[f][j] == 0) { // Ahora el limite es hacia abajp
+					                    f++;
+					                }
+					                
+					                if (f >= tablero.length) {
+					                    tablero[tablero.length - 1][j] = tablero[i][j];
+					                    tablero[i][j] = 0;
+					                    actualizarColorCelda(tablero.length - 1, j);
+					                    actualizarColorCelda(i, j);
 
+					                } else {					                	
+					                    if (tablero[f][j] == tablero[i][j]) {
+					                    	
+					                        tablero[f][j] += tablero[i][j];
+					                        ptuTotal += tablero[f][j];
+					                        
+											actualizarPuntuacion();
+					                        tablero[i][j] = 0;
+					                        
+					                        actualizarColorCelda(f, j);
+					                        actualizarColorCelda(i, j);
+
+					                    } else {					                    	
+					                        tablero[f - 1][j] = tablero[i][j];
+					                        if (f - 1 != i) {
+					                        	
+					                            tablero[i][j] = 0;
+					                        }
+					                        actualizarColorCelda(f - 1, j);
+					                        actualizarColorCelda(i, j);
+					                    }
+					                }
+					            }
+					        }
+					    }
+					}
+					
+					if(e.getKeyCode()==KeyEvent.VK_A){
+						
+						System.out.println("izquierda");
+                        
+						for(int i=0; i<tablero.length; i++) {
+                            // Recorremos las columnas (j) empezando en la segunda (j=1)
+							for(int j=1; j<tablero[i].length; j++) {
+								
+								if(tablero[i][j]!=0) {
+									
+									int c = j-1; 
+                                    
+									while(c>=0 && tablero[i][c]==0) {
+										c--;
+									}
+									
+									if(c<0) {
+										
+										tablero[i][0] = tablero[i][j];
+										tablero[i][j] = 0;
+										actualizarColorCelda(i, 0);
+										actualizarColorCelda(i, j);
+										
+									}else {
+										
+										if (tablero[i][c] == tablero[i][j]) {
+											
+											tablero[i][c] = tablero[i][c] + tablero[i][j];
+											ptuTotal += tablero[i][c]; 
+											
+											actualizarPuntuacion();
+											tablero[i][j] = 0;
+											
+											actualizarColorCelda(i, c);
+											actualizarColorCelda(i, j);
+											
+										}else {
+											
+											tablero[i][c+1] = tablero[i][j];
+											if(c+1!=j) {
+												tablero[i][j] = 0;
+											}
+												
+											actualizarColorCelda(i, c+1);
+											actualizarColorCelda(i, j);
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					if (e.getKeyCode()==KeyEvent.VK_D) {
+						
+						System.out.println("Derecha");
+                        
+						for (int i = 0; i < tablero.length; i++) {  
+                            // Recorremos las columnas (j) desde la penúltima hacia la izquierda (j=2, 1, 0)
+					        for (int j = tablero[i].length - 2; j >= 0; j--) {
+					        	
+					            if (tablero[i][j] != 0) {
+					            	
+					            	int c = j + 1;
+                                    
+					                while (c < tablero[i].length && tablero[i][c] == 0) { 
+					                    c++;
+					                }
+					                
+					                if (c >= tablero[i].length) {
+					                	
+					                    tablero[i][tablero[i].length - 1] = tablero[i][j];
+					                    tablero[i][j] = 0;
+					                    actualizarColorCelda(i, tablero[i].length - 1);
+					                    actualizarColorCelda(i, j);
+
+					                } else {
+					                	
+					                    if (tablero[i][c] == tablero[i][j]) {
+					                    	
+					                        tablero[i][c] += tablero[i][j];
+					                        ptuTotal += tablero[i][c]; 
+					                        
+											actualizarPuntuacion();
+					                        tablero[i][j] = 0;
+					                        
+					                        actualizarColorCelda(i, c);
+					                        actualizarColorCelda(i, j);
+
+					                    } else {
+					                    	
+					                        tablero[i][c - 1] = tablero[i][j];
+					                        if (c - 1 != j) {
+					                        	
+					                            tablero[i][j] = 0;
+					                        }
+					                        
+					                        actualizarColorCelda(i, c - 1);
+					                        actualizarColorCelda(i, j);
+					                    }
+					                }
+					            }
+					        }
+					    }
+					}
+					
+				}
+				
+				generarNuevoNumero();
+				actualizarPantalla();
+				if (!hayMovimientosPosible()) {
+					JOptionPane.showMessageDialog(Juego2048.this, "¡Juego Terminado! No hay más movimientos posibles.\nPuntuación Final: " + ptuTotal, 
+							"GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+		});
+	}
+	
+	public void crearCronometro() {
+		
+		cronometro = new Thread(()->{
+			
+			for (int segundosPasados = 0; segundosPasados<=tiempoMaximo; segundosPasados++) {
+				int minutos = segundosPasados / 60;
+	            int segundos = segundosPasados % 60;
+	            
+	            String tiempoFormateado = String.format("%02d:%02d", minutos, segundos);
+				
+				SwingUtilities.invokeLater(() -> lblTiempo.setText("Tiempo: " + tiempoFormateado));
+				
+				if (segundosPasados >=tiempoMaximo) {
+					SwingUtilities.invokeLater(() ->{
+						new JOptionPane().showMessageDialog(null, "¡Fuera de tiempo!", "Tiempo agotado", JOptionPane.ERROR_MESSAGE);
+					});
+				}
+				
+				try {
+					cronometro.sleep(1000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+					return; // Al reiniciar, nos salimos
+				}
+			}
+		});
+	}
+	
+	public boolean hayMovimientosPosible() {
+		if (!estaLleno()) {
+			return true;
+		}
+		
+		for (int i = 0; i < 4; i++) {
+	        for (int j = 0; j < 4; j++) {
+	            int valorActual = tablero[i][j];
+	            
+	            // Nos aseguramos de que no estamos en el borde derecho
+	            if (j < 3) { 
+	                if (tablero[i][j + 1] == valorActual) {
+	                    return true; 
+	                }
+	            }
+	            // Nos aseguramos de que no estamos en el borde de abajo
+	            if (i < 3) { 
+	                if (tablero[i + 1][j] == valorActual) {
+	                    return true;
+	                }
+	            }
+	        }
+	    }
+		return false; // No tenemos mas posibilidades
+	}
+	
 	public static void main(String[] args) {
 		Juego2048 j2028 = new Juego2048();
 	}
