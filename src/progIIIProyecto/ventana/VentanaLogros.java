@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,19 +27,17 @@ import progIIIProyecto.domain.Usuario;
 
 public class VentanaLogros extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int numeroOros = 0;
 	private int numeroPlatas = 0;
 	private int numeroBronces = 0;
 	
+	
 	public VentanaLogros(JFrame previo) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(new Dimension(1200, 460));
 		setLocationRelativeTo(previo);
-		
+	
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new GridLayout(2, 2));
 		
@@ -76,6 +75,12 @@ public class VentanaLogros extends JFrame{
 		
 		setTitle("Logros de " + usuarioRelacionado.getNombre());
 		
+		//#########################################################################################################################//
+		//INSTANCIAMOS EL RENDERER QUE CREAMOS EN LA OTRA CLASE
+		IconoLogroRenderer renderer = new IconoLogroRenderer();
+		//#########################################################################################################################//
+
+		
 		for (ArrayList<Logro> listaLogros : listaListaLogros) {
 			
 			JPanel panelLogrosJuego = new JPanel();
@@ -84,6 +89,11 @@ public class VentanaLogros extends JFrame{
 			TablaLogrosModel modelo = new TablaLogrosModel(listaLogros);
 			JTable tablaLogrosJuego = new JTable(modelo);
 			
+			//#########################################################################################################################//
+			tablaLogrosJuego.getColumnModel().getColumn(0).setCellRenderer(renderer);
+			tablaLogrosJuego.getColumnModel().getColumn(2).setCellRenderer(renderer);
+			//#########################################################################################################################//
+
 			tablaLogrosJuego.setDefaultRenderer(Object.class, new TableCellRenderer() {
 				
 				@Override
@@ -134,8 +144,7 @@ public class VentanaLogros extends JFrame{
 			
 			panelPrincipal.add(panelLogrosJuego);
 			
-			// Aprovechamos este for para meter el for del contador dentro
-			
+			// Aprovechamos este for para meter el for del contador dentro			
 			for (Logro logro : listaLogros) {
 				if (logro.isConseguido()) {
 					if (logro.getCalidad().equals(Calidad.ORO)) {
@@ -155,10 +164,20 @@ public class VentanaLogros extends JFrame{
 		
 		//Añadimos el contador de trofeos que ira arriba
 		
+		//#########################################################################################################################//
+		//ESTABLECEMOS LAS RUTAS DE CADA ICONO
+		ImageIcon iconoOro = new ImageIcon(getClass().getResource("/imagenes/oro.png"));
+		ImageIcon iconoPlata = new ImageIcon(getClass().getResource("/imagenes/plata.png"));
+		ImageIcon iconoBronce = new ImageIcon(getClass().getResource("/imagenes/bron.png"));
+		//#########################################################################################################################//
+
+		
 		JPanel panelContador = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
-		// Se añadiran los iconos más tarde
-		JLabel jLabelIconoBronce = new JLabel("B");
+		JLabel jLabelIconoBronce = new JLabel("");
+		//ESCALAMOS EL ICONO EN 30x30
+		jLabelIconoBronce.setIcon(new ImageIcon(iconoBronce.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+		//
 		jLabelIconoBronce.setFont(new Font("Arial", Font.PLAIN, 16));
 		jLabelIconoBronce.setBorder(new LineBorder(Color.BLACK));
 		panelContador.add(jLabelIconoBronce);
@@ -167,7 +186,12 @@ public class VentanaLogros extends JFrame{
 		jLabelBronce.setFont(new Font("Arial", Font.PLAIN, 16));
 		panelContador.add(jLabelBronce);
 		
-		JLabel jLabelIconoPlata = new JLabel("P");
+		
+		
+		JLabel jLabelIconoPlata = new JLabel("");
+		//ESCALAMOS EL ICONO EN 30x30
+		jLabelIconoPlata.setIcon(new ImageIcon(iconoPlata.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+		//
 		jLabelIconoPlata.setFont(new Font("Arial", Font.PLAIN, 16));
 		jLabelIconoPlata.setBorder(new LineBorder(Color.BLACK));
 		panelContador.add(jLabelIconoPlata);
@@ -176,7 +200,13 @@ public class VentanaLogros extends JFrame{
 		jLabelPlata.setFont(new Font("Arial", Font.PLAIN, 16));
 		panelContador.add(jLabelPlata);
 		
-		JLabel jLabelIconoOro = new JLabel("O");
+		
+		
+		
+		JLabel jLabelIconoOro = new JLabel("");
+		//ESCALAMOS EL ICONO EN 30x30
+		jLabelIconoOro.setIcon(new ImageIcon(iconoOro.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+		//
 		jLabelIconoOro.setFont(new Font("Arial", Font.PLAIN, 16));
 		jLabelIconoOro.setBorder(new LineBorder(Color.BLACK));
 		panelContador.add(jLabelIconoOro);
