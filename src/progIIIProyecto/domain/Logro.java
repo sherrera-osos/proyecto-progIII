@@ -1,5 +1,9 @@
 package progIIIProyecto.domain;
 
+import java.util.Random;
+
+import progIIIProyecto.BD.GestorBD;
+
 public class Logro {
 	
 	private int codigo;
@@ -9,19 +13,41 @@ public class Logro {
 	private String nombreJuego;
 	private Calidad calidad;
 	
-	private static int codigoNuevo = 1;
+	// Este es el constructor que hay que utilizar de normal
 
 	public Logro(String nombre, boolean conseguido, int requisitopuntos, String nombreJuego, Calidad calidad) {
 		super();
-		this.codigo = codigoNuevo;
 		this.nombre = nombre;
 		this.conseguido = conseguido;
 		this.requisitopuntos = requisitopuntos;
 		this.nombreJuego = nombreJuego;
 		this.calidad = calidad;
 		
-		codigoNuevo += 1;
+		Random r = new Random();
+		int codigoNuevo = r.nextInt(1, 1000000000);
+		GestorBD gestorBD = new GestorBD();
+		while (gestorBD.existeCodLog(codigoNuevo)) {
+			codigoNuevo = r.nextInt(1, 1000000000);
+		}
+		
+		this.codigo = codigoNuevo;
+		
 	}
+	
+	// Este constructor es el que utilizamos para al bajar logros de la bd poder saber su código real
+
+	public Logro(int codigo, String nombre, boolean conseguido, int requisitopuntos, String nombreJuego,
+			Calidad calidad) {
+		super();
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.conseguido = conseguido;
+		this.requisitopuntos = requisitopuntos;
+		this.nombreJuego = nombreJuego;
+		this.calidad = calidad;
+	}
+
+
 
 	public int getCodigo() {
 		return codigo;

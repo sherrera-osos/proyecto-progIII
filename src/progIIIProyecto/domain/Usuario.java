@@ -26,7 +26,7 @@ public class Usuario {
 		this.genero = genero;
 		
 		Random r = new Random();
-		int codigoNuevo = r.nextInt(1, 10);
+		int codigoNuevo = r.nextInt(1, 1000000000);
 		GestorBD gestorBD = new GestorBD();
 		while (gestorBD.existeCodUsu(codigoNuevo)) {
 			codigoNuevo = r.nextInt(1, 1000000000);
