@@ -107,6 +107,14 @@ public class VentanaConJuegos extends JFrame{
 				});
 				
 			
+			} else if(indiceBoton == 0) {
+				setVisible(false);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new Juego2048(VentanaConJuegos.this);	
+					}	
+				});
 			}
 			}
 		};

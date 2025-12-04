@@ -40,7 +40,7 @@ public class Juego2048  extends JFrame {
     private JLabel lblTiempo;
     private int ptuTotal;
     	
-	public Juego2048() {
+	public Juego2048(VentanaConJuegos ventanaConJuegos) {
 		setTitle("2048");
 		setBounds(500,200, 400, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -589,7 +589,7 @@ public class Juego2048  extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		Juego2048 j2028 = new Juego2048();
+		Juego2048 j2028 = new Juego2048(null);
 	}
 
 }
