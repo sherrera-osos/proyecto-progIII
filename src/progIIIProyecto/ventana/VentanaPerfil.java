@@ -12,14 +12,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import progIIIProyecto.domain.Usuario;
+
 public class VentanaPerfil extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	public VentanaPerfil(JFrame previo) {
+	private Usuario usuario;
+	
+	public VentanaPerfil(JFrame previo, Usuario usuario) {
+		this.usuario = usuario;
 		JFrame VentanaActual = this;
 		JFrame VentanaAnterior = previo;
 		

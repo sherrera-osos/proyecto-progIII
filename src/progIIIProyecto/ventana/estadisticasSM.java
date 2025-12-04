@@ -15,14 +15,18 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import progIIIProyecto.domain.Usuario;
+
 public class estadisticasSM extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 	private JTable tabla;
 	private estadisticasSMModel modelo;
 	private JButton btnVolver = new JButton("VOLVER");
 	
-	public estadisticasSM(JFrame previo, int tipo) {
+	public estadisticasSM(JFrame previo, int tipo, Usuario usuario) {
+		this.usuario = usuario;
 		this.setSize(1000, 400);
 		this.setTitle("Estadisticas Slot Machine");
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

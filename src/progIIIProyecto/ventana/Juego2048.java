@@ -23,12 +23,12 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import progIIIProyecto.domain.Usuario;
+
 public class Juego2048  extends JFrame {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 	private JPanel pNorte,pCentro,pSur;
 	private JLabel puntuacion;
 	private JPanel matriz [][];
@@ -40,7 +40,8 @@ public class Juego2048  extends JFrame {
     private JLabel lblTiempo;
     private int ptuTotal;
     	
-	public Juego2048(VentanaConJuegos ventanaConJuegos) {
+	public Juego2048(VentanaConJuegos ventanaConJuegos, Usuario usuario) {
+		this.usuario = usuario;
 		setTitle("2048");
 		setBounds(500,200, 400, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -589,7 +590,7 @@ public class Juego2048  extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		Juego2048 j2028 = new Juego2048(null);
+		Juego2048 j2028 = new Juego2048(null, null);
 	}
 
 }

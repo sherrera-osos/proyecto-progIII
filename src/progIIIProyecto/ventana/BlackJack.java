@@ -18,13 +18,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import progIIIProyecto.domain.Usuario;
+
 public class BlackJack extends JFrame{
 	private static final long serialVersionUID = 1L;
-
-
-
-
-
+	
+	private Usuario usuario;
 
 	private class Carta{
 		String valor;
@@ -207,7 +206,7 @@ public class BlackJack extends JFrame{
 	JButton btnStay = new JButton("Stay");
 	JButton btnReset = new JButton("Volver a Jugar");
 	
-	BlackJack(VentanaConJuegos ventanaConJuegos){
+	BlackJack(VentanaConJuegos ventanaConJuegos, Usuario usuario){
 		empezarJuego();
 		
 		ventana.setVisible(true);
@@ -412,7 +411,7 @@ public class BlackJack extends JFrame{
 
 
 	public static void main(String[] args) throws Exception{
-		BlackJack blackJack = new BlackJack(null);
+		BlackJack blackJack = new BlackJack(null, null);
 		blackJack.setVisible(true);
 	}
 }

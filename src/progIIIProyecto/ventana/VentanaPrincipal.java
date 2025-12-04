@@ -65,7 +65,7 @@ public class VentanaPrincipal extends JFrame{
 					
 					@Override
 					public void run() {
-						new VentanaConJuegos(VentanaPrincipal.this);
+						new VentanaConJuegos(VentanaPrincipal.this, null);
 					}
 				});
                          

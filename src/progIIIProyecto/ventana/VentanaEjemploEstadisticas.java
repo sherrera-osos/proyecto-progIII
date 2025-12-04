@@ -16,16 +16,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import progIIIProyecto.domain.Usuario;
+
 public class VentanaEjemploEstadisticas extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 	private JTable tablaEstadisticas;
 	private TreeMap<Integer, String> mapa;
 	
-	public VentanaEjemploEstadisticas(JFrame previo) {
+	public VentanaEjemploEstadisticas(JFrame previo, Usuario usuario) {
+		this.usuario = usuario;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setMinimumSize(new Dimension(1200, 300));
 		setTitle("Ventana Ejemplo estadisticas");
@@ -162,7 +163,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		new VentanaEjemploEstadisticas(null);
+		new VentanaEjemploEstadisticas(null, null);
 	}
 
 }

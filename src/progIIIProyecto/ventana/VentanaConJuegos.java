@@ -28,9 +28,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import progIIIProyecto.domain.Usuario;
+
 
 public class VentanaConJuegos extends JFrame{
 	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 	private JPanel panelJuegos;
 	private JTextField campoBusqueda;
 	private ArrayList<JButton> listaBotones; 
@@ -41,7 +44,8 @@ public class VentanaConJuegos extends JFrame{
 	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","SLOT MACHINE"};
 	private String[] listaIconos = {"/imagenes/2048.jpg","/imagenes/buscaminas1.jpeg","/imagenes/blackjack3 (1).jpg","/imagenes/SlotMachine.jpg"};
 	
-	public VentanaConJuegos (JFrame previo) {
+	public VentanaConJuegos (JFrame previo, Usuario usuario) {
+		this.usuario = usuario;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setTitle("VentanaPrincipal con Juegos"); //Provisional 
 		setSize(800, 600);
@@ -86,7 +90,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new BuscaMinas(VentanaConJuegos.this); // Lanza Buscaminas
+						new BuscaMinas(VentanaConJuegos.this, null); // Lanza Buscaminas
 					}
 				});
 			} else if (indiceBoton == 2) { // BLACKJACK
@@ -94,7 +98,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new BlackJack(VentanaConJuegos.this);	
+						new BlackJack(VentanaConJuegos.this, null);	
 					}	
 				});
 			} else if(indiceBoton == 3) { // SLOT MACHINE 
@@ -102,7 +106,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new slotMachine(VentanaConJuegos.this);	
+						new slotMachine(VentanaConJuegos.this, null);	
 					}	
 				});
 				
@@ -112,7 +116,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new Juego2048(VentanaConJuegos.this);	
+						new Juego2048(VentanaConJuegos.this, null);	
 					}	
 				});
 			}
@@ -267,7 +271,7 @@ public class VentanaConJuegos extends JFrame{
 					
 					@Override
 					public void run() {
-						new VentanaPerfil(VentanaConJuegos.this);
+						new VentanaPerfil(VentanaConJuegos.this, null);
 					}
 				});
 				
@@ -292,7 +296,7 @@ public class VentanaConJuegos extends JFrame{
 						public void run() {
 							switch (ii) {
 							case 0:
-								new VentanaEjemploEstadisticas(VentanaConJuegos.this);
+								new VentanaEjemploEstadisticas(VentanaConJuegos.this, null);
 								break;
 							default:
 								System.out.println("No hay estadísticas para este juego");
@@ -317,7 +321,7 @@ public class VentanaConJuegos extends JFrame{
 					
 					@Override
 					public void run() {
-						new VentanaLogros(VentanaConJuegos.this);
+						new VentanaLogros(VentanaConJuegos.this, null);
 					}
 				});
 				

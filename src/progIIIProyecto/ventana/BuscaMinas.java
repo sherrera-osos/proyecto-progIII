@@ -1,6 +1,9 @@
 package progIIIProyecto.ventana;
 
 import javax.swing.*;
+
+import progIIIProyecto.domain.Usuario;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,6 +14,9 @@ import java.util.Random;
 public class BuscaMinas extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
+	private Usuario usuario;
+	
 	private static final int FILAS = 10; 
     private static final int COLUMNAS = 10; 
     private static final int NUM_MINAS = 15; 
@@ -33,8 +39,9 @@ public class BuscaMinas extends JFrame {
     
     private boolean reiniciando = false;
 
-    public BuscaMinas(JFrame previo) {
-        super("BuscaMinas");
+    public BuscaMinas(JFrame previo, Usuario usuario) {
+    	super("BuscaMinas");
+    	this.usuario = usuario;
         this.ventanaPrevia = previo;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
@@ -299,7 +306,7 @@ public class BuscaMinas extends JFrame {
             if (eleccion == JOptionPane.YES_OPTION) {
                 reiniciando = true;
                 dispose();
-                new BuscaMinas(ventanaPrevia);
+                new BuscaMinas(ventanaPrevia, null);
             } else {
             }
         });
@@ -333,7 +340,7 @@ public class BuscaMinas extends JFrame {
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new BuscaMinas(null); 
+            new BuscaMinas(null, null); 
         });
     }
 }

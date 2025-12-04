@@ -23,8 +23,13 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import progIIIProyecto.domain.Usuario;
+
 public class slotMachine extends JFrame{
 private static final long serialVersionUID = 1L;
+
+	// CREAMES EL OBJETO DEL USUARIO QUE ESTARA JUGANDO
+	private Usuario usuario;
 	
 	//CREAMOS UNA LISTA CON LOS SLOTS QUE USAREMOS
 	private JLabel[] slots;
@@ -46,7 +51,8 @@ private static final long serialVersionUID = 1L;
 	private Thread t;
 	private ArrayList<Thread> hilos;
 	
-	public slotMachine(JFrame previo) {
+	public slotMachine(JFrame previo, Usuario usuario) {
+		this.usuario = usuario;
 		JFrame VentanaActual = this;
 		JFrame VentanaAnterior = previo;
 		pokemonesE.add("zekrom");
@@ -261,7 +267,7 @@ private static final long serialVersionUID = 1L;
 		//----------------------
 		//ESTADISTICAS
 		verEstadisticas.addActionListener((e)->{
-			new estadisticasSM(VentanaActual, tipo);
+			new estadisticasSM(VentanaActual, tipo, null);
 		});
 		//----------------------
 
@@ -566,7 +572,4 @@ private static final long serialVersionUID = 1L;
 		label.setOpaque(true);
 	}
 	
-	public static void main(String[] args) {
-		new slotMachine(null);
-	}
 }

@@ -28,12 +28,14 @@ import progIIIProyecto.domain.Usuario;
 public class VentanaLogros extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 	private int numeroOros = 0;
 	private int numeroPlatas = 0;
 	private int numeroBronces = 0;
 	
 	
-	public VentanaLogros(JFrame previo) {
+	public VentanaLogros(JFrame previo, Usuario usuario) {
+		this.usuario = usuario;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(new Dimension(1200, 460));
 		setLocationRelativeTo(previo);
