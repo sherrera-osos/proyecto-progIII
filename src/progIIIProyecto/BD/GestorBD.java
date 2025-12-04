@@ -43,7 +43,7 @@ public class GestorBD {
 				String contrasenya = rs.getString("CONTRA");
 				int tlf = rs.getInt("TLF");
 				String correo = rs.getString("CORREO");
-				Pais pais = Pais.valueOf(rs.getString("PAIS"));
+				Pais pais = Pais.valueOf(rs.getString("PAIS").replace(" ", "_"));
 				Genero genero = Genero.valueOf(rs.getString("GENERO"));
 
 				Usuario usuario = new Usuario(codigo, nombre, contrasenya, tlf, correo, pais, genero);

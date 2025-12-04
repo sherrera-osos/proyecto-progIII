@@ -24,10 +24,10 @@ public class Logro {
 		this.calidad = calidad;
 		
 		Random r = new Random();
-		int codigoNuevo = r.nextInt(1, 1000000000);
+		int codigoNuevo = r.nextInt(2, 1000000000);
 		GestorBD gestorBD = new GestorBD();
 		while (gestorBD.existeCodLog(codigoNuevo)) {
-			codigoNuevo = r.nextInt(1, 1000000000);
+			codigoNuevo = r.nextInt(2, 1000000000);
 		}
 		
 		this.codigo = codigoNuevo;
