@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 import javax.swing.BorderFactory;
@@ -12,10 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Puntaje;
 import progIIIProyecto.domain.Usuario;
 
 public class VentanaEjemploEstadisticas extends JFrame{
@@ -23,7 +25,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 	private JTable tablaEstadisticas;
-	private TreeMap<Integer, String> mapa;
+	private ArrayList<Puntaje> listaPuntajes;
 	
 	public VentanaEjemploEstadisticas(JFrame previo, Usuario usuario) {
 		this.usuario = usuario;
@@ -32,19 +34,14 @@ public class VentanaEjemploEstadisticas extends JFrame{
 		setTitle("Ventana Ejemplo estadisticas");
 		setLocationRelativeTo(previo);
 		
-		// Esta parte del mapa habra que sacarla de la base de datos
+		// Sacamos todos los puntajes del juego del la bd y los ponemos en una lista
 		
-		String[] listaUsuarios = {"Usuario1","Usuario2","Usuario3","Usuario4","Usuario5","Usuario6","Usuario7","Usuario8","Usuario9","Usuario10","Usuario11","Usuario12","Usuario13","Usuario14","Usuario15"};
-		Integer[] listaPuntos = {12,50,30,70,15,45,28,12,20,22,37,23,4,45,67,54};
+		GestorBD gestorBD = new GestorBD();
+		listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego1");
 		
-		TreeMap<Integer, String> mapaUsuariosYPuntos = new TreeMap<Integer, String>(Collections.reverseOrder());
-		for (int i = 0;i<listaUsuarios.length;i++) {
-			mapaUsuariosYPuntos.put(listaPuntos[i], listaUsuarios[i]);
-		}
+		// Ordenamos esa lista segun los valores de los puntajes principales y secundarios
 		
-		this.mapa = mapaUsuariosYPuntos;
-		
-		// ---
+		ordenar(listaPuntajes,listaPuntajes.size()-1);
 		
 		initTables();
 		
@@ -57,7 +54,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 	public void initTables() {
 		
 		// Se crea la tabla con el modelo
-		VentanaEjemploEstadisticasModel modelo = new VentanaEjemploEstadisticasModel(this.mapa);	
+		VentanaEjemploEstadisticasModel modelo = new VentanaEjemploEstadisticasModel(listaPuntajes);	
 		this.tablaEstadisticas = new JTable(modelo);
 		tablaEstadisticas.setGridColor(Color.BLACK);
 		tablaEstadisticas.setRowHeight(40);
@@ -65,6 +62,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 		tablaEstadisticas.getColumnModel().getColumn(0).setMinWidth(180);
 		tablaEstadisticas.getColumnModel().getColumn(1).setMinWidth(480);
 		tablaEstadisticas.getColumnModel().getColumn(2).setMinWidth(200);
+		tablaEstadisticas.getColumnModel().getColumn(3).setMinWidth(200);
 		
 		// Renderizado personalizado para la cabecera
 		tablaEstadisticas.getTableHeader().setDefaultRenderer(new TableCellRenderer() {
@@ -76,7 +74,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 				
 				result.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				result.setHorizontalAlignment(JLabel.CENTER);
-				result.setFont(new Font("Arial", Font.BOLD, 28));
+				result.setFont(new Font("Arial", Font.BOLD, 20));
 				
 				result.setOpaque(true);
 				return result;
@@ -126,16 +124,16 @@ public class VentanaEjemploEstadisticas extends JFrame{
 	public class VentanaEjemploEstadisticasModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = 1L;
-		private String[] nombresColumnas = {"Ranking","Nombre usuario","Puntuación"};
-		private TreeMap<Integer, String> mapa;
+		private String[] nombresColumnas = {"Ranking","Nombre usuario","Puntuación Principal", "Puntuación secundaria"};
+		private ArrayList<Puntaje> listaPuntajes;
 		
-		public VentanaEjemploEstadisticasModel(TreeMap<Integer, String> mapa) {
-			this.mapa = mapa;
+		public VentanaEjemploEstadisticasModel(ArrayList<Puntaje> listaPuntajes) {
+			this.listaPuntajes = listaPuntajes;
 		}
 
 		@Override
 		public int getRowCount() {
-			return mapa.keySet().size();
+			return listaPuntajes.size();
 		}
 
 		@Override
@@ -153,13 +151,37 @@ public class VentanaEjemploEstadisticas extends JFrame{
 			if (columnIndex == 0) {
 				return rowIndex+1;
 			} else if (columnIndex == 1) {
-				return mapa.get(mapa.keySet().toArray()[rowIndex]); 
+				GestorBD gestorBD = new GestorBD();
+				String nombreUsuario = gestorBD.obtenerUsuario(listaPuntajes.get(rowIndex).getCodigoDelUsuario()).getNombre();
+				return nombreUsuario; 
 			} else if (columnIndex == 2) {
-				return mapa.keySet().toArray()[rowIndex];
+				int puntuacionPrincipal = listaPuntajes.get(rowIndex).getPuntos1();
+				return puntuacionPrincipal;
+			} else if (columnIndex == 3) {
+				int puntuacionSecundaria = listaPuntajes.get(rowIndex).getPuntos2();
+				return puntuacionSecundaria;
 			}
 			return null;
 		}
 		
+	}
+	
+	public void ordenar(ArrayList<Puntaje> listaPuntajes, int indice) {
+		int i = indice;
+		while (i>0) {
+			for (int j=0;j<i;j++)
+				if (listaPuntajes.get(i).getPuntos1() > listaPuntajes.get(j).getPuntos1()) {
+					Puntaje puntajeTemporal = listaPuntajes.get(i);
+					listaPuntajes.set(i, listaPuntajes.get(j));
+					listaPuntajes.set(j, puntajeTemporal);
+				} else if (listaPuntajes.get(i).getPuntos1() == listaPuntajes.get(j).getPuntos1() && listaPuntajes.get(i).getPuntos2() > listaPuntajes.get(j).getPuntos2()){
+					Puntaje puntajeTemporal = listaPuntajes.get(i);
+					listaPuntajes.set(i, listaPuntajes.get(j));
+					listaPuntajes.set(j, puntajeTemporal);  // En caso de empate en el puntaje principal se desempata con el puntaje secundario
+				}
+			i--;
+			ordenar(listaPuntajes, i);
+		}
 	}
 	
 	public static void main(String[] args) {
