@@ -198,34 +198,8 @@ public class VentanaPerfil extends JFrame{
 				int response = JOptionPane.showConfirmDialog(VentanaPerfil.this, "¿Seguro que quieres cancelar los cambios realizados?", "Cancelar cambios", JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
 
-					ventanaActual.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-					btnModificar.setVisible(true);
-					btnGuardar.setVisible(false);
-					btnCancelar.setVisible(false);
-
-					txtNombreUsuario.setText(usuario.getNombre());
-					txtNombreUsuario.setEditable(false);
-
-					txtContraseña.setText(usuario.getContr());
-					txtContraseña.setEditable(false);
-
-					txtTelefono.setText(usuario.getTlf() + "");
-					txtTelefono.setEditable(false);
-
-					txtCorreo.setText(usuario.getCorreo());
-					txtCorreo.setEditable(false);
-
-					panelDatosExtra.remove(3);
-					panelDatosExtra.remove(4);
-
-					txtPais.setText(usuario.getPais().toString());
-					txtPais.setEditable(false);
-					panelDatosExtra.add(txtPais,3);
-
-					txtGenero.setText(usuario.getGenero().toString());
-					txtGenero.setEditable(false);
-					panelDatosExtra.add(txtGenero,5);
+					ventanaActual.dispose();
+					new VentanaPerfil(previo, usuario);
 
 				}
 			}
