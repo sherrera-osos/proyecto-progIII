@@ -6,8 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeMap;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -119,7 +117,7 @@ public class VentanaEjemploEstadisticas extends JFrame{
 		this.add(scrollPaneEstadisticas, BorderLayout.CENTER);
 	}
 	
-	// El modelo de la tabla (Dependiendo del juego se pueden añadir más columnas)
+	// El modelo de la tabla
 	
 	public class VentanaEjemploEstadisticasModel extends AbstractTableModel {
 
@@ -165,6 +163,13 @@ public class VentanaEjemploEstadisticas extends JFrame{
 		}
 		
 	}
+	
+	// Función para ordenar los puntajes de cada usuario, primero por el puntaje principal y después por el secundario
+	// En un buscaminas por ejemplo, el puntaje principal sería las casillas resuletas, y el secundario el tiempo conseguido
+	// así, todos los jugadores que hayan encontrado todas las minas estaran arriba del todo, pero, para desempatar, el que
+	// menoa tiempo haya hecho sera el primero (en este caso habría que cambiar la función para que los tiempos los ordene de
+	// forma descendente, dandole la vuelta al >)
+	
 	
 	public void ordenar(ArrayList<Puntaje> listaPuntajes, int indice) {
 		int i = indice;

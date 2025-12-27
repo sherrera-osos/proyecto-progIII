@@ -15,6 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Usuario;
+
 public class VentanaPrincipal extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JButton btnUsuario;
@@ -35,9 +38,6 @@ public class VentanaPrincipal extends JFrame{
 		
 		setContentPane(panelConFondo);
 		
-		
-		
-		
 		JLabel titulo = new JLabel("16-BITS GAMES");
 		titulo.setFont(new Font("Impact", Font.BOLD, 48));
 		titulo.setForeground(Color.WHITE);
@@ -51,7 +51,7 @@ public class VentanaPrincipal extends JFrame{
 		panelConFondo.add(panelTitulo, BorderLayout.CENTER);
 		
 		
-		JButton botonEntrar = new JButton("Entrar");
+		JButton botonEntrar = new JButton("Entrar como invitado");
 		botonEntrar.setBackground(new Color(0, 153, 255));
 		
 		botonEntrar.addActionListener(new ActionListener() {
@@ -65,7 +65,9 @@ public class VentanaPrincipal extends JFrame{
 					
 					@Override
 					public void run() {
-						new VentanaConJuegos(VentanaPrincipal.this, null);
+						GestorBD gestorBD = new GestorBD();
+						Usuario usuarioInvitado = gestorBD.obtenerUsuario(306818548); //Más adelante hay que cambiarlo a 1 el código
+						new VentanaConJuegos(VentanaPrincipal.this, usuarioInvitado);
 					}
 				});
                          

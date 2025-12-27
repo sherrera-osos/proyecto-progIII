@@ -114,6 +114,32 @@ public class GestorBD {
 		}
 	}
 	
+	// FUNCION PARA MODIFICAR LOS VALORES DE UN USUARIO DE LA BASE DE DATOS
+	// Recibe un usuario y modifica los valores del usuario en bd que tenga el mismo código
+	
+	public void modificarUsuario(Usuario usuario) {
+		String sqlUpdate = "UPDATE USUARIO SET NOM_USU = ?, GENERO = ?, PAIS = ?, CONTRA = ?, TLF = ?, CORREO = ? WHERE COD_USU = ?";
+
+		try (Connection con = DriverManager.getConnection(CONNECTION_STRING);
+				PreparedStatement pstUpdate = con.prepareStatement(sqlUpdate)){
+
+			
+			pstUpdate.setString(1, usuario.getNombre());
+			pstUpdate.setString(2, usuario.getGenero().toString());
+			pstUpdate.setString(3, usuario.getPais().toString());
+			pstUpdate.setString(4, usuario.getContr());
+			pstUpdate.setInt(5, usuario.getTlf());
+			pstUpdate.setString(6, usuario.getCorreo());
+			pstUpdate.setInt(7, usuario.getCodigo());
+
+			pstUpdate.executeUpdate();
+
+		} catch (SQLException e) {
+			System.err.format("* Error al modificar el usuario: %s.\n", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 	// FUNCION PARA AÑADIR UN PUNTAJE A LA BASE DE DATOS
 
 		public void subirPuntaje(Puntaje puntaje) {
@@ -245,7 +271,7 @@ public class GestorBD {
 	public static void main(String[] args) {
 		GestorBD gestorBD = new GestorBD();
 		
-		System.out.println(gestorBD.obtenerUsuario(940119315));
+		System.out.println(gestorBD.obtenerUsuario(306818548));
 
 //		ArrayList<Puntaje> listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego1");
 //		for (Puntaje puntaje : listaPuntajes) {

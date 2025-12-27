@@ -33,7 +33,6 @@ import progIIIProyecto.domain.Usuario;
 
 public class VentanaConJuegos extends JFrame{
 	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
 	private JPanel panelJuegos;
 	private JTextField campoBusqueda;
 	private ArrayList<JButton> listaBotones; 
@@ -45,9 +44,8 @@ public class VentanaConJuegos extends JFrame{
 	private String[] listaIconos = {"/imagenes/2048.jpg","/imagenes/buscaminas1.jpeg","/imagenes/blackjack3 (1).jpg","/imagenes/SlotMachine.jpg"};
 	
 	public VentanaConJuegos (JFrame previo, Usuario usuario) {
-		this.usuario = usuario;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setTitle("VentanaPrincipal con Juegos"); //Provisional 
+		setTitle("JUEGOS	Usuario: " + usuario.getNombre()); //Lo pongo así para ver en cada momento cual es el usuario que esta metido, pero se puede cambiar
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		
@@ -90,7 +88,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new BuscaMinas(VentanaConJuegos.this, null); // Lanza Buscaminas
+						new BuscaMinas(VentanaConJuegos.this, usuario); // Lanza Buscaminas
 					}
 				});
 			} else if (indiceBoton == 2) { // BLACKJACK
@@ -98,7 +96,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new BlackJack(VentanaConJuegos.this, null);	
+						new BlackJack(VentanaConJuegos.this, usuario);	
 					}	
 				});
 			} else if(indiceBoton == 3) { // SLOT MACHINE 
@@ -106,7 +104,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new slotMachine(VentanaConJuegos.this, null);	
+						new slotMachine(VentanaConJuegos.this, usuario);	
 					}	
 				});
 				
@@ -116,7 +114,7 @@ public class VentanaConJuegos extends JFrame{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						new Juego2048(VentanaConJuegos.this, null);	
+						new Juego2048(VentanaConJuegos.this, usuario);	
 					}	
 				});
 			}
@@ -271,13 +269,16 @@ public class VentanaConJuegos extends JFrame{
 					
 					@Override
 					public void run() {
-						new VentanaPerfil(VentanaConJuegos.this, null);
+						new VentanaPerfil(VentanaConJuegos.this, usuario);
 					}
 				});
 				
 			}
 		});
-		itemVerPerfil.setEnabled(true); //Cuando tengamos el sistema de usuarios, este item estara desactivado a menos que hayas metido un usuario
+		
+		if (usuario.getCodigo() == 1) {
+			itemVerPerfil.setEnabled(false);
+		}
 		
 		menuUsuario.add(itemVerPerfil);
 		
@@ -296,7 +297,7 @@ public class VentanaConJuegos extends JFrame{
 						public void run() {
 							switch (ii) {
 							case 0:
-								new VentanaEjemploEstadisticas(VentanaConJuegos.this, null);
+								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
 								break;
 							default:
 								System.out.println("No hay estadísticas para este juego");
@@ -321,7 +322,7 @@ public class VentanaConJuegos extends JFrame{
 					
 					@Override
 					public void run() {
-						new VentanaLogros(VentanaConJuegos.this, null);
+						new VentanaLogros(VentanaConJuegos.this, usuario);
 					}
 				});
 				
@@ -329,7 +330,9 @@ public class VentanaConJuegos extends JFrame{
 		});
 		menuLogros.add(itemLogrosPorJuego);
 		
-		menuLogros.setEnabled(true); //Se activara si metes tu usuario
+		if (usuario.getCodigo() == 1) {
+			menuLogros.setEnabled(false);
+		}
 		
 		barraMenu.add(menuConfiguracion);
 		barraMenu.add(menuUsuario);
