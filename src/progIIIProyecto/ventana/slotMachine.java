@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -23,6 +24,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import progIIIProyecto.BD.GestionSMBD;
 import progIIIProyecto.domain.Usuario;
 
 public class slotMachine extends JFrame{
@@ -45,11 +47,40 @@ private static final long serialVersionUID = 1L;
 	private ArrayList<String> pokemonesB = new ArrayList<String>();
 	private ArrayList<String> pokemonesP = new ArrayList<String>();
 	
+	private JPanel panelPrinci;
+	private JMenuBar barraMenu;
+	private JPanel buttonPanel;
+	
 	private int tipo = 0;
 	
 	//INICIALIZAMOS EL HILO COMO VARIABLE Y HACEMOS UNA LISTA DE HILOS
 	private Thread t;
 	private ArrayList<Thread> hilos;
+	
+	private void aplicarTheme(String themeName) {
+		
+		GestionSMBD gestor = new GestionSMBD();
+		Map<String, Color> c = gestor.cargarTheme(themeName);
+		
+		if(c.isEmpty()) {
+			System.err.println("Theme vacio o no encontrado: "+themeName);
+			return;
+		}
+		
+		getContentPane().setBackground(c.get("background_main"));
+	    panelPrinci.setBackground(c.get("panel_principal"));
+	    buttonPanel.setBackground(c.get("panel_botones"));
+	    barraMenu.setBackground(c.get("menu_bar"));
+
+	    startButton.setBackground(c.get("button_primary"));
+	    stopButton.setBackground(c.get("button_secondary"));
+	    btnVolver.setBackground(c.get("button_primary"));
+	    
+	    Color textColor = c.get("button_text");
+	    startButton.setForeground(textColor);
+	    stopButton.setForeground(textColor);
+	    btnVolver.setForeground(textColor);
+	}
 	
 	public slotMachine(JFrame previo, Usuario usuario) {
 		this.usuario = usuario;
@@ -114,7 +145,7 @@ private static final long serialVersionUID = 1L;
 		this.setBackground(new Color(28, 0, 51));
 		
 		//CREAMOS EL PANEL PRINCIPAL, DONDE ESTARÁ LA MAQUINA
-		JPanel panelPrinci = new JPanel(new GridLayout(2, 3, 40, 15));
+		panelPrinci = new JPanel(new GridLayout(2, 3, 40, 15));
 		slots = new JLabel[6];
 		panelPrinci.setBackground(new Color(28, 0, 51));
 		
@@ -150,7 +181,7 @@ private static final long serialVersionUID = 1L;
 		
 		
 		//CREAMOS UN MENU EN EL CUAL PODREMOS AÑADIR DIFERENTES FUNCIONALIDADES
-		JMenuBar barraMenu = new JMenuBar();
+		barraMenu = new JMenuBar();
 		barraMenu.setBackground(new Color(28, 0, 51));
 		barraMenu.setBorderPainted(false);//PARA QUE NO APAREZCA EL BORDE
 		this.setJMenuBar(barraMenu);
@@ -277,7 +308,7 @@ private static final long serialVersionUID = 1L;
 		fichero.add(verEstadisticas);		
 		
 		//CREAMOS EL PANEL PARA LOS BOTONES
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		buttonPanel.add(startButton);
 		buttonPanel.add(stopButton);
 		buttonPanel.add(btnVolver);
@@ -335,95 +366,38 @@ private static final long serialVersionUID = 1L;
 		JMenuItem bicho = new JMenuItem("BICHO");
 		
 		fuego.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(200, 55, 40));
-			barraMenu.setBackground(new Color(200, 55, 40));
-			buttonPanel.setBackground(new Color(78, 26, 4));
-			panelPrinci.setBackground(new Color(200, 55, 40));
-			startButton.setBackground(new Color(255, 106, 0));
-			stopButton.setBackground(new Color(255, 143, 51));
-			btnVolver.setBackground(new Color(255, 106, 0));
+			aplicarTheme("fuego");
 			tipo=1;
 		});
 		
 		
 		agua.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(0, 168, 232));
-			barraMenu.setBackground(new Color(0, 168, 232));
-			buttonPanel.setBackground(new Color(1, 58, 99));
-			panelPrinci.setBackground(new Color(0, 168, 232));
-			startButton.setBackground(new Color(0, 168, 232));
-			stopButton.setBackground(new Color(0, 119, 182));
-			btnVolver.setBackground(new Color(0, 168, 232));
+			aplicarTheme("agua");
 			tipo=2;
 		});
 		
 		electrico.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(255, 234, 0));
-			barraMenu.setBackground(new Color(45, 45, 45));
-			buttonPanel.setBackground(new Color(45, 45, 45));
-			panelPrinci.setBackground(new Color(255, 234, 0));
-			startButton.setBackground(new Color(255, 234, 0));
-			stopButton.setBackground(new Color(255, 234, 0));
-			btnVolver.setBackground(new Color(255, 234, 0));
-			startButton.setForeground(new Color(45, 45, 45));
-			stopButton.setForeground(new Color(45, 45, 45));
-			btnVolver.setForeground(new Color(45, 45, 45));
+			aplicarTheme("electrico");
 			tipo=3;
 		});
 		
 		ghost.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(28, 0, 51));
-			barraMenu.setBackground(new Color(28, 0, 51));
-			buttonPanel.setBackground(new Color(28, 0, 51));
-			panelPrinci.setBackground(new Color(28, 0, 51));
-			startButton.setBackground(new Color(28, 0, 51));
-			stopButton.setBackground(new Color(28, 0, 51));
-			btnVolver.setBackground(new Color(28, 0, 51));
-			startButton.setForeground(Color.WHITE);
-			stopButton.setForeground(Color.WHITE);
-			btnVolver.setForeground(Color.WHITE);
+			aplicarTheme("ghost");
 			tipo=0;
 		});
 		
 		normal.addActionListener((e)->{
-			VentanaActual.setBackground(Color.LIGHT_GRAY);
-			barraMenu.setBackground(Color.LIGHT_GRAY);
-			buttonPanel.setBackground(Color.GRAY);
-			panelPrinci.setBackground(Color.LIGHT_GRAY);
-			startButton.setBackground(Color.LIGHT_GRAY);
-			stopButton.setBackground(Color.LIGHT_GRAY);
-			btnVolver.setBackground(Color.LIGHT_GRAY);
-			startButton.setForeground(Color.BLACK);
-			stopButton.setForeground(Color.BLACK);
-			btnVolver.setForeground(Color.BLACK);
+			aplicarTheme("normal");
 			tipo=4;
 		});
 		
 		bicho.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(121, 163, 29));
-			barraMenu.setBackground(new Color(121, 163, 29));
-			buttonPanel.setBackground(new Color(121, 163, 29));
-			panelPrinci.setBackground(new Color(121, 163, 29));
-			startButton.setBackground(new Color(121, 163, 29));
-			stopButton.setBackground(new Color(121, 163, 29));
-			btnVolver.setBackground(new Color(121, 163, 29));
-			startButton.setForeground(Color.BLACK);
-			stopButton.setForeground(Color.BLACK);
-			btnVolver.setForeground(Color.BLACK);
+			aplicarTheme("bicho");
 			tipo=5;
 		});
 		
 		planta.addActionListener((e)->{
-			VentanaActual.setBackground(new Color(31, 156, 84));
-			barraMenu.setBackground(new Color(31, 156, 84));
-			buttonPanel.setBackground(new Color(31, 156, 84));
-			panelPrinci.setBackground(new Color(31, 156, 84));
-			startButton.setBackground(new Color(31, 156, 84));
-			stopButton.setBackground(new Color(31, 156, 84));
-			btnVolver.setBackground(new Color(31, 156, 84));
-			startButton.setForeground(Color.WHITE);
-			stopButton.setForeground(Color.WHITE);
-			btnVolver.setForeground(Color.WHITE);
+			aplicarTheme("planta");
 			tipo=6;
 		});
 		
