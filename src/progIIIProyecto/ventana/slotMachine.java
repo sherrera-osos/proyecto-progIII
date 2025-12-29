@@ -5,14 +5,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -20,12 +24,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import progIIIProyecto.BD.GestionSMBD;
 import progIIIProyecto.domain.Usuario;
+
+import javax.swing.AbstractAction;
 
 public class slotMachine extends JFrame{
 private static final long serialVersionUID = 1L;
@@ -50,8 +56,14 @@ private static final long serialVersionUID = 1L;
 	private JPanel panelPrinci;
 	private JMenuBar barraMenu;
 	private JPanel buttonPanel;
+	private JFrame ventVerPuntaje;
+	private JTextArea txtArea;
 	
 	private int tipo = 0;
+	
+	//PARA LA PUNTUACIÓN
+	private int score = 0;
+	private JLabel lblScore;
 	
 	//INICIALIZAMOS EL HILO COMO VARIABLE Y HACEMOS UNA LISTA DE HILOS
 	private Thread t;
@@ -178,16 +190,12 @@ private static final long serialVersionUID = 1L;
 			panelPrinci.add(slots[i]);
 		}
 		
-		
-		
 		//CREAMOS UN MENU EN EL CUAL PODREMOS AÑADIR DIFERENTES FUNCIONALIDADES
 		barraMenu = new JMenuBar();
 		barraMenu.setBackground(new Color(28, 0, 51));
 		barraMenu.setBorderPainted(false);//PARA QUE NO APAREZCA EL BORDE
 		this.setJMenuBar(barraMenu);
 		add(barraMenu, BorderLayout.NORTH);
-		
-		
 		
 		JMenu fichero = new JMenu("Opciones");
 		fichero.setForeground(Color.WHITE);
@@ -227,10 +235,9 @@ private static final long serialVersionUID = 1L;
 			
 			Font retroFont = new Font("Monospaced", Font.BOLD, 17);
 	        txt.setFont(retroFont);
-			txt.setForeground(new Color(210, 160, 255));
+			txt.setForeground(Color.WHITE);
 			
 			JPanel aPanel = new JPanel();
-			
 			
 			btnOk.addActionListener((e2)->{
 				ventVerInfo.setVisible(false);
@@ -244,13 +251,13 @@ private static final long serialVersionUID = 1L;
 				aPanel.setBackground(new Color(1, 58, 99));
 				btnOk.setBackground(new Color(1, 58, 99));
 			}else if(tipo == 3) { //ELECTRICO
-				txt.setBackground(new Color(1, 58, 99));
-				aPanel.setBackground(new Color(1, 58, 99));
-				btnOk.setBackground(new Color(1, 58, 99));
+				txt.setBackground(new Color(45, 45, 45));
+				aPanel.setBackground(new Color(45, 45, 45));
+				btnOk.setBackground(new Color(45, 45, 45));
 			}else if(tipo == 4) { //NORMAL
-				txt.setBackground(Color.GRAY);
-				aPanel.setBackground(Color.GRAY);
-				btnOk.setBackground(Color.GRAY);
+				txt.setBackground(Color.LIGHT_GRAY);
+				aPanel.setBackground(Color.LIGHT_GRAY);
+				btnOk.setBackground(Color.LIGHT_GRAY);
 			}else if(tipo == 5) { //BICHO
  				txt.setBackground(new Color(121, 163, 29));
 				aPanel.setBackground(new Color(121, 163, 29));
@@ -276,19 +283,59 @@ private static final long serialVersionUID = 1L;
 		});
 		//----------------------
 		verPuntaje.addActionListener((e)->{
-			JFrame ventVerPuntaje = new JFrame();
-			ventVerPuntaje.setSize(400,500);
+			ventVerPuntaje = new JFrame();
+			ventVerPuntaje.setSize(400,300);
 			ventVerPuntaje.setLocationRelativeTo(null);
 			ventVerPuntaje.setTitle("Información del puntaje");
+
+			txtArea = new JTextArea();
+			txtArea.setEditable(false);
+			txtArea.setLineWrap(true);//AJUSTA LA LINEA AUTOMATICO
+			txtArea.setWrapStyleWord(true);//HACE QUE SEPARE POR PALABRAS Y NO POR CARACTERES
+			txtArea.setFocusable(false);//NO MUESTRA EL CURSOR
+			txtArea.setText(
+					"SISTEMA DE PUNTUACIÓN\n\n 6 iguales  → 1000 puntos (JACKPOT)\n 5 iguales  → 500 puntos\n 4 iguales  → 200 puntos\n" +
+						    " 3 iguales  → 100 puntos\n 2 iguales  → 30 puntos\n Menos de 2 → 0 puntos\n");
 			
-			JTable tabla = new JTable();
+			Font retroFont = new Font("Monospaced", Font.BOLD, 17);
+	        txtArea.setFont(retroFont);
+			txtArea.setForeground(Color.WHITE);
+			txtArea.setBackground(new Color(61, 0, 76));
 			
-			
+			ventVerPuntaje.add(txtArea, BorderLayout.CENTER);
 			
 			JPanel pSur = new JPanel();
-			pSur.setBackground(new Color(61, 0, 76));
 			ventVerPuntaje.add(pSur, BorderLayout.SOUTH);
 			pSur.add(btnOk);
+			if(tipo == 1) { //FUEGO
+				txtArea.setBackground(new Color(78, 26, 4));
+				pSur.setBackground(new Color(78, 26, 4));
+				btnOk.setBackground(new Color(78, 26, 4));
+			} else if(tipo == 2) { //AGUA
+				txtArea.setBackground(new Color(1, 58, 99));
+				pSur.setBackground(new Color(1, 58, 99));
+				btnOk.setBackground(new Color(1, 58, 99));
+			}else if(tipo == 3) { //ELECTRICO
+				txtArea.setBackground(new Color(45, 45, 45));
+				pSur.setBackground(new Color(45, 45, 45));
+				btnOk.setBackground(new Color(45, 45, 45));
+			}else if(tipo == 4) { //NORMAL
+				txtArea.setBackground(Color.LIGHT_GRAY);
+				pSur.setBackground(Color.LIGHT_GRAY);
+				btnOk.setBackground(Color.LIGHT_GRAY);
+			}else if(tipo == 5) { //BICHO
+				txtArea.setBackground(new Color(121, 163, 29));
+				pSur.setBackground(new Color(121, 163, 29));
+				btnOk.setBackground(new Color(121, 163, 29));
+			}else if(tipo == 6) { //PLANTA
+				txtArea.setBackground(new Color(31, 156, 84));
+				pSur.setBackground(new Color(31, 156, 84));
+				btnOk.setBackground(new Color(31, 156, 84));
+			} else { //GHOST
+				txtArea.setBackground(new Color(28, 0, 51));
+				pSur.setBackground(new Color(28, 0, 51));
+				btnOk.setBackground(new Color(28, 0, 51));
+			}
 			btnOk.addActionListener((e2)->{
 				ventVerPuntaje.setVisible(false);
 			});
@@ -447,7 +494,100 @@ private static final long serialVersionUID = 1L;
 		stopButton.setEnabled(false);
 		
 		
+		lblScore = new JLabel("PUNTOS: 0");
+		lblScore.setForeground(Color.WHITE);
+		lblScore.setFont(new Font("Impact", Font.BOLD, 18));
+		lblScore.setHorizontalAlignment(JLabel.CENTER);
+		barraMenu.add(lblScore);
+		
+		//--------------------------------------------------//
+		//--------------------------------------------------//
+		//EVENTO DE TECLADO PARA CERRAR LA VENTANA CTR+E
+		btnVolver.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E , KeyEvent.CTRL_DOWN_MASK), "exit");
+
+		btnVolver.getActionMap().put("exit", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnVolver.doClick();
+			}
+		});
+		
+		//EVENTO DE TECLADO PARA EMPEZAR A JUGAR CTR+SPACE
+		startButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE , KeyEvent.CTRL_DOWN_MASK), "start");
+
+		startButton.getActionMap().put("start", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				startButton.doClick(); 
+			}
+		});
+		
+		//EVENTO DE TECLADO PARA EMPEZAR A JUGAR CTR+ENTER
+		stopButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER , KeyEvent.CTRL_DOWN_MASK), "stop");
+
+		stopButton.getActionMap().put("stop", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				stopButton.doClick();
+			}
+		});
+		
+		//EVENTO DE TECLADO PARA CAMBIAR LA APARIENCIA CON CTR+T
+		this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.CTRL_DOWN_MASK), "changeTheme");
+		//getRootPane() HACE QUE SEA ESTABLE Y DETECTE EL JCOMPONENT
+		this.getRootPane().getActionMap().put("changeTheme", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cambiarTheme();
+			}
+		});
+		
+		//--------------------------------------------------//
+		//--------------------------------------------------//
 		setVisible(true);
+	}
+	
+	//METODO PARA EVENTO DE TECLADO DE ACTUALIZAR EL THEME
+	private String[] themes = {
+		    "ghost", "fuego", "agua", "electrico", "normal", "bicho", "planta"};
+	
+	private int themeIndex = 0;
+	private void cambiarTheme() {
+		    themeIndex = (themeIndex + 1) % themes.length;
+		    String nuevoTheme = themes[themeIndex];
+		    aplicarTheme(nuevoTheme);
+		    tipo=themeIndex;
+	}
+	
+	//METODO PARA ACTUALIZAR EL PUNTAJE
+	private void actualizarScore() {
+	    lblScore.setText("SCORE: " + score);
+	}
+	
+	//METODO PARA CALCULAR LOS PUNTOS OBTENIDOS
+	private int calcularPuntos() {
+		//CREAMOS UN MAPA COMO CONTADOR PARA IR SUMANDO LOS PUNTOS
+	    Map<String, Integer> contador = new HashMap<>();
+
+	    for (JLabel slot : slots) {
+	        String pokemon = slot.getToolTipText();//CON EL TOOLTIPTEXT OBTENEMOS EL NOMBRE DEL POKEMON
+	        contador.put(pokemon, contador.getOrDefault(pokemon, 0) + 1);
+	    }
+
+	    int maxIguales = 0;
+	    for (int cantidad : contador.values()) {
+	        if (cantidad > maxIguales) {
+	            maxIguales = cantidad;
+	        }
+	    }
+	    switch (maxIguales) {
+	        case 6: return 1000;//SI TODOS LAS IMAGENES SON IGUALES
+	        case 5: return 500;
+	        case 4: return 200;
+	        case 3: return 100;
+	        case 2: return 30;
+	        default: return 0;//SI LAS IMAGENES NO COINCIDEN
+	    }
 	}
 	
 	//#########################################################################################################################//
@@ -516,6 +656,15 @@ private static final long serialVersionUID = 1L;
 			} catch (InterruptedException e) {
 				//NO VAMOS A HACER NADA
 			}
+		}
+		int puntosGanados = calcularPuntos();
+		score += puntosGanados;
+		actualizarScore();
+		if (puntosGanados == 1000) {
+		    JOptionPane.showMessageDialog(this,
+		        "¡Has ganado +" + puntosGanados + " puntos!",
+		        "WOW",
+		        JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
