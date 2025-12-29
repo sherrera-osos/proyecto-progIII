@@ -19,23 +19,20 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import progIIIProyecto.BD.GestorBD;
 import progIIIProyecto.domain.Calidad;
-import progIIIProyecto.domain.Genero;
 import progIIIProyecto.domain.Logro;
-import progIIIProyecto.domain.Pais;
 import progIIIProyecto.domain.Usuario;
 
 public class VentanaLogros extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
 	private int numeroOros = 0;
 	private int numeroPlatas = 0;
 	private int numeroBronces = 0;
 	
 	
 	public VentanaLogros(JFrame previo, Usuario usuario) {
-		this.usuario = usuario;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(new Dimension(1200, 460));
 		setLocationRelativeTo(previo);
@@ -45,25 +42,15 @@ public class VentanaLogros extends JFrame{
 		
 		// Esto habría que sacarlo de la base de datos
 		
-		ArrayList<Logro> listaLogrosJuego1 = new ArrayList<Logro>();
-		listaLogrosJuego1.add(new Logro("Conseguir más de 10 puntos", true, 10, "Juego1", Calidad.BRONCE));
-		listaLogrosJuego1.add(new Logro("Conseguir más de 50 puntos", false, 50, "Juego1", Calidad.PLATA));
-		listaLogrosJuego1.add(new Logro("Conseguir más de 100 puntos", false, 100, "Juego1", Calidad.ORO));
+		GestorBD gestorBD = new GestorBD();
 		
-		ArrayList<Logro> listaLogrosJuego2 = new ArrayList<Logro>();
-		listaLogrosJuego2.add(new Logro("Conseguir más de 10 puntos", true, 10, "Juego2", Calidad.BRONCE));
-		listaLogrosJuego2.add(new Logro("Conseguir más de 50 puntos", true, 50, "Juego2", Calidad.PLATA));
-		listaLogrosJuego2.add(new Logro("Conseguir más de 100 puntos", false, 100, "Juego2", Calidad.ORO));
+		ArrayList<Logro> listaLogrosJuego1 = gestorBD.bajarLogrosDejuego("Juego1");
 		
-		ArrayList<Logro> listaLogrosJuego3 = new ArrayList<Logro>();
-		listaLogrosJuego3.add(new Logro("Conseguir más de 10 puntos", false, 10, "Juego3", Calidad.BRONCE));
-		listaLogrosJuego3.add(new Logro("Conseguir más de 50 puntos", false, 50, "Juego3", Calidad.PLATA));
-		listaLogrosJuego3.add(new Logro("Conseguir más de 100 puntos", false, 100, "Juego3", Calidad.ORO));
+		ArrayList<Logro> listaLogrosJuego2 = gestorBD.bajarLogrosDejuego("Juego2");
 		
-		ArrayList<Logro> listaLogrosJuego4 = new ArrayList<Logro>();
-		listaLogrosJuego4.add(new Logro("Conseguir más de 10 puntos", true, 10, "Juego4", Calidad.BRONCE));
-		listaLogrosJuego4.add(new Logro("Conseguir más de 50 puntos", true, 50, "Juego4", Calidad.PLATA));
-		listaLogrosJuego4.add(new Logro("Conseguir más de 100 puntos", true, 100, "Juego4", Calidad.ORO));
+		ArrayList<Logro> listaLogrosJuego3 = gestorBD.bajarLogrosDejuego("Juego3");
+		
+		ArrayList<Logro> listaLogrosJuego4 = gestorBD.bajarLogrosDejuego("Juego4");
 		
 		ArrayList<ArrayList<Logro>> listaListaLogros = new ArrayList<ArrayList<Logro>>();
 		listaListaLogros.add(listaLogrosJuego1);
@@ -71,11 +58,11 @@ public class VentanaLogros extends JFrame{
 		listaListaLogros.add(listaLogrosJuego3);
 		listaListaLogros.add(listaLogrosJuego4);
 		
-		Usuario usuarioRelacionado = new Usuario("Usuario1", "Contraseña1234", 666666666, "usuario1@gmail.com", Pais.Colombia, Genero.Otro);
-		
+		ArrayList<Integer> listaCodigosLogroDeUsuario = gestorBD.bajarLogrosDeUsuario(usuario.getCodigo());
+			
 		// -------------------------------------------
 		
-		setTitle("Logros de " + usuarioRelacionado.getNombre());
+		setTitle("Logros de " + usuario.getNombre());
 		
 		//#########################################################################################################################//
 		//INSTANCIAMOS EL RENDERER QUE CREAMOS EN LA OTRA CLASE
@@ -88,7 +75,7 @@ public class VentanaLogros extends JFrame{
 			JPanel panelLogrosJuego = new JPanel();
 			panelLogrosJuego.setBorder(BorderFactory.createTitledBorder(listaLogros.getFirst().getNombreJuego()));
 			
-			TablaLogrosModel modelo = new TablaLogrosModel(listaLogros);
+			TablaLogrosModel modelo = new TablaLogrosModel(listaLogros,listaCodigosLogroDeUsuario);
 			JTable tablaLogrosJuego = new JTable(modelo);
 			
 			//#########################################################################################################################//
@@ -148,7 +135,7 @@ public class VentanaLogros extends JFrame{
 			
 			// Aprovechamos este for para meter el for del contador dentro			
 			for (Logro logro : listaLogros) {
-				if (logro.isConseguido()) {
+				if (listaCodigosLogroDeUsuario.contains(logro.getCodigo())) {
 					if (logro.getCalidad().equals(Calidad.ORO)) {
 						numeroOros += 1;
 					} else if (logro.getCalidad().equals(Calidad.PLATA)) {
@@ -228,10 +215,12 @@ public class VentanaLogros extends JFrame{
 
 		private static final long serialVersionUID = 1L;
 		private ArrayList<Logro> listaLogros;
+		private ArrayList<Integer> listaCodigosLogroDeUsuario;
 		private int COLUMNAS = 3;
 		
-		public TablaLogrosModel(ArrayList<Logro> listaLogros) {
+		public TablaLogrosModel(ArrayList<Logro> listaLogros, ArrayList<Integer> listaCodigosLogroDeUsuario) {
 			this.listaLogros = listaLogros;
+			this.listaCodigosLogroDeUsuario = listaCodigosLogroDeUsuario;
 		}
 
 		@Override
@@ -247,7 +236,7 @@ public class VentanaLogros extends JFrame{
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			if (columnIndex == 0) {
-				return listaLogros.get(rowIndex).isConseguido();
+				return listaCodigosLogroDeUsuario.contains(listaLogros.get(rowIndex).getCodigo());
 				
 			} else if (columnIndex == 1) {
 				return listaLogros.get(rowIndex).getNombre(); 
@@ -259,5 +248,5 @@ public class VentanaLogros extends JFrame{
 		}
 		
 	}
-
+	
 }

@@ -40,7 +40,7 @@ public class VentanaConJuegos extends JFrame{
 	private JList<String> listaSugerencias; 
 	private JScrollPane scrollListaSugerencias; 
 	private DefaultListModel<String> modeloLista;
-	private String[] todosLosNombres = {"SERPIENTE","BUSCAMINAS","BLACKJACK","SLOT MACHINE"};
+	private String[] todosLosNombres = {"2048","BUSCAMINAS","BLACKJACK","SLOT MACHINE"};
 	private String[] listaIconos = {"/imagenes/2048.jpg","/imagenes/buscaminas1.jpeg","/imagenes/blackjack3 (1).jpg","/imagenes/SlotMachine.jpg"};
 	
 	public VentanaConJuegos (JFrame previo, Usuario usuario) {
@@ -296,13 +296,23 @@ public class VentanaConJuegos extends JFrame{
 						@Override
 						public void run() {
 							switch (ii) {
-							case 0:
+							case 0: // En este caso irian las estadísticas del 2048
+								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+								break;
+							case 1: // En este caso irian las estadísticas del BUSCAMINAS
+								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+								break;
+							case 2: // En este caso irian las estadísticas del BLACKJACK
+								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+								break;
+							case 3: // En este caso irian las estadísticas del SLOTMACHINE
 								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
 								break;
 							default:
 								System.out.println("No hay estadísticas para este juego");
 							}
-							
+							// Por ahora cada una de las estadisticas llama a la ventana de estadisticas de ejemplo, hay que ir cambiando las
+							// llamadas a medida que se tengan las ventanas de estadísticas d ecada juego
 						}
 					});
 					

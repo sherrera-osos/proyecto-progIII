@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import progIIIProyecto.domain.Calidad;
 import progIIIProyecto.domain.Genero;
+import progIIIProyecto.domain.Logro;
 import progIIIProyecto.domain.Pais;
 import progIIIProyecto.domain.Puntaje;
 import progIIIProyecto.domain.Usuario;
@@ -89,6 +91,58 @@ public class GestorBD {
 		return listaPuntajes;
 
 	}
+	
+	// FUNCION PARA BAJAR TODOS LOS LOGROS DE UN JUEGO
+	
+		public ArrayList<Logro> bajarLogrosDejuego(String nombreJuego){
+			ArrayList<Logro> listaLogros = new ArrayList<Logro>();
+			String sql = "SELECT * FROM LOGRO WHERE NOM_JUEGO = '"+nombreJuego+"'";
+
+			try (Connection con = DriverManager.getConnection(CONNECTION_STRING); Statement pst = con.createStatement()){
+				ResultSet rs = pst.executeQuery(sql);
+
+				while(rs.next()) {
+					int codigo = rs.getInt("COD_LOG");
+					String nombreLogro = rs.getString("NOM_LOG");
+					Calidad calidad = Calidad.valueOf(rs.getString("CALIDAD"));
+
+					Logro logro = new Logro(codigo, nombreLogro, nombreJuego, calidad);
+
+					listaLogros.add(logro);
+				}
+
+			} catch (Exception e) {
+				System.err.format("* Error recuperando logros: %s.\n", e.getMessage());
+				e.printStackTrace();
+			}
+
+			return listaLogros;
+
+		}
+		
+		// FUNCION PARA BAJAR LOS CODIGOS DE TODOS LOS LOGROS QUE TIENE UN USUARIO
+		
+		public ArrayList<Integer> bajarLogrosDeUsuario(int codigoUsuario){
+			ArrayList<Integer> listaCodigosLogros = new ArrayList<Integer>();
+			String sql = "SELECT * FROM TIENE WHERE COD_USU = "+codigoUsuario+"";
+
+			try (Connection con = DriverManager.getConnection(CONNECTION_STRING); Statement pst = con.createStatement()){
+				ResultSet rs = pst.executeQuery(sql);
+
+				while(rs.next()) {
+					int codigoLogro = rs.getInt("COD_LOG");
+
+					listaCodigosLogros.add(codigoLogro);
+				}
+
+			} catch (Exception e) {
+				System.err.format("* Error recuperando logros: %s.\n", e.getMessage());
+				e.printStackTrace();
+			}
+
+			return listaCodigosLogros;
+
+		}
 	
 	// FUNCION PARA AÑADIR UN USUARIO A LA BASE DE DATOS
 

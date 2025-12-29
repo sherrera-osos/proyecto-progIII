@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import progIIIProyecto.BD.GestorBD;
@@ -199,7 +200,13 @@ public class VentanaPerfil extends JFrame{
 				if (response == JOptionPane.YES_OPTION) {
 
 					ventanaActual.dispose();
-					new VentanaPerfil(previo, usuario);
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							new VentanaPerfil(previo, usuario);							
+						}
+					});
 
 				}
 			}
