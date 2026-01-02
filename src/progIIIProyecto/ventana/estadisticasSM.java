@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
@@ -15,18 +16,17 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import progIIIProyecto.domain.Usuario;
+import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Puntaje;
 
 public class estadisticasSM extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
 	private JTable tabla;
 	private estadisticasSMModel modelo;
 	private JButton btnVolver = new JButton("VOLVER");
 	
-	public estadisticasSM(JFrame previo, int tipo, Usuario usuario) {
-		this.usuario = usuario;
+	public estadisticasSM(JFrame previo, int tipo) {
 		this.setSize(1000, 400);
 		this.setTitle("Estadisticas Slot Machine");
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -78,20 +78,30 @@ public class estadisticasSM extends JFrame{
 		});
 
 		//USANDO LA BASE DE DATOS:
-		String[] listaUsuarios = {"Usuario1","Usuario2","Usuario3","Usuario4","Usuario5","Usuario6","Usuario7","Usuario8","Usuario9","Usuario10","Usuario11","Usuario12","Usuario13","Usuario14","Usuario15","Usuario16"};
-		Integer[] listaPuntos = {120,500,300,700,150,450,250,120,200,220,350,220,400,450,670,550};
-		Integer[] listaIntentos = {6,2,4,6,1,7,9,10,15,14,10,8,6,7,5,12};
+		GestorBD gestor = new GestorBD();
+		ArrayList<Puntaje> lista = gestor.bajarPuntajesDeJuego("slotMachine");
+		
+		String[] nombres = new String[lista.size()];
+		Integer[] puntos = new Integer[lista.size()];
+		Integer[] intentos = new Integer[lista.size()];
+
+		for (int i = 0; i < lista.size(); i++) {
+		    Puntaje p = lista.get(i);
+		    nombres[i] = "Usuario " + p.getCodigoDelUsuario();
+		    puntos[i] = p.getPuntos1();
+		    intentos[i] = p.getPuntos2();
+		}
 		
 		//SI LAS LISTAS NO COINCIDEN
-		int total = Math.min(listaUsuarios.length, 
-                Math.min(listaPuntos.length, listaIntentos.length));
+		int total = Math.min(nombres.length, 
+                Math.min(puntos.length, intentos.length));
 		
 		
 		//CREAMOS EL MODELO
 		modelo = new estadisticasSMModel(
-				Arrays.copyOf(listaUsuarios, total),
-                Arrays.copyOf(listaPuntos, total),
-                Arrays.copyOf(listaIntentos, total)
+				Arrays.copyOf(nombres, total),
+                Arrays.copyOf(puntos, total),
+                Arrays.copyOf(intentos, total)
                 );
 		
 		tabla = new JTable(modelo);

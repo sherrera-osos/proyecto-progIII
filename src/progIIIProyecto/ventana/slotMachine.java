@@ -29,6 +29,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import progIIIProyecto.BD.GestionSMBD;
+import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Puntaje;
 import progIIIProyecto.domain.Usuario;
 
 import javax.swing.AbstractAction;
@@ -64,6 +66,8 @@ private static final long serialVersionUID = 1L;
 	//PARA LA PUNTUACIÓN
 	private int score = 0;
 	private JLabel lblScore;
+	private int intentos = 0;
+	private JLabel lblIntentos;
 	
 	//INICIALIZAMOS EL HILO COMO VARIABLE Y HACEMOS UNA LISTA DE HILOS
 	private Thread t;
@@ -96,6 +100,8 @@ private static final long serialVersionUID = 1L;
 	
 	public slotMachine(JFrame previo, Usuario usuario) {
 		this.usuario = usuario;
+		int codUsuario = usuario.getCodigo();
+		
 		JFrame VentanaActual = this;
 		JFrame VentanaAnterior = previo;
 		pokemonesE.add("zekrom");
@@ -204,6 +210,7 @@ private static final long serialVersionUID = 1L;
 		JMenuItem verInfo = new JMenuItem("Ver Información");
 		JMenuItem verPuntaje = new JMenuItem("¿Cómo funciona el puntaje?");
 		JMenuItem verEstadisticas = new JMenuItem("Ver Estadisticas");		
+		JMenuItem guardarP = new JMenuItem("Guardar puntaje");
 		
 		JButton btnOk = new JButton("Entendido!");
 		btnOk.setBackground(new Color(61, 0, 76));
@@ -345,14 +352,25 @@ private static final long serialVersionUID = 1L;
 		//----------------------
 		//ESTADISTICAS
 		verEstadisticas.addActionListener((e)->{
-			new estadisticasSM(VentanaActual, tipo, null);
+			new estadisticasSM(VentanaActual, tipo);
+		});
+		
+		//----------------------
+		guardarP.addActionListener(e->{
+			Puntaje puntaje = new Puntaje("slotMachine", score, intentos, codUsuario);
+			GestorBD gestor = new GestorBD();
+			gestor.subirPuntaje(puntaje);
+			
+			JOptionPane.showMessageDialog(this, 
+					"Puntaje guardado:\nPuntaje: "+score+"\nIntentos: "+intentos,
+					"Guardado", JOptionPane.INFORMATION_MESSAGE);
 		});
 		//----------------------
-
 		
 		fichero.add(verInfo);
 		fichero.add(verPuntaje);
-		fichero.add(verEstadisticas);		
+		fichero.add(verEstadisticas);	
+		fichero.add(guardarP);
 		
 		//CREAMOS EL PANEL PARA LOS BOTONES
 		buttonPanel = new JPanel();
@@ -471,6 +489,9 @@ private static final long serialVersionUID = 1L;
 		//HACEMOS QUE CUANDO PULSE EL BOTON DE START, SE ACTIVE
 		//Y SE DESACTIVE EL DE STOP
 		startButton.addActionListener(e -> {
+			intentos++;
+			actualizarIntentos();
+			
 			startButton.setEnabled(false);
 			stopButton.setEnabled(true);
 			estilo.setEnabled(false);
@@ -499,6 +520,13 @@ private static final long serialVersionUID = 1L;
 		lblScore.setFont(new Font("Impact", Font.BOLD, 18));
 		lblScore.setHorizontalAlignment(JLabel.CENTER);
 		barraMenu.add(lblScore);
+		
+		lblIntentos = new JLabel("		INTENTOS: 0");
+		lblIntentos.setForeground(Color.WHITE);
+		lblIntentos.setFont(new Font("Impact", Font.BOLD, 18));
+		lblIntentos.setHorizontalAlignment(JLabel.CENTER);
+		barraMenu.add(javax.swing.Box.createHorizontalGlue());
+		barraMenu.add(lblIntentos);
 		
 		//--------------------------------------------------//
 		//--------------------------------------------------//
@@ -557,6 +585,11 @@ private static final long serialVersionUID = 1L;
 		    String nuevoTheme = themes[themeIndex];
 		    aplicarTheme(nuevoTheme);
 		    tipo=themeIndex;
+	}
+	
+	//METODO PARA ACTUALIZAR LOS INTENTOS
+	private void actualizarIntentos() {
+		lblIntentos.setText("INTENTOS: "+intentos);
 	}
 	
 	//METODO PARA ACTUALIZAR EL PUNTAJE

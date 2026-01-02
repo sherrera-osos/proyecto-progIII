@@ -171,24 +171,6 @@ public class VentanaConJuegos extends JFrame{
 		setJMenuBar(barraMenu);
 		
 		JMenu menuConfiguracion = new JMenu("Configuración");
-		
-		JMenuItem itemCambiarApariencia = new JMenuItem("Cambiar apariencia");
-		itemCambiarApariencia.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					
-					@Override
-					public void run() {
-						new VentanaCambiarApariencia(VentanaConJuegos.this);				
-					}
-				});
-			}
-		});
-		
-		menuConfiguracion.add(itemCambiarApariencia);
-		
 		JMenuItem itemInformacion = new JMenuItem("Información del programa");
 		itemInformacion.addActionListener(new ActionListener() {
 			
@@ -306,7 +288,7 @@ public class VentanaConJuegos extends JFrame{
 								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
 								break;
 							case 3: // En este caso irian las estadísticas del SLOTMACHINE
-								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+								new estadisticasSM(VentanaConJuegos.this, 0);
 								break;
 							default:
 								System.out.println("No hay estadísticas para este juego");
