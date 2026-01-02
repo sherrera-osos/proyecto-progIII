@@ -320,6 +320,39 @@ public class GestorBD {
 		
 	}
     
+	// FUNCION PARA ASIGNAR UN LOGRO A UN USUARIO
+	public void asignarLogroAUsuario(int codigoUsuario, int codigoLogro) {
+		// Primero comprobamos si ya lo tiene para no duplicar
+		String sqlChek = "SELECT * FROM TIENE WHERE COD_USU = ? AND COD_LOG = ?";
+		String sqlInsert = "INSERT INTO TIENE (COD_USU, COD_LOG) VALUES (?, ?)";
+		
+		try (Connection con = DriverManager.getConnection(CONNECTION_STRING)){
+			//Check
+			try(PreparedStatement pstCheck = con.prepareStatement(sqlChek)){
+				pstCheck.setInt(1, codigoUsuario);
+				pstCheck.setInt(2, codigoLogro);
+				ResultSet rs = pstCheck.executeQuery();
+				if (rs.next()) return; // Si ya existe, no hacemos nada				
+			}
+			
+			// Insert
+			try (PreparedStatement pstInsert = con.prepareStatement(sqlInsert)){
+				pstInsert.setInt(1, codigoUsuario);
+				pstInsert.setInt(2, codigoLogro);
+				pstInsert.executeUpdate();
+				System.out.println("¡Logro "+ "desbloqueado para el usuario "+ codigoUsuario+ "!");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
 	// Este main se quita después
 
 	public static void main(String[] args) {

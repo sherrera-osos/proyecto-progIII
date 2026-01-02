@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import progIIIProyecto.BD.GestorBD;
 import progIIIProyecto.domain.Usuario;
 
 public class BlackJack extends JFrame{
@@ -89,9 +90,11 @@ public class BlackJack extends JFrame{
 	int anchoCarta = 110;
 	int altoCarta = 154;
 	
-	JFrame ventana = new JFrame();
+	
 	JPanel panelJuego = new JPanel() {
 		
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -166,6 +169,7 @@ public class BlackJack extends JFrame{
 						}
 						
 						puntuacionSumada = true;
+						comprobarLogros();
 					}
 					
 					g.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -209,22 +213,24 @@ public class BlackJack extends JFrame{
 	BlackJack(VentanaConJuegos ventanaConJuegos, Usuario usuario){
 		empezarJuego();
 		
-		ventana.setVisible(true);
-		ventana.setSize(anchoVentana, altoVentana);
-		ventana.setLocationRelativeTo(null);
-		ventana.setResizable(false);
-		ventana.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.usuario = usuario;
 		
-		ventana.addWindowListener(new WindowAdapter() {
+		this.setVisible(true);
+		this.setSize(anchoVentana, altoVentana);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				int respuesta = JOptionPane.showConfirmDialog(ventana, 
+				int respuesta = JOptionPane.showConfirmDialog(null, 
 																"¿Quieres salis del juego y volver al menú?",
 																"Salir",
 																JOptionPane.YES_NO_OPTION);
 				
 				if (respuesta == JOptionPane.YES_OPTION) {
-					ventana.dispose(); // Solo cierra BlackJack
+					dispose(); // Solo cierra BlackJack
 					
 					ventanaConJuegos.setVisible(true);
 				}
@@ -233,7 +239,7 @@ public class BlackJack extends JFrame{
 		
 		panelJuego.setLayout(new BorderLayout());
 		panelJuego.setBackground(new Color(138, 0, 20));
-		ventana.add(panelJuego);
+		this.add(panelJuego);
 		
 		btnHit.setFocusable(false);
 		panelBotones.add(btnHit);
@@ -242,7 +248,7 @@ public class BlackJack extends JFrame{
 		btnReset.setFocusable(false);
 		btnReset.setEnabled(false);
 		panelBotones.add(btnReset);
-		ventana.add(panelBotones, BorderLayout.SOUTH);
+		this.add(panelBotones, BorderLayout.SOUTH);
 		
 		
 		// LISTENERS de los botones
@@ -414,6 +420,33 @@ public class BlackJack extends JFrame{
 		BlackJack blackJack = new BlackJack(null, null);
 		blackJack.setVisible(true);
 	}
+	
+	private void comprobarLogros() {
+		if (usuario == null) return; // Por si acaso no hay usuario logueado
+		
+		GestorBD gestor = new GestorBD();
+		
+		// Juego 3
+		if (contadorVictorias == 3) {
+			gestor.asignarLogroAUsuario(usuario.getCodigo(), 7);
+			JOptionPane.showMessageDialog(null, "¡Logro de Bronce desbloqueado!");
+		} 
+		if (contadorVictorias == 7) {
+			gestor.asignarLogroAUsuario(usuario.getCodigo(), 8);
+			JOptionPane.showMessageDialog(null, "¡Logro de Plata desbloqueado!");
+		}
+		if (contadorVictorias == 15) {
+			gestor.asignarLogroAUsuario(usuario.getCodigo(), 9);
+			JOptionPane.showMessageDialog(null, "Logro de Oro desbloqueado!");
+		}
+		
+	}
+	
 }
+
+// Codigo adaptado del tutorial de BlackJack: https://www.youtube.com/watch?v=bMYCWccL-3U&t=10s
+
+
+
 
 
