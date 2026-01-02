@@ -34,7 +34,7 @@ public class Juego2048  extends JFrame {
 	private JPanel matriz [][];
 	private JLabel numeros[][];
     private int tablero[][] = new int[4][4];
-    private JButton btnSalir,btnInformacion, btnReiniciar;
+    private JButton btnSalir,btnInformacion, btnReiniciar,btnRecursvidad;
     private Thread cronometro;
     private final int tiempoMaximo = 30;
     private JLabel lblTiempo;
@@ -81,13 +81,17 @@ public class Juego2048  extends JFrame {
 		btnReiniciar.setForeground(Color.WHITE);
 		btnReiniciar.setBorderPainted(false);
 		pSur.add(btnReiniciar);
-
+		
+		
+		btnRecursvidad = new JButton("MOVIMIENTOS DISPONIBLES");
+		btnRecursvidad.setBackground(new Color(180, 120, 80));
+		btnRecursvidad.setForeground(Color.WHITE);
+		btnRecursvidad.setBorderPainted(false);
+		pSur.add(btnRecursvidad);
 		
 		pNorte.setBackground(new Color(255, 244, 229));
 		pSur.setBackground(new Color(219, 204, 184));
-		
 
-		
 		matriz = new JPanel[4][4];
 		numeros = new JLabel[4][4];
 		
@@ -197,6 +201,13 @@ public class Juego2048  extends JFrame {
 		actualizarPantalla();
 		actualizarPuntuacion();
 		movimientosNumeros();
+		
+		btnRecursvidad.addActionListener((e)->{
+			int movimientos = calcularMovimientosRestantes(tableroCopia	(tablero), 0);
+			JOptionPane.showMessageDialog(null, "Se estima que se puede llegar hacer " + movimientos + " movimientos mas");
+			pCentro.requestFocusInWindow();
+		});
+		
 		
 		setVisible(true);
 		pCentro.setFocusable(true); // Asi el panel recive un foco
@@ -315,7 +326,7 @@ public class Juego2048  extends JFrame {
 			}
 			
 		}
-	}
+	}	
 	
 	public void movimientosNumeros() {
 		pCentro.addKeyListener(new KeyAdapter() {
@@ -587,6 +598,67 @@ public class Juego2048  extends JFrame {
 	        }
 	    }
 		return false; // No tenemos mas posibilidades
+	}
+	
+	// pa no romper el juego hacemos un nuevo tablero "falso"
+	public int [][] tableroCopia(int[][] tablero){
+		int [][]copia = new int[4][4];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				copia[i][j]=tablero[i][j];
+			}
+		}
+		return copia;
+	}
+	
+	// miramos como es el nuemero de al lado pa saber si se puede hacer un movimiento
+	public boolean comprobarMovimientoRecursivo(int[][] tablero) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (tablero[i][j]==0) {
+					return true;
+				}	
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				int valor = tablero[i][j];
+				
+				if (valor==0) {
+					return true;
+				}
+				if (j <3&& tablero[i][j+1]==valor) {
+					return true;
+				}
+				if (j >0&& tablero[i][j-1]==valor) { //izq
+					return true;
+				}
+				if (i <3&& tablero[i+1][j]==valor) {
+					return true;
+				}
+				if (i >0&& tablero[i-1][j]==valor) { //arriba
+					return true;
+				}
+				
+			}
+		}
+		return false;
+
+			}
+	
+	public int calcularMovimientosRestantes(int [][] tableroRecursivo, int limite) {
+		// Caso base
+		if (!comprobarMovimientoRecursivo(tableroRecursivo) || limite >= 100) {
+			return limite; // pongo 100 pa que el ordenador no muera
+		}
+		
+		int max = limite;
+		// El resto de los casos
+		for (int i = 0; i < 4; i++) {
+			int [][]copia = tableroCopia(tableroRecursivo);
+			
+		}
+		return limite;
 	}
 	
 	public static void main(String[] args) {
