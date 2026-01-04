@@ -11,11 +11,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Random;
 
+
 public class BuscaMinas extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
-	private Usuario usuario;
 	
 	private static final int FILAS = 10; 
     private static final int COLUMNAS = 10; 
@@ -38,11 +37,14 @@ public class BuscaMinas extends JFrame {
     private JFrame ventanaPrevia;
     
     private boolean reiniciando = false;
-
+    
+    private boolean logroVictoriaDesbloqueado = false;
+    private boolean logroVelocistaDesbloqueado = false;
+    private boolean logroPuntuacionDesbloqueado = false;
+    
     public BuscaMinas(JFrame previo, Usuario usuario) {
     	super("BuscaMinas");
-    	this.usuario = usuario;
-        this.ventanaPrevia = previo;
+    	this.ventanaPrevia = previo;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         this.casillasSinMinasRestantes = (FILAS * COLUMNAS) - NUM_MINAS;
@@ -266,6 +268,11 @@ public class BuscaMinas extends JFrame {
         puntuacion += 10;
         lblPuntuacion.setText("Puntuación: " + puntuacion);
         
+        if (puntuacion >= 500 && !logroPuntuacionDesbloqueado) {
+            mostrarLogro("¡GRAN PUNTUADOR!", "Has conseguido 500 puntos.");
+            logroPuntuacionDesbloqueado = true;
+        }
+        
         lblPuntuacion.paintImmediately(lblPuntuacion.getVisibleRect()); 
     }
     
@@ -281,6 +288,17 @@ public class BuscaMinas extends JFrame {
                     }
                 }
             }
+            
+            if (!logroVictoriaDesbloqueado) {
+                mostrarLogro("¡PRIMERA VICTORIA!", "Has despejado el campo con éxito.");
+                logroVictoriaDesbloqueado = true;
+            }
+
+            if (segundosTranscurridos < 40 && !logroVelocistaDesbloqueado) {
+                mostrarLogro("¡VELOCISTA!", "Has ganado en menos de 40 segundos.");
+                logroVelocistaDesbloqueado = true;
+            }
+            
             gestionarFinalJuego("¡FELICIDADES! Has despejado el campo.\nPuntuación Final: " + puntuacion, "¡Victoria!");
         }
     }
@@ -291,6 +309,15 @@ public class BuscaMinas extends JFrame {
         mostrarTodasMinas();
         this.getRootPane().paintImmediately(0, 0, getWidth(), getHeight());
         gestionarFinalJuego("¡BOOM! Has perdido.\nPuntuación Final: " + puntuacion, "Fin del Juego");
+    }
+    
+    private void mostrarLogro(String titulo, String descripcion) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(this, 
+                descripcion, 
+                "LOGRO DESBLOQUEADO: " + titulo, 
+                JOptionPane.INFORMATION_MESSAGE);
+        });
     }
     
     private void gestionarFinalJuego(String mensaje, String titulo) {
