@@ -348,6 +348,50 @@ public class GestorBD {
 	}
 	
 	
+	public int obtenerRecordPersonal(int codUsuario) {
+		int max = 0;
+		String sql = "SELECT max(PUNTOS1) FROM PUNTAJE WHERE COD_USU= ? AND NOM=JUEGO= '2048'";
+		
+		try {
+			Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1,codUsuario);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				max= rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("Error al obtener récord: " + e.getMessage());
+		}
+		
+		return max;
+	}
+	
+	public int obtenerSiguienteCodigoPuntaje() {
+		
+	    String sql = "SELECT max(COD_PUN) FROM PUNTAJE";
+	    
+	    try {
+			Connection conn=DriverManager.getConnection(CONNECTION_STRING);
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				int maximo = rs.getInt(1);
+				return maximo +1;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return 1;
+	    
+	}
+	
+	
 	
 	
 	

@@ -23,6 +23,8 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Puntaje;
 import progIIIProyecto.domain.Usuario;
 
 public class Juego2048  extends JFrame {
@@ -39,6 +41,8 @@ public class Juego2048  extends JFrame {
     private final int tiempoMaximo = 30;
     private JLabel lblTiempo;
     private int ptuTotal;
+    private boolean victoria;
+    private int segundosPasados =0;
     	
 	public Juego2048(VentanaConJuegos ventanaConJuegos, Usuario usuario) {
 		this.usuario = usuario;
@@ -538,7 +542,9 @@ public class Juego2048  extends JFrame {
 				
 				generarNuevoNumero();
 				actualizarPantalla();
+				comprombarLogros();
 				if (!hayMovimientosPosible()) {
+					finalizarGuardarPartida();
 					JOptionPane.showMessageDialog(Juego2048.this, "¡Juego Terminado! No hay más movimientos posibles.\nPuntuación Final: " + ptuTotal, 
 							"GAME OVER", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -551,6 +557,7 @@ public class Juego2048  extends JFrame {
 		cronometro = new Thread(()->{
 			
 			for (int segundosPasados = 0; segundosPasados<=tiempoMaximo; segundosPasados++) {
+				this.segundosPasados = segundosPasados; // guardamos el timepo exacto
 				int minutos = segundosPasados / 60;
 	            int segundos = segundosPasados % 60;
 	            
@@ -659,6 +666,64 @@ public class Juego2048  extends JFrame {
 			
 		}
 		return limite;
+	}
+	
+	
+	public void finalizarGuardarPartida() {
+		GestorBD bd = new GestorBD();
+		
+		int idUsuarioActual;
+		if (this.usuario !=null) {
+			idUsuarioActual = this.usuario.getCodigo();
+		}else {
+			idUsuarioActual = 0;
+		}
+		
+		int nuevoPunID =bd.obtenerSiguienteCodigoPuntaje();	
+		
+		int recordAnterior = bd.obtenerRecordPersonal(idUsuarioActual);
+		
+		Puntaje partida = new Puntaje( nuevoPunID, "2048",this.ptuTotal, recordAnterior, idUsuarioActual);
+		bd.subirPuntaje(partida);
+		
+		if(ptuTotal>recordAnterior && idUsuarioActual !=0) {
+			JOptionPane.showMessageDialog(this, "¡NUEVO RÉCORD PERSONAL: " + ptuTotal + "!");
+		}
+	}
+	
+	
+	public void comprombarLogros() {
+		if (this.usuario == null) {
+	        return; 
+	    }
+		
+		// si ya tiene ficha
+		boolean tiene2048 = false;
+	    for (int i = 0; i < 4; i++) {
+	        for (int j = 0; j < 4; j++) {
+	            if (tablero[i][j] >= 2048) {
+	                tiene2048 = true;
+	                break;
+	            }
+	        }
+	    }
+	    if (tiene2048) {
+	    	GestorBD bd = new GestorBD();
+	    	int id = this.usuario.getCodigo();
+	    	bd.asignarLogroAUsuario(id, 10);
+	    	
+	    	if(segundosPasados < 420) {
+		    	bd.asignarLogroAUsuario(id, 11);
+	    	}
+	    	
+	    	if(segundosPasados < 120) {
+		    	bd.asignarLogroAUsuario(id, 12);
+	    	}
+	    	if (!victoria) {
+	            JOptionPane.showMessageDialog(this, "¡Felicidades! Has alcanzado el 2048.");
+	            victoria = true;
+	    	}
+	    }
 	}
 	
 	public static void main(String[] args) {
