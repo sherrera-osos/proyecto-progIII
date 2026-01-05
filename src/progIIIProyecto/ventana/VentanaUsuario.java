@@ -1,8 +1,9 @@
 package progIIIProyecto.ventana;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+
+import progIIIProyecto.BD.GestorBD;
 
 public class VentanaUsuario extends JFrame {
 
@@ -99,10 +100,22 @@ public class VentanaUsuario extends JFrame {
                 JOptionPane.showMessageDialog(this, "Introduce tu contraseña.");
                 return;
             }
-
+            
+            GestorBD gestorBD = new GestorBD();
+            
+            int comprobante = gestorBD.comprobarUsuario(nombre, contraseña, this);
+            
+            if (comprobante != -1) {
             JOptionPane.showMessageDialog(this, "Bienvenido " + nombre);
-            ventanaActual.setVisible(false);
-            ventanaAnterior.setVisible(true);
+            
+            SwingUtilities.invokeLater(() -> new VentanaConJuegos(gestorBD.obtenerUsuario(comprobante)));
+            
+            ventanaActual.dispose();
+            ventanaAnterior.dispose();
+            } else {
+            	return;
+            }
+            
         });
 
         btnRegistrate.addActionListener(e -> {
@@ -111,8 +124,8 @@ public class VentanaUsuario extends JFrame {
         });
 
         btnVolver.addActionListener(e -> {
-            ventanaActual.setVisible(false);
-            ventanaAnterior.setVisible(true);
+        	ventanaAnterior.setVisible(true);
+            ventanaActual.dispose();
         });
 
         setVisible(true);

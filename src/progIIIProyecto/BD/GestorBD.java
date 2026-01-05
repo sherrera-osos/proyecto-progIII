@@ -1,5 +1,6 @@
 package progIIIProyecto.BD;
 
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import progIIIProyecto.domain.Calidad;
 import progIIIProyecto.domain.Genero;
@@ -196,25 +199,56 @@ public class GestorBD {
 	
 	// FUNCION PARA AÑADIR UN PUNTAJE A LA BASE DE DATOS
 
-		public void subirPuntaje(Puntaje puntaje) {
+	public void subirPuntaje(Puntaje puntaje) {
+		if (puntaje.getCodigoDelUsuario() != 1) {
+			String sqlSelect = "SELECT PUNTOS1, PUNTOS2 FROM PUNTAJE WHERE COD_USU = ? AND NOM_JUEGO = ? ORDER BY PUNTOS1 DESC, PUNTOS2 ASC";
+			String sqlDelete = "DELETE FROM PUNTAJE WHERE COD_USU = ? AND NOM_JUEGO = ?";
 			String sqlInsert = "INSERT INTO PUNTAJE VALUES (?, ?, ?, ?, ?)";
 
 			try (Connection con = DriverManager.getConnection(CONNECTION_STRING);
-					PreparedStatement pstInsert = con.prepareStatement(sqlInsert)){
+					PreparedStatement pstSelect = con.prepareStatement(sqlSelect);
+					PreparedStatement pstDelete = con.prepareStatement(sqlDelete);
+					PreparedStatement pstInsert = con.prepareStatement(sqlInsert)
+					){
 
-				pstInsert.setInt(1, puntaje.getCodigo());
-				pstInsert.setString(2, puntaje.getNombreJuego());
-				pstInsert.setInt(3, puntaje.getPuntos1());
-				pstInsert.setInt(4, puntaje.getCodigoDelUsuario());
-				pstInsert.setInt(5, puntaje.getPuntos2());
-				
-				pstInsert.executeUpdate();
+				int puntos1Record = 0;
+				int puntos2Record = 0;
+
+				pstSelect.setInt(1, puntaje.getCodigoDelUsuario());
+				pstSelect.setString(2, puntaje.getNombreJuego());
+
+				ResultSet rsSelect = pstSelect.executeQuery();
+
+				if(rsSelect.next()) { // Solo necesitamos el primero pues la select ya los ordena según queremos
+					puntos1Record = rsSelect.getInt("PUNTOS1");
+					puntos2Record = rsSelect.getInt("PUNTOS2");
+				}
+
+				if (puntos1Record < puntaje.getPuntos1() || (puntos1Record == puntaje.getPuntos1() && puntos2Record > puntaje.getPuntos2())) {
+
+					pstDelete.setInt(1, puntaje.getCodigoDelUsuario());
+					pstDelete.setString(2, puntaje.getNombreJuego());
+
+					pstDelete.executeUpdate(); //Borramos los anteriores puntos del juego que no son record
+
+					pstInsert.setInt(1, puntaje.getCodigo());
+					pstInsert.setString(2, puntaje.getNombreJuego());
+					pstInsert.setInt(3, puntaje.getPuntos1());
+					pstInsert.setInt(4, puntaje.getCodigoDelUsuario());
+					pstInsert.setInt(5, puntaje.getPuntos2());
+
+					pstInsert.executeUpdate(); //Añadimos el nuevo record del usuario
+
+				}
 
 			} catch (SQLException e) {
 				System.err.format("* Error carga: %s.\n", e.getMessage());
 				e.printStackTrace();
 			}
+		} else {
+			System.out.println("Es el invitado, no se le guardan los puntos");
 		}
+	}
 		
 	// FUNCIÓN PARA OBTENER UN USUARIO A PARTIR DE SU CÓDIGO (UTILIZADO EN ESTADÍSTICAS)
 		
@@ -391,6 +425,41 @@ public class GestorBD {
 	    
 	}
 	
+	// FUNCIÓN QUE COMPRUEBA QUE EXISTE EL USUARIO DEL NOMBRE QUE SE LE DA Y QUE COINCIDE CON SU CONTRASEÑA,
+	// SI EL USUARIO EXISTE Y LA CONTRASEÑA COINCIDE, DEVUELVE EL COD_USU, SI NO DEVUELVE -1
+	
+	public int comprobarUsuario(String nombre, String contra, Component c) {
+		int codigoUsuarioCorrecto = -1;
+		String sqlSelect = "SELECT * FROM USUARIO WHERE NOM_USU = ?";
+		
+		try (Connection con = DriverManager.getConnection(CONNECTION_STRING);
+				PreparedStatement pstSelect = con.prepareStatement(sqlSelect)){
+			
+			pstSelect.setString(1, nombre);
+			
+			ResultSet rsUsuario = pstSelect.executeQuery();
+			
+			if (rsUsuario.next()) {
+				String contraBD = rsUsuario.getString("CONTRA");
+				
+				if (contra.equals(contraBD)) {
+					codigoUsuarioCorrecto = rsUsuario.getInt("COD_USU");
+				} else {
+					JOptionPane.showMessageDialog(c, "Contraseña incorrecta", "Error", JOptionPane.OK_OPTION);
+				}
+			} else {
+				JOptionPane.showMessageDialog(c, "No hay existe ese usuario", "Error", JOptionPane.OK_OPTION);
+			}
+
+			con.close();
+		} catch (SQLException e) {
+			System.err.format("* Error recuperando el usuario: %s.\n", e.getMessage());
+			e.printStackTrace();
+		}
+				
+		return codigoUsuarioCorrecto;
+	}
+	
 	
 	
 	
@@ -402,7 +471,9 @@ public class GestorBD {
 	public static void main(String[] args) {
 		GestorBD gestorBD = new GestorBD();
 		
-		System.out.println(gestorBD.obtenerUsuario(306818548));
+		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
+		
+//		gestorBD.subirPuntaje(new Puntaje("slotMachine", 60, 1, 913776397));
 
 //		ArrayList<Puntaje> listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego1");
 //		for (Puntaje puntaje : listaPuntajes) {

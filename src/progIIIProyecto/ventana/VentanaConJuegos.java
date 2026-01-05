@@ -43,7 +43,7 @@ public class VentanaConJuegos extends JFrame{
 	private String[] todosLosNombres = {"2048","BUSCAMINAS","BLACKJACK","SLOT MACHINE"};
 	private String[] listaIconos = {"/imagenes/2048.jpg","/imagenes/buscaminas1.jpeg","/imagenes/blackjack3 (1).jpg","/imagenes/SlotMachine.jpg"};
 	
-	public VentanaConJuegos (JFrame previo, Usuario usuario) {
+	public VentanaConJuegos (Usuario usuario) {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setTitle("JUEGOS	Usuario: " + usuario.getNombre()); //Lo pongo así para ver en cada momento cual es el usuario que esta metido, pero se puede cambiar
 		setSize(800, 600);
@@ -211,6 +211,8 @@ public class VentanaConJuegos extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				
 				SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override
@@ -339,12 +341,10 @@ public class VentanaConJuegos extends JFrame{
 				int response = JOptionPane.showConfirmDialog(VentanaConJuegos.this, "¿Deseas salir a la página principal?", "Salir", JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
 					VentanaConJuegos.this.dispose();
+					new VentanaPrincipal();
 				}
 			}
-			
-			public void windowClosed(WindowEvent e) {
-				previo.setVisible(true);
-			}
+
 		});
 	
 		setVisible(true);

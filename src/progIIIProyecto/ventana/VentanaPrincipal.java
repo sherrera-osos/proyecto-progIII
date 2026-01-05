@@ -59,15 +59,15 @@ public class VentanaPrincipal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
                // se hace invisible la ventana actual 
-               setVisible(false);
+               VentanaPrincipal.this.dispose();
                // se crea la ventana donde iran los juegos pasando la referencia a la actual
                SwingUtilities.invokeLater(new Runnable() {
 					
 					@Override
 					public void run() {
 						GestorBD gestorBD = new GestorBD();
-						Usuario usuarioInvitado = gestorBD.obtenerUsuario(306818548); //Más adelante hay que cambiarlo a 1 el código
-						new VentanaConJuegos(VentanaPrincipal.this, usuarioInvitado);
+						Usuario usuarioInvitado = gestorBD.obtenerUsuario(1);
+						new VentanaConJuegos(usuarioInvitado);
 					}
 				});
                          
@@ -110,6 +110,8 @@ public class VentanaPrincipal extends JFrame{
 //		});
 		
 		btnUsuario.addActionListener((e)->{
+			setVisible(false);
+			
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
