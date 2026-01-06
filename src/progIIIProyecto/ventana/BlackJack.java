@@ -422,7 +422,7 @@ public class BlackJack extends JFrame{
 	}
 	
 	private void comprobarLogros() {
-		if (usuario == null) return; // Por si acaso no hay usuario logueado
+		if (usuario == null || usuario.getCodigo() == 1) return; // Por si acaso no hay usuario logueado
 		
 		GestorBD gestor = new GestorBD();
 		

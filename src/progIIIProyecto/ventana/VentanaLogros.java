@@ -44,13 +44,13 @@ public class VentanaLogros extends JFrame{
 		
 		GestorBD gestorBD = new GestorBD();
 		
-		ArrayList<Logro> listaLogrosJuego1 = gestorBD.bajarLogrosDejuego("Juego1");
+		ArrayList<Logro> listaLogrosJuego1 = gestorBD.bajarLogrosDejuego("2048");
 		
-		ArrayList<Logro> listaLogrosJuego2 = gestorBD.bajarLogrosDejuego("Juego2");
+		ArrayList<Logro> listaLogrosJuego2 = gestorBD.bajarLogrosDejuego("BuscaMinas");
 		
-		ArrayList<Logro> listaLogrosJuego3 = gestorBD.bajarLogrosDejuego("Juego3");
+		ArrayList<Logro> listaLogrosJuego3 = gestorBD.bajarLogrosDejuego("BlackJack");
 		
-		ArrayList<Logro> listaLogrosJuego4 = gestorBD.bajarLogrosDejuego("Juego4");
+		ArrayList<Logro> listaLogrosJuego4 = gestorBD.bajarLogrosDejuego("SlotMachine");
 		
 		ArrayList<ArrayList<Logro>> listaListaLogros = new ArrayList<ArrayList<Logro>>();
 		listaListaLogros.add(listaLogrosJuego1);

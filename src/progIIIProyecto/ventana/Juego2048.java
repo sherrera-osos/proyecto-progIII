@@ -693,7 +693,7 @@ public class Juego2048  extends JFrame {
 	
 	
 	public void comprombarLogros() {
-		if (this.usuario == null) {
+		if (this.usuario == null || usuario.getCodigo() ==1) {
 	        return; 
 	    }
 		
@@ -710,14 +710,14 @@ public class Juego2048  extends JFrame {
 	    if (tiene2048) {
 	    	GestorBD bd = new GestorBD();
 	    	int id = this.usuario.getCodigo();
-	    	bd.asignarLogroAUsuario(id, 10);
+	    	bd.asignarLogroAUsuario(id, 1);
 	    	
 	    	if(segundosPasados < 420) {
-		    	bd.asignarLogroAUsuario(id, 11);
+		    	bd.asignarLogroAUsuario(id, 2);
 	    	}
 	    	
 	    	if(segundosPasados < 120) {
-		    	bd.asignarLogroAUsuario(id, 12);
+		    	bd.asignarLogroAUsuario(id, 3);
 	    	}
 	    	if (!victoria) {
 	            JOptionPane.showMessageDialog(this, "¡Felicidades! Has alcanzado el 2048.");

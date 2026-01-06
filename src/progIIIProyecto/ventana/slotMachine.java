@@ -364,6 +364,8 @@ private static final long serialVersionUID = 1L;
 			JOptionPane.showMessageDialog(this, 
 					"Puntaje guardado:\nPuntaje: "+score+"\nIntentos: "+intentos,
 					"Guardado", JOptionPane.INFORMATION_MESSAGE);
+			
+			comprobarLogros();
 		});
 		//----------------------
 		
@@ -621,6 +623,26 @@ private static final long serialVersionUID = 1L;
 	        case 2: return 30;
 	        default: return 0;//SI LAS IMAGENES NO COINCIDEN
 	    }
+	}
+	
+	private void comprobarLogros() {
+		if (usuario == null || usuario.getCodigo() == 1) return; // Por si acaso no hay usuario logueado o es el invitado
+		
+		GestorBD gestor = new GestorBD();
+		
+		if (intentos >= 10) {
+			gestor.asignarLogroAUsuario(usuario.getCodigo(), 10);
+			JOptionPane.showMessageDialog(null, "¡Logro de Bronce desbloqueado!");
+		} 
+		if (score >= 1000) {
+			gestor.asignarLogroAUsuario(usuario.getCodigo(), 11);
+			JOptionPane.showMessageDialog(null, "¡Logro de Plata desbloqueado!");
+		}
+		if (score >= 10000) {
+			gestor.asignarLogroAUsuario(usuario.getCodigo(), 12);
+			JOptionPane.showMessageDialog(null, "Logro de Oro desbloqueado!");
+		}
+		
 	}
 	
 	//#########################################################################################################################//
