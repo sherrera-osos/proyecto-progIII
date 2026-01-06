@@ -3,6 +3,8 @@ package progIIIProyecto.ventana;
 import javax.swing.*;
 
 import progIIIProyecto.domain.Usuario;
+import progIIIProyecto.domain.Puntaje;
+import progIIIProyecto.BD.GestorBD;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -35,6 +37,8 @@ public class BuscaMinas extends JFrame {
     private JLabel lblPuntuacion;
     
     private JFrame ventanaPrevia;
+    private Usuario usuario; 
+    private GestorBD gestorBD;
     
     private boolean reiniciando = false;
     
@@ -42,9 +46,16 @@ public class BuscaMinas extends JFrame {
     private boolean logroVelocistaDesbloqueado = false;
     private boolean logroPuntuacionDesbloqueado = false;
     
+    private static final int ID_LOGRO_PUNTUACION = 4; 
+    private static final int ID_LOGRO_VICTORIA = 5;  
+    private static final int ID_LOGRO_VELOCISTA = 6;
+    
     public BuscaMinas(JFrame previo, Usuario usuario) {
     	super("BuscaMinas");
     	this.ventanaPrevia = previo;
+    	this.usuario = usuario;         
+        this.gestorBD = new GestorBD();
+        
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         this.casillasSinMinasRestantes = (FILAS * COLUMNAS) - NUM_MINAS;
@@ -271,6 +282,8 @@ public class BuscaMinas extends JFrame {
         if (puntuacion >= 500 && !logroPuntuacionDesbloqueado) {
             mostrarLogro("¡GRAN PUNTUADOR!", "Has conseguido 500 puntos.");
             logroPuntuacionDesbloqueado = true;
+            
+            guardarLogroBD(ID_LOGRO_PUNTUACION);
         }
         
         lblPuntuacion.paintImmediately(lblPuntuacion.getVisibleRect()); 
@@ -292,12 +305,17 @@ public class BuscaMinas extends JFrame {
             if (!logroVictoriaDesbloqueado) {
                 mostrarLogro("¡PRIMERA VICTORIA!", "Has despejado el campo con éxito.");
                 logroVictoriaDesbloqueado = true;
+                
+                guardarLogroBD(ID_LOGRO_VICTORIA);
             }
 
             if (segundosTranscurridos < 40 && !logroVelocistaDesbloqueado) {
                 mostrarLogro("¡VELOCISTA!", "Has ganado en menos de 40 segundos.");
                 logroVelocistaDesbloqueado = true;
+                
+                guardarLogroBD(ID_LOGRO_VELOCISTA);
             }
+            guardarPuntajeBD();
             
             gestionarFinalJuego("¡FELICIDADES! Has despejado el campo.\nPuntuación Final: " + puntuacion, "¡Victoria!");
         }
@@ -307,6 +325,7 @@ public class BuscaMinas extends JFrame {
         juegoTerminado = true;
         timer.stop();
         mostrarTodasMinas();
+        guardarPuntajeBD();
         this.getRootPane().paintImmediately(0, 0, getWidth(), getHeight());
         gestionarFinalJuego("¡BOOM! Has perdido.\nPuntuación Final: " + puntuacion, "Fin del Juego");
     }
@@ -333,7 +352,7 @@ public class BuscaMinas extends JFrame {
             if (eleccion == JOptionPane.YES_OPTION) {
                 reiniciando = true;
                 dispose();
-                new BuscaMinas(ventanaPrevia, null);
+                new BuscaMinas(ventanaPrevia, this.usuario);
             } else {
             }
         });
@@ -363,7 +382,32 @@ public class BuscaMinas extends JFrame {
         }
     }
 
-    //4. FUNCIONES AUXILIARES
+    //4. FUNCIONES AUXILIARES Y GESTION BASE DE DATOS
+    private void guardarPuntajeBD() {
+        if (usuario != null) {
+            try {
+                int codPuntaje = gestorBD.obtenerSiguienteCodigoPuntaje();
+                
+                Puntaje p = new Puntaje(codPuntaje, "BuscaMinas", puntuacion, segundosTranscurridos, usuario.getCodigo());
+                
+                gestorBD.subirPuntaje(p);
+                System.out.println("Puntuación guardada para usuario: " + usuario.getNombre());
+                
+            } catch (Exception e) {
+                System.err.println("Error al guardar puntaje: " + e.getMessage());
+            }
+        }
+    }
+
+    private void guardarLogroBD(int codigoLogro) {
+        if (usuario != null) {
+            try {
+                gestorBD.asignarLogroAUsuario(usuario.getCodigo(), codigoLogro);
+            } catch (Exception e) {
+                System.err.println("Error al guardar logro: " + e.getMessage());
+            }
+        }
+    }
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
