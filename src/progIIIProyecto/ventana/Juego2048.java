@@ -2,6 +2,7 @@
 package progIIIProyecto.ventana;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -43,6 +44,7 @@ public class Juego2048  extends JFrame {
     private int ptuTotal;
     private boolean victoria;
     private int segundosPasados =0;
+    private VentanaConJuegos ventanaAnterior;
     	
 	public Juego2048(VentanaConJuegos ventanaConJuegos, Usuario usuario) {
 		this.usuario = usuario;
@@ -50,7 +52,7 @@ public class Juego2048  extends JFrame {
 		setBounds(500,200, 400, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		
+		this.ventanaAnterior = ventanaConJuegos;
 		
 		pNorte = new JPanel();
 		pNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 45, 10));
@@ -198,7 +200,13 @@ public class Juego2048  extends JFrame {
 		});
 		
 		btnSalir.addActionListener((e)->{
-			System.exit(0);
+			if (cronometro != null && cronometro.isAlive()) {
+		        cronometro.interrupt();
+		    }
+		    
+		    if (ventanaAnterior != null) {
+		        ventanaAnterior.setVisible(true);
+		    }
 		});
 		
 		generarNuevoNumero();
@@ -679,11 +687,11 @@ public class Juego2048  extends JFrame {
 			idUsuarioActual = 0;
 		}
 		
-		int nuevoPunID =bd.obtenerSiguienteCodigoPuntaje();	
+//		int nuevoPunID =bd.obtenerSiguienteCodigoPuntaje();	
 		
 		int recordAnterior = bd.obtenerRecordPersonal(idUsuarioActual);
 		
-		Puntaje partida = new Puntaje( nuevoPunID, "2048",this.ptuTotal, recordAnterior, idUsuarioActual);
+		Puntaje partida = new Puntaje( "2048",this.ptuTotal, recordAnterior, idUsuarioActual);
 		bd.subirPuntaje(partida);
 		
 		if(ptuTotal>recordAnterior && idUsuarioActual !=0) {
@@ -701,7 +709,7 @@ public class Juego2048  extends JFrame {
 		boolean tiene2048 = false;
 	    for (int i = 0; i < 4; i++) {
 	        for (int j = 0; j < 4; j++) {
-	            if (tablero[i][j] >= 2048) {
+	            if (tablero[i][j] >= 8) {
 	                tiene2048 = true;
 	                break;
 	            }
