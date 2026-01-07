@@ -386,9 +386,9 @@ public class BuscaMinas extends JFrame {
     private void guardarPuntajeBD() {
         if (usuario != null) {
             try {
-                int codPuntaje = gestorBD.obtenerSiguienteCodigoPuntaje();
+ //               int codPuntaje = gestorBD.obtenerSiguienteCodigoPuntaje();
                 
-                Puntaje p = new Puntaje(codPuntaje, "BuscaMinas", puntuacion, segundosTranscurridos, usuario.getCodigo());
+                Puntaje p = new Puntaje("BuscaMinas", puntuacion, segundosTranscurridos, usuario.getCodigo());
                 
                 gestorBD.subirPuntaje(p);
                 System.out.println("Puntuación guardada para usuario: " + usuario.getNombre());
