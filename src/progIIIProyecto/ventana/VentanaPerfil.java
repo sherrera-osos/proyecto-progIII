@@ -181,10 +181,11 @@ public class VentanaPerfil extends JFrame{
 						gestorBD.modificarUsuario(usuarioModificado);
 						JOptionPane.showMessageDialog(null, "Has modificado los valores de tu usuario");
 						
-						ventanaActual.dispose(); // En caso de que se modifique el usuario, se cierra la ventana actual
-						previo.dispose(); // y la ventanaConJuegos de la que vienes para volver a la página de inicio, 
-						                  // porque si no es demasiado complicado modificar el usuario con el que esta abierto 
-										  // ventanaConJuegos y ventanaPerfil
+						ventanaActual.dispose();
+						previo.dispose(); 
+						
+						
+						new VentanaPrincipal();
 
 					}
 				}

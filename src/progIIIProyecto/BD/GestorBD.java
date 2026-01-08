@@ -471,9 +471,9 @@ public class GestorBD {
 	public static void main(String[] args) {
 		GestorBD gestorBD = new GestorBD();
 		
-		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
+//		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
 		
-//		gestorBD.subirPuntaje(new Puntaje("slotMachine", 60, 1, 913776397));
+//    	gestorBD.subirPuntaje(new Puntaje("BuscaMinas", 850, 1003, 462374553));
 
 //		ArrayList<Puntaje> listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego1");
 //		for (Puntaje puntaje : listaPuntajes) {

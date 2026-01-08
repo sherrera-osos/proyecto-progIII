@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class BuscaMinas extends JFrame {
@@ -317,7 +318,16 @@ public class BuscaMinas extends JFrame {
             }
             guardarPuntajeBD();
             
-            gestionarFinalJuego("¡FELICIDADES! Has despejado el campo.\nPuntuación Final: " + puntuacion, "¡Victoria!");
+            long segundos = (long) segundosTranscurridos;
+    		long minutos = TimeUnit.SECONDS.toMinutes(segundos);
+    		segundos -= TimeUnit.MINUTES.toSeconds(minutos);
+    		
+    		String stringMinutos = minutos+"";
+    		if ((stringMinutos).length()==1) stringMinutos = "0"+ minutos;
+    		String stringSegundos = segundos+"";
+    		if ((stringSegundos).length()==1) stringSegundos = "0"+ segundos;
+            
+            gestionarFinalJuego("¡FELICIDADES! Has despejado el campo.\nPuntuación Final: " + puntuacion +"\nTiempo: " + stringMinutos + ":" + stringSegundos, "¡Victoria!");
         }
     }
     
@@ -327,7 +337,17 @@ public class BuscaMinas extends JFrame {
         mostrarTodasMinas();
         guardarPuntajeBD();
         this.getRootPane().paintImmediately(0, 0, getWidth(), getHeight());
-        gestionarFinalJuego("¡BOOM! Has perdido.\nPuntuación Final: " + puntuacion, "Fin del Juego");
+        
+        long segundos = (long) segundosTranscurridos;
+		long minutos = TimeUnit.SECONDS.toMinutes(segundos);
+		segundos -= TimeUnit.MINUTES.toSeconds(minutos);
+		
+		String stringMinutos = minutos+"";
+		if ((stringMinutos).length()==1) stringMinutos = "0"+ minutos;
+		String stringSegundos = segundos+"";
+		if ((stringSegundos).length()==1) stringSegundos = "0"+ segundos;
+        
+        gestionarFinalJuego("¡BOOM! Has perdido.\nPuntuación Final: " + puntuacion +"\nTiempo: "+ stringMinutos + ":" + stringSegundos, "Fin del Juego");
     }
     
     private void mostrarLogro(String titulo, String descripcion) {

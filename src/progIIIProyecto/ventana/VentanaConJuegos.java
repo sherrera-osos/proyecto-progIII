@@ -283,13 +283,13 @@ public class VentanaConJuegos extends JFrame{
 							case 0: // En este caso irian las estadísticas del 2048
 								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
 								break;
-							case 1: // En este caso irian las estadísticas del BUSCAMINAS
-								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+							case 1: 
+								new estadisticasBuscaMinas(VentanaConJuegos.this, usuario);
 								break;
 							case 2: // En este caso irian las estadísticas del BLACKJACK
 								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
 								break;
-							case 3: // En este caso irian las estadísticas del SLOTMACHINE
+							case 3:
 								new estadisticasSM(VentanaConJuegos.this, 0);
 								break;
 							default:
