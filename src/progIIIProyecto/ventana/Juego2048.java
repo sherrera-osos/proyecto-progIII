@@ -37,9 +37,9 @@ public class Juego2048  extends JFrame {
 	private JPanel matriz [][];
 	private JLabel numeros[][];
     private int tablero[][] = new int[4][4];
-    private JButton btnSalir,btnInformacion, btnReiniciar,btnRecursvidad;
+    private JButton btnSalir,btnInformacion, btnReiniciar;
     private Thread cronometro;
-    private final int tiempoMaximo = 30;
+    private final int tiempoMaximo = 1000000;
     private JLabel lblTiempo;
     private int ptuTotal;
     private boolean victoria;
@@ -89,11 +89,7 @@ public class Juego2048  extends JFrame {
 		pSur.add(btnReiniciar);
 		
 		
-		btnRecursvidad = new JButton("MOVIMIENTOS DISPONIBLES");
-		btnRecursvidad.setBackground(new Color(180, 120, 80));
-		btnRecursvidad.setForeground(Color.WHITE);
-		btnRecursvidad.setBorderPainted(false);
-		pSur.add(btnRecursvidad);
+		
 		
 		pNorte.setBackground(new Color(255, 244, 229));
 		pSur.setBackground(new Color(219, 204, 184));
@@ -185,12 +181,14 @@ public class Juego2048  extends JFrame {
 					} 
 				}
 			
-			if(cronometro.isAlive()) {
+			if(cronometro !=null) {
 				cronometro.interrupt();
 			}
 			lblTiempo.setText("Tiempo: 00:00");
 			
 			ptuTotal = 0;
+			segundosPasados = 0;
+			victoria = false;
 			actualizarPuntuacion();	
 			generarNuevoNumero();
 			actualizarPantalla();
@@ -213,14 +211,7 @@ public class Juego2048  extends JFrame {
 		actualizarPantalla();
 		actualizarPuntuacion();
 		movimientosNumeros();
-		
-		btnRecursvidad.addActionListener((e)->{
-			int movimientos = calcularMovimientosRestantes(tableroCopia	(tablero), 0);
-			JOptionPane.showMessageDialog(null, "Se estima que se puede llegar hacer " + movimientos + " movimientos mas");
-			pCentro.requestFocusInWindow();
-		});
-		
-		
+
 		setVisible(true);
 		pCentro.setFocusable(true); // Asi el panel recive un foco
 		pCentro.requestFocusInWindow(); // El panel necesita un foco, asi recive el keyListener
@@ -552,6 +543,9 @@ public class Juego2048  extends JFrame {
 				actualizarPantalla();
 				comprombarLogros();
 				if (!hayMovimientosPosible()) {
+					if (cronometro !=null) {
+						cronometro.interrupt();
+					}
 					finalizarGuardarPartida();
 					JOptionPane.showMessageDialog(Juego2048.this, "¡Juego Terminado! No hay más movimientos posibles.\nPuntuación Final: " + ptuTotal, 
 							"GAME OVER", JOptionPane.INFORMATION_MESSAGE);
@@ -561,7 +555,7 @@ public class Juego2048  extends JFrame {
 	}
 	
 	public void crearCronometro() {
-		
+		segundosPasados = 0; // empezar mejor siempre de 0		
 		cronometro = new Thread(()->{
 			
 			for (int segundosPasados = 0; segundosPasados<=tiempoMaximo; segundosPasados++) {
@@ -572,12 +566,6 @@ public class Juego2048  extends JFrame {
 	            String tiempoFormateado = String.format("%02d:%02d", minutos, segundos);
 				
 				SwingUtilities.invokeLater(() -> lblTiempo.setText("Tiempo: " + tiempoFormateado));
-				
-				if (segundosPasados >=tiempoMaximo) {
-					SwingUtilities.invokeLater(() ->{
-						new JOptionPane().showMessageDialog(null, "¡Fuera de tiempo!", "Tiempo agotado", JOptionPane.ERROR_MESSAGE);
-					});
-				}
 				
 				try {
 					cronometro.sleep(1000);
@@ -615,68 +603,6 @@ public class Juego2048  extends JFrame {
 		return false; // No tenemos mas posibilidades
 	}
 	
-	// pa no romper el juego hacemos un nuevo tablero "falso"
-	public int [][] tableroCopia(int[][] tablero){
-		int [][]copia = new int[4][4];
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				copia[i][j]=tablero[i][j];
-			}
-		}
-		return copia;
-	}
-	
-	// miramos como es el nuemero de al lado pa saber si se puede hacer un movimiento
-	public boolean comprobarMovimientoRecursivo(int[][] tablero) {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (tablero[i][j]==0) {
-					return true;
-				}	
-			}
-		}
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				int valor = tablero[i][j];
-				
-				if (valor==0) {
-					return true;
-				}
-				if (j <3&& tablero[i][j+1]==valor) {
-					return true;
-				}
-				if (j >0&& tablero[i][j-1]==valor) { //izq
-					return true;
-				}
-				if (i <3&& tablero[i+1][j]==valor) {
-					return true;
-				}
-				if (i >0&& tablero[i-1][j]==valor) { //arriba
-					return true;
-				}
-				
-			}
-		}
-		return false;
-
-			}
-	
-	public int calcularMovimientosRestantes(int [][] tableroRecursivo, int limite) {
-		// Caso base
-		if (!comprobarMovimientoRecursivo(tableroRecursivo) || limite >= 100) {
-			return limite; // pongo 100 pa que el ordenador no muera
-		}
-		
-		int max = limite;
-		// El resto de los casos
-		for (int i = 0; i < 4; i++) {
-			int [][]copia = tableroCopia(tableroRecursivo);
-			
-		}
-		return limite;
-	}
-	
-	
 	public void finalizarGuardarPartida() {
 		GestorBD bd = new GestorBD();
 		
@@ -705,32 +631,39 @@ public class Juego2048  extends JFrame {
 	        return; 
 	    }
 		
-		// si ya tiene ficha
 		boolean tiene2048 = false;
+		boolean tiene1024 = false;
 	    for (int i = 0; i < 4; i++) {
 	        for (int j = 0; j < 4; j++) {
-	            if (tablero[i][j] >= 8) {
+	            if (tablero[i][j] >= 1024) {
+	                tiene1024 = true;
+
+	            }
+	            if (tablero[i][j]>=2048) {
 	                tiene2048 = true;
-	                break;
+
 	            }
 	        }
 	    }
-	    if (tiene2048) {
-	    	GestorBD bd = new GestorBD();
-	    	int id = this.usuario.getCodigo();
+	    GestorBD bd = new GestorBD();
+    	int id = this.usuario.getCodigo();
+    	
+    	
+	    if (tiene1024) {
 	    	bd.asignarLogroAUsuario(id, 1);
+	    }
+	    
+	    if (tiene2048) {
+	    	bd.asignarLogroAUsuario(id, 2);
 	    	
-	    	if(segundosPasados < 420) {
-		    	bd.asignarLogroAUsuario(id, 2);
-	    	}
-	    	
-	    	if(segundosPasados < 120) {
-		    	bd.asignarLogroAUsuario(id, 3);
-	    	}
 	    	if (!victoria) {
 	            JOptionPane.showMessageDialog(this, "¡Felicidades! Has alcanzado el 2048.");
 	            victoria = true;
 	    	}
+	    }
+	    
+	    if(ptuTotal >=2048 && segundosPasados< 120) {
+	    	bd.asignarLogroAUsuario(id, 3);
 	    }
 	}
 	

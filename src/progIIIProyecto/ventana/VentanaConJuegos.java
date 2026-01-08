@@ -281,7 +281,7 @@ public class VentanaConJuegos extends JFrame{
 						public void run() {
 							switch (ii) {
 							case 0: // En este caso irian las estadísticas del 2048
-								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+								new estadisticas2048(VentanaConJuegos.this, usuario);
 								break;
 							case 1: 
 								new estadisticasBuscaMinas(VentanaConJuegos.this, usuario);
