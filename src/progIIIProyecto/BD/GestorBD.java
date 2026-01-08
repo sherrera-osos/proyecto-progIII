@@ -468,7 +468,7 @@ public class GestorBD {
 	// Este main se quita después
 
 	public static void main(String[] args) {
-		GestorBD gestorBD = new GestorBD();
+//		GestorBD gestorBD = new GestorBD();
 		
 //		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
 		

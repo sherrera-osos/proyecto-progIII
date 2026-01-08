@@ -87,7 +87,7 @@ public class estadisticasSM extends JFrame{
 
 		for (int i = 0; i < lista.size(); i++) {
 		    Puntaje p = lista.get(i);
-		    nombres[i] = "Usuario " + p.getCodigoDelUsuario();
+		    nombres[i] = gestor.obtenerUsuario(p.getCodigoDelUsuario()).getNombre();
 		    puntos[i] = p.getPuntos1();
 		    intentos[i] = p.getPuntos2();
 		}

@@ -198,6 +198,7 @@ public class VentanaConJuegos extends JFrame{
 				int response = JOptionPane.showConfirmDialog(VentanaConJuegos.this, "¿Deseas salir a la página principal?", "Salir", JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
 					VentanaConJuegos.this.dispose();
+					new VentanaPrincipal();
 				}
 			}
 		});

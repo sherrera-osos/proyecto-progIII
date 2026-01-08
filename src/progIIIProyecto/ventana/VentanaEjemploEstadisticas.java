@@ -21,12 +21,10 @@ import progIIIProyecto.domain.Usuario;
 public class VentanaEjemploEstadisticas extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
 	private JTable tablaEstadisticas;
 	private ArrayList<Puntaje> listaPuntajes;
 	
 	public VentanaEjemploEstadisticas(JFrame previo, Usuario usuario) {
-		this.usuario = usuario;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setMinimumSize(new Dimension(1200, 300));
 		setTitle("Ventana Ejemplo estadisticas");
