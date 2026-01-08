@@ -234,8 +234,8 @@ public class GestorBD {
 					pstInsert.setInt(1, puntaje.getCodigo());
 					pstInsert.setString(2, puntaje.getNombreJuego());
 					pstInsert.setInt(3, puntaje.getPuntos1());
-					pstInsert.setInt(4, puntaje.getCodigoDelUsuario());
-					pstInsert.setInt(5, puntaje.getPuntos2());
+					pstInsert.setInt(4, puntaje.getPuntos2());
+					pstInsert.setInt(5, puntaje.getCodigoDelUsuario());
 
 					pstInsert.executeUpdate(); //Añadimos el nuevo record del usuario
 
@@ -408,8 +408,7 @@ public class GestorBD {
 		
 	    String sql = "SELECT max(COD_PUN) FROM PUNTAJE";
 	    
-	    try {
-			Connection conn=DriverManager.getConnection(CONNECTION_STRING);
+	    try (Connection conn=DriverManager.getConnection(CONNECTION_STRING)){
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			

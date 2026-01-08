@@ -287,7 +287,7 @@ public class VentanaConJuegos extends JFrame{
 								new estadisticasBuscaMinas(VentanaConJuegos.this, usuario);
 								break;
 							case 2: // En este caso irian las estadísticas del BLACKJACK
-								new VentanaEjemploEstadisticas(VentanaConJuegos.this, usuario);
+								new estadisticasBlackJack(VentanaConJuegos.this, usuario);
 								break;
 							case 3:
 								new estadisticasSM(VentanaConJuegos.this, 0);

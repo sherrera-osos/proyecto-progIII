@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import progIIIProyecto.BD.GestorBD;
+import progIIIProyecto.domain.Puntaje;
 import progIIIProyecto.domain.Usuario;
 
 public class BlackJack extends JFrame {
@@ -26,6 +27,7 @@ public class BlackJack extends JFrame {
 
 	private Usuario usuario;
 
+	
 	private class Carta {
 		String valor;
 
@@ -79,6 +81,9 @@ public class BlackJack extends JFrame {
 
 	private int contadorVictorias = 0;
 	private boolean puntuacionSumada = false;
+	
+	private int marcadorMaximo = 0; // Puntaje 1 (Record)
+	private int partidasTotales = 0; // Puntaje 2 (Esfuerzo)
 
 	// Ventana
 	int anchoVentana = 600;
@@ -157,8 +162,14 @@ public class BlackJack extends JFrame {
 					}
 
 					if (!puntuacionSumada) {
+						partidasTotales++; // Sumamos una partida cada vez que termina una mano
+						
 						if (mensaje.equals("¡HAS GANADO!")) {
 							contadorVictorias++;
+							// Si el record ahora es mejor que el maximo, lo actualizamos
+							if (contadorVictorias > marcadorMaximo) {
+								marcadorMaximo = contadorVictorias;
+							}
 						} else if (mensaje.equals("Has perdido")) {
 							contadorVictorias--;
 						}
@@ -221,6 +232,30 @@ public class BlackJack extends JFrame {
 						"Salir", JOptionPane.YES_NO_OPTION);
 
 				if (respuesta == JOptionPane.YES_OPTION) {
+					if (usuario != null && usuario.getCodigo() != 1) {
+						GestorBD gestor = new GestorBD();
+						
+						int siguienteID = gestor.obtenerSiguienteCodigoPuntaje();
+						
+						try {
+		                    // Esperamos 400 milisegundos para que la conexión anterior se cierre bien
+		                    Thread.sleep(400); 
+		                } catch (InterruptedException ex) {
+		                    ex.printStackTrace();
+		                }
+						System.out.println("DEBUG - Usuario: " + usuario.getCodigo());
+						System.out.println("DEBUG - Marcador: " + marcadorMaximo);
+						System.out.println("DEBUG - Partidas: " + partidasTotales);
+						
+						Puntaje p = new Puntaje(siguienteID, "BlackJack", marcadorMaximo, partidasTotales, usuario.getCodigo());
+						
+						
+						gestor.subirPuntaje(p);
+						System.out.println("Record guardado: " + marcadorMaximo);
+					}
+					
+					
+					
 					dispose(); // Solo cierra BlackJack
 
 					ventanaConJuegos.setVisible(true);
