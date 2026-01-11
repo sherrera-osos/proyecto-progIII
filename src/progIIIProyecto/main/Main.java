@@ -11,6 +11,7 @@ public class Main {
 			public void run() {
 				new VentanaPrincipal();
 				System.out.println("Prueba recuperación");
+				System.out.println("Intento revertir");
 				
 			}
 		});
