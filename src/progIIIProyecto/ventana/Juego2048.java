@@ -617,7 +617,7 @@ public class Juego2048  extends JFrame {
 		
 		int recordAnterior = bd.obtenerRecordPersonal(idUsuarioActual);
 		
-		Puntaje partida = new Puntaje( "2048",this.ptuTotal, recordAnterior, idUsuarioActual);
+		Puntaje partida = new Puntaje( "2048",this.ptuTotal, this.segundosPasados, idUsuarioActual);
 		bd.subirPuntaje(partida);
 		
 		if(ptuTotal>recordAnterior && idUsuarioActual !=0) {
