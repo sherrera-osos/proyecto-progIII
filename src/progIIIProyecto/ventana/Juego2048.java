@@ -28,6 +28,10 @@ import progIIIProyecto.BD.GestorBD;
 import progIIIProyecto.domain.Puntaje;
 import progIIIProyecto.domain.Usuario;
 
+
+// PARA LA CREACION DEL TABLERO ME BASE EN ESTE VIDEO DE YOUTUBE:
+// https://www.youtube.com/watch?v=hT663vtxWdA
+
 public class Juego2048  extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
