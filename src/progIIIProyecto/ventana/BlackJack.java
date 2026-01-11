@@ -161,22 +161,22 @@ public class BlackJack extends JFrame {
 						mensaje = "Has perdido";
 					}
 
-					if (!puntuacionSumada) {
-						partidasTotales++; // Sumamos una partida cada vez que termina una mano
-						
-						if (mensaje.equals("¡HAS GANADO!")) {
-							contadorVictorias++;
-							// Si el record ahora es mejor que el maximo, lo actualizamos
-							if (contadorVictorias > marcadorMaximo) {
-								marcadorMaximo = contadorVictorias;
-							}
-						} else if (mensaje.equals("Has perdido")) {
-							contadorVictorias--;
-						}
-
-						puntuacionSumada = true;
-						comprobarLogros();
-					}
+//					if (!puntuacionSumada) {
+//						partidasTotales++; // Sumamos una partida cada vez que termina una mano
+//						
+//						if (mensaje.equals("¡HAS GANADO!")) {
+//							contadorVictorias++;
+//							// Si el record ahora es mejor que el maximo, lo actualizamos
+//							if (contadorVictorias > marcadorMaximo) {
+//								marcadorMaximo = contadorVictorias;
+//							}
+//						} else if (mensaje.equals("Has perdido")) {
+//							contadorVictorias--;
+//						}
+//
+//						puntuacionSumada = true;
+//						comprobarLogros();
+//					}
 
 					g.setFont(new Font("Arial", Font.PLAIN, 30));
 					g.setColor(Color.white);
@@ -249,7 +249,7 @@ public class BlackJack extends JFrame {
 						
 						Puntaje p = new Puntaje(siguienteID, "BlackJack", marcadorMaximo, partidasTotales, usuario.getCodigo());
 						
-						
+						System.out.println("VOY A GUARDAR: " + partidasTotales);
 						gestor.subirPuntaje(p);
 						System.out.println("Record guardado: " + marcadorMaximo);
 					}
@@ -292,6 +292,7 @@ public class BlackJack extends JFrame {
 					btnHit.setEnabled(false);
 					btnStay.setEnabled(false);
 					btnReset.setEnabled(true);
+					actualizarEstadisticas();
 				}
 			}
 		});
@@ -312,8 +313,8 @@ public class BlackJack extends JFrame {
 					manoDealer.add(carta);
 				}
 
+				actualizarEstadisticas();
 				btnReset.setEnabled(true);
-
 				panelJuego.repaint();
 
 			}
@@ -336,6 +337,43 @@ public class BlackJack extends JFrame {
 		panelJuego.repaint();
 	}
 
+	
+	
+	
+	private void actualizarEstadisticas() {
+	    if (puntuacionSumada) return; // Si ya se sumó en esta ronda, no hacemos nada
+
+	    String mensaje = "";
+	    int sD = reduceAsDealer();
+	    int sJ = reduceAsJugador();
+
+	    // Calculamos el resultado
+	    if (sJ > 21) {
+	        mensaje = "Has perdido";
+	    } else if (sD > 21 || sJ > sD) {
+	        mensaje = "¡HAS GANADO!";
+	    } else if (sJ == sD) {
+	        mensaje = "Empate";
+	    } else {
+	        mensaje = "Has perdido";
+	    }
+
+	    // Actualizamos contadores
+	    partidasTotales++; 
+	    if (mensaje.equals("¡HAS GANADO!")) {
+	        contadorVictorias++;
+	        if (contadorVictorias > marcadorMaximo) {
+	            marcadorMaximo = contadorVictorias;
+	        }
+	    } else if (mensaje.equals("Has perdido")) {
+	        contadorVictorias--;
+	    }
+
+	    puntuacionSumada = true; // Marcamos que ya se ha procesado esta mano
+	    comprobarLogros();
+	}
+	
+	
 	private void empezarJuego() {
 		// Puntuación
 		puntuacionSumada = false;

@@ -461,7 +461,16 @@ public class GestorBD {
 	
 	
 	
-	
+	public void vaciarPuntajesBlackJack() {
+	    String sql = "DELETE FROM PUNTAJE WHERE NOM_JUEGO = 'BlackJack'";
+	    try (Connection con = DriverManager.getConnection(CONNECTION_STRING); 
+	         Statement st = con.createStatement()) {
+	        st.executeUpdate(sql);
+	        System.out.println("¡Tabla de BlackJack reseteada!");
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 	
 	
 	
@@ -469,6 +478,7 @@ public class GestorBD {
 
 	public static void main(String[] args) {
 //		GestorBD gestorBD = new GestorBD();
+//		gestorBD.vaciarPuntajesBlackJack();
 		
 //		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
 		
