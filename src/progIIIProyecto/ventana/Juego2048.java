@@ -130,21 +130,39 @@ public class Juego2048  extends JFrame {
 			txtInformacion.setWrapStyleWord(true);//HACE QUE SEPARE POR PALABRAS Y NO POR CARACTERES
 			txtInformacion.setFocusable(false);//NO MUESTRA EL CURSOR
 			txtInformacion.setText(
-						    "¡Bienvenido a 2048!\n\n"
-						  + "Objetivo: Combina los números iguales en los cuadros del tablero para llegar al número 2048.\n\n"
-						  + "Cómo jugar:\n"
-						  + "- Usa las flechas del teclado para mover los cuadros.\n"
-						  + "- Cuando dos cuadros con el mismo número chocan, se fusionan sumando sus valores.\n"
-						  + "- Cada movimiento genera un nuevo cuadro (2 o 4) en un lugar vacío.\n"
-						  + "- El juego termina si ya no puedes hacer más movimientos.\n\n"
-						  + "Reglas especiales:\n"
-						  + "- Hay un cronómetro que mide tu tiempo.\n"
-						  + "- Cuanto menos tardes, mayor será tu puntuación o recompensa.\n\n"
-						  + "Consejos:\n"
-						  + "- Mantén los números grandes en un lado del tablero.\n"
-						  + "- Evita llenar todo el tablero demasiado rápido.\n"
-						  + "- Prioriza combinar cuadros grandes para avanzar más rápido.\n\n"
-						  + "¡Prepárate para jugar, desafiar tu ingenio y superar tu propio récord! 🚀"
+					"■ EL OBJETIVO ■\n" +
+						    "Tu misión es deslizar las baldosas sobre el tablero para combinar \n" +
+						    "números iguales. Cuando dos fichas con el mismo valor chocan, \n" +
+						    "se funden en una sola con la suma de ambas (2+2=4, 4+4=8...). \n" +
+						    "¡El desafío máximo es alcanzar la mítica baldosa 2048!\n\n" +
+						    
+						    "■ CONTROLES (Teclado) ■\n" +
+						    "Utiliza las siguientes teclas para mover todo el tablero:\n" +
+						    " • [ W ] - Deslizar hacia ARRIBA\n" +
+						    " • [ S ] - Deslizar hacia ABAJO\n" +
+						    " • [ A ] - Deslizar hacia la IZQUIERDA\n" +
+						    " • [ D ] - Deslizar hacia la DERECHA\n\n" +
+						    
+						    "■ SISTEMA DE LOGROS 🏆 ■\n" +
+						    "Demuestra tu valía desbloqueando estas insignias especiales:\n" +
+						    " 1. Aprendiz: Alcanza una baldosa de 1024.\n" +
+						    " 2. Maestro del 2048: Consigue la baldosa de 2048.\n" +
+						    " 3. Velocista: Acumula 2048 puntos totales en menos de\n" +
+						    "    120 segundos (2 minutos).\n\n" +
+						    
+						    "■ PUNTUACIÓN Y TIEMPO ■\n" +
+						    " • Tu puntuación sube con cada fusión que realices.\n" +
+						    " • El cronómetro se inicia con tu primer movimiento.\n" +
+						    " • Tu récord personal se guardará automáticamente al finalizar.\n\n" +
+						    
+						    "■ CONSEJOS ESTRATÉGICOS ■\n" +
+						    " • LA TÉCNICA DE LA ESQUINA: Intenta mantener tu número más alto\n" +
+						    "   siempre en una de las esquinas (preferiblemente una inferior).\n" +
+						    " • EFECTO CADENA: Organiza tus números de mayor a menor en \n" +
+						    "   forma de 'S' para facilitar fusiones múltiples.\n" +
+						    " • NO LLENES EL CENTRO: Mantener espacios vacíos es vital para \n" +
+						    "   tener capacidad de maniobra.\n\n" +
+						    "¡Prepárate para desafiar tu ingenio y superar tu propio récord!"
 						);
 			
 			txtInformacion.setBackground(Color.BLACK);
@@ -335,17 +353,17 @@ public class Juego2048  extends JFrame {
 		pCentro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode()==KeyEvent.VK_W 
-					|| e.getKeyCode()==KeyEvent.VK_A 
-					|| e.getKeyCode()==KeyEvent.VK_S 
-					|| e.getKeyCode()==KeyEvent.VK_D ) {
+				if (e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP
+		            || e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT
+		            || e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN
+		            || e.getKeyCode()==KeyEvent.VK_D || e.getKeyCode()==KeyEvent.VK_RIGHT) {
 					if (cronometro == null || !cronometro.isAlive()) { // Evitamos asi que se inicie mas de una vez
 						crearCronometro();
 					    cronometro.start();
 					}
 					
-					if(e.getKeyCode()==KeyEvent.VK_W){						
-						System.out.println("Arriba");
+					if(e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP){
+						// System.out.println("Arriba");
 						for(int i=1;i<tablero.length;i++) {
 							for(int j=0;j<tablero[i].length;j++) {
 								
@@ -388,8 +406,8 @@ public class Juego2048  extends JFrame {
 						}
 					}
 					
-					if (e.getKeyCode()==KeyEvent.VK_S) {
-						System.out.println("Baja");
+					if (e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN) {
+						// System.out.println("Baja");
 						for (int i = tablero.length - 2; i >= 0; i--) {  // Ahora comenzamos desde la penultima fila
 					        for (int j = 0; j < tablero[i].length; j++) {
 					        	
@@ -432,9 +450,9 @@ public class Juego2048  extends JFrame {
 					    }
 					}
 					
-					if(e.getKeyCode()==KeyEvent.VK_A){
+					if(e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT){
 						
-						System.out.println("izquierda");
+						//System.out.println("izquierda");
                         
 						for(int i=0; i<tablero.length; i++) {
                             // Recorremos las columnas (j) empezando en la segunda (j=1)
@@ -484,9 +502,7 @@ public class Juego2048  extends JFrame {
 						}
 					}
 					
-					if (e.getKeyCode()==KeyEvent.VK_D) {
-						
-						System.out.println("Derecha");
+					if (e.getKeyCode()==KeyEvent.VK_D || e.getKeyCode()==KeyEvent.VK_RIGHT) {						
                         
 						for (int i = 0; i < tablero.length; i++) {  
                             // Recorremos las columnas (j) desde la penúltima hacia la izquierda (j=2, 1, 0)
@@ -617,7 +633,7 @@ public class Juego2048  extends JFrame {
 		
 		int recordAnterior = bd.obtenerRecordPersonal(idUsuarioActual);
 		
-		Puntaje partida = new Puntaje( "2048",this.ptuTotal, recordAnterior, idUsuarioActual);
+		Puntaje partida = new Puntaje( "2048",this.ptuTotal, this.segundosPasados, idUsuarioActual);
 		bd.subirPuntaje(partida);
 		
 		if(ptuTotal>recordAnterior && idUsuarioActual !=0) {
