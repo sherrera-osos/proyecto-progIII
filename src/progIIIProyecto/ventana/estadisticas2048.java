@@ -35,7 +35,7 @@ public class estadisticas2048 extends JFrame{
 
         // 1. Obtener datos de la BD para el juego "2048"
         GestorBD gestorBD = new GestorBD();
-        listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego2048");
+        listaPuntajes = gestorBD.bajarPuntajesDeJuego("2048");
 
         if (listaPuntajes != null && !listaPuntajes.isEmpty()) {
             preferencia(listaPuntajes, listaPuntajes.size()-1);
