@@ -114,7 +114,7 @@ public class estadisticasBlackJack extends JFrame{
 		
 		public class ModeloEstadisticasBlackJack extends AbstractTableModel {
 			private static final long serialVersionUID = 1L;
-			private String[] titulos = {"Posición", "Usuario", "Puntuación", "Tiempo"};
+			private String[] titulos = {"Posición", "Usuario", "Puntuación", "Partidas Jugadas"};
 	        private ArrayList<Puntaje> puntos;
 
 	        public ModeloEstadisticasBlackJack(ArrayList<Puntaje> puntos) {
@@ -150,7 +150,7 @@ public class estadisticasBlackJack extends JFrame{
 	                    
 	                case 2: return p.getPuntos1(); 
 	                
-	                case 3: return p.getPuntos2() + " partidas";
+	                case 3: return p.getPuntos2();
 	                default: return null;
 	            }
 	        }

@@ -234,8 +234,8 @@ public class GestorBD {
 					pstInsert.setInt(1, puntaje.getCodigo());
 					pstInsert.setString(2, puntaje.getNombreJuego());
 					pstInsert.setInt(3, puntaje.getPuntos1());
-					pstInsert.setInt(4, puntaje.getPuntos2());
-					pstInsert.setInt(5, puntaje.getCodigoDelUsuario());
+					pstInsert.setInt(4, puntaje.getCodigoDelUsuario());
+					pstInsert.setInt(5, puntaje.getPuntos2());
 
 					pstInsert.executeUpdate(); //Añadimos el nuevo record del usuario
 
@@ -461,7 +461,16 @@ public class GestorBD {
 	
 	
 	
-	
+	public void vaciarPuntajesBlackJack() {
+	    String sql = "DELETE FROM PUNTAJE WHERE NOM_JUEGO = 'BlackJack'";
+	    try (Connection con = DriverManager.getConnection(CONNECTION_STRING); 
+	         Statement st = con.createStatement()) {
+	        st.executeUpdate(sql);
+	        System.out.println("¡Tabla de BlackJack reseteada!");
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 	
 	
 	
@@ -469,10 +478,11 @@ public class GestorBD {
 
 	public static void main(String[] args) {
 //		GestorBD gestorBD = new GestorBD();
+//		gestorBD.vaciarPuntajesBlackJack();
 		
 //		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
 		
-//    	gestorBD.subirPuntaje(new Puntaje("BuscaMinas", 850, 1003, 462374553));
+//   	gestorBD.subirPuntaje(new Puntaje("2048", 850, 1003, 22282512));
 
 //		ArrayList<Puntaje> listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego1");
 //		for (Puntaje puntaje : listaPuntajes) {
