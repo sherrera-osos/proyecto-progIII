@@ -14,7 +14,7 @@ import java.awt.event.WindowEvent;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-
+//Repositorio de github que he utilizado como referencia:https://github.com/MartaLL/PBuscaminas/tree/master
 public class BuscaMinas extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ public class BuscaMinas extends JFrame {
     private static final int NUM_MINAS = 15; 
 
     private JButton[][] botones;
-    private int[][] tableroLogico;
+    private int[][] tableroLogico;// -1: Mina, 0-8: Número de minas adyacentes
     private boolean juegoTerminado = false;
     
     private Timer timer;
@@ -96,7 +96,7 @@ public class BuscaMinas extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
             	if (!reiniciando) {
-            		if (timer != null) timer.stop();
+            		if (timer != null) timer.stop();// Si hay ventana previa, volvemos a ella; si no, cerramos la app completa
                     if (ventanaPrevia != null) {
                         ventanaPrevia.setVisible(true);
                         ventanaPrevia.toFront();
@@ -124,7 +124,7 @@ public class BuscaMinas extends JFrame {
         while (minasColocadas < NUM_MINAS) {
             int fila = rand.nextInt(FILAS);
             int columna = rand.nextInt(COLUMNAS);
-            
+         // Solo coloca si no hay mina previa (-1 indica mina)
             if (tableroLogico[fila][columna] != -1) {
                 tableroLogico[fila][columna] = -1;
                 minasColocadas++;
@@ -146,7 +146,7 @@ public class BuscaMinas extends JFrame {
         int contador = 0;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) continue; 
+                if (i == 0 && j == 0) continue;// Salta la propia celda 
                 
                 int nuevaFila = fila + i;
                 int nuevaColumna = columna + j;
@@ -172,11 +172,11 @@ public class BuscaMinas extends JFrame {
             for (int j = 0; j < COLUMNAS; j++) {
                 JButton boton = new JButton(" ");
                 
-                boton.setPreferredSize(new Dimension(50, 50)); 
+                boton.setPreferredSize(new Dimension(40, 40)); 
                 boton.setMargin(new Insets(0,0,0,0)); 
                 boton.setFont(new Font("Arial", Font.BOLD, 18)); 
                 boton.setFocusPainted(false); 
-                
+             // Guardamos las coordenadas en el propio componente para recuperarlas en el evento
                 boton.putClientProperty("fila", i);
                 boton.putClientProperty("columna", j);
                 
@@ -196,7 +196,7 @@ public class BuscaMinas extends JFrame {
 
                         int fila = (int) celda.getClientProperty("fila");
                         int columna = (int) celda.getClientProperty("columna");
-
+                     // Click Izquierdo: Destapar / Click Derecho: Marcar bandera
                         if (e.getButton() == MouseEvent.BUTTON1) {
                             if (!celda.getText().equals("P")) {
                                 destaparCelda(fila, columna);
@@ -237,6 +237,7 @@ public class BuscaMinas extends JFrame {
                 celda.setText(String.valueOf(valor));
                 celda.setForeground(Color.BLACK);
             } else {
+            	// Si es 0 (vacío), expansión recursiva
                 celda.setText("");
                 destapeRecursivo(fila, columna);
             }
