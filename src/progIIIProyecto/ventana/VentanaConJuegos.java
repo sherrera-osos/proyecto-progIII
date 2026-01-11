@@ -157,8 +157,51 @@ public class VentanaConJuegos extends JFrame{
 				if (evt.getClickCount() == 2) { 
 					String nombreJuego = listaSugerencias.getSelectedValue();
 					if (nombreJuego != null) {
-						JOptionPane.showMessageDialog(VentanaConJuegos.this, "Iniciando " + nombreJuego);
+						
 						campoBusqueda.setText(""); 
+						
+						if(nombreJuego == "2048") {
+							
+							setVisible(false);
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									new Juego2048(VentanaConJuegos.this, usuario);	
+								}	
+							});
+							
+						}else if(nombreJuego == "BUSCAMINAS") {
+							
+							setVisible(false);
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									new BuscaMinas(VentanaConJuegos.this, usuario); // Lanza Buscaminas
+								}
+							});
+							
+						} else if(nombreJuego == "BLACKJACK") {
+							
+							setVisible(false);
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									new BlackJack(VentanaConJuegos.this, usuario);	
+								}	
+							});
+							
+						} else {
+							
+							setVisible(false);
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									new slotMachine(VentanaConJuegos.this, usuario);	
+								}	
+							});
+							
+						}
+						
 						scrollListaSugerencias.setVisible(false); 
 					}
 				}
