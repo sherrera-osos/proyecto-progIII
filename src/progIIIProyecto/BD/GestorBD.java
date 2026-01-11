@@ -480,6 +480,8 @@ public class GestorBD {
 //		GestorBD gestorBD = new GestorBD();
 //		gestorBD.vaciarPuntajesBlackJack();
 		
+	// revertir
+		
 //		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
 		
 //   	gestorBD.subirPuntaje(new Puntaje("2048", 850, 1003, 22282512));
