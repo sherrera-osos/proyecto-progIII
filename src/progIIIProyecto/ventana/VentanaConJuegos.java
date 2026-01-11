@@ -337,10 +337,9 @@ public class VentanaConJuegos extends JFrame{
 								new estadisticasSM(VentanaConJuegos.this, 0);
 								break;
 							default:
-								System.out.println("No hay estadísticas para este juego");
+
 							}
-							// Por ahora cada una de las estadisticas llama a la ventana de estadisticas de ejemplo, hay que ir cambiando las
-							// llamadas a medida que se tengan las ventanas de estadísticas d ecada juego
+							// Por ahora cada una de las estadisticas llama a la ventana de estadisticas de ejemplo
 						}
 					});
 					

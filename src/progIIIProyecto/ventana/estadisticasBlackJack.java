@@ -181,10 +181,4 @@ public class estadisticasBlackJack extends JFrame{
 	            preferencia(lista, i);
 	        }
 		}
-		
-
-		public static void main(String[] args) {
-			new estadisticasBlackJack(null, null);
-		}
-
 }

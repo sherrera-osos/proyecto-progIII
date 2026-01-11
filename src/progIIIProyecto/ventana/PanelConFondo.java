@@ -13,14 +13,7 @@ public class PanelConFondo extends JPanel{
 	private Image imagenFondo;
 	
 	public PanelConFondo(String rutaImagen) {
-		//REALIZAMOS UN TRY-CATCH EN CASO DE QUE NO SE CARGUE BIEN LA IMAGEN
-		
-		System.out.println("Intentando cargar: " + rutaImagen);
-		//PARA SABER LA RUTA REAL QUE ESTAMOS USANDO
-		System.out.println("Ruta real utilizada: " + getClass().getResource(rutaImagen));
-		
 		try {
-			
 			imagenFondo = new ImageIcon(getClass().getResource(rutaImagen)).getImage();
 			
 		} catch (Exception e) {
@@ -28,7 +21,6 @@ public class PanelConFondo extends JPanel{
 			System.err.println("Error al cargar la imagen de fondo: "+rutaImagen);
 			e.printStackTrace();
 			imagenFondo=null;
-			
 		}
 		
 	}

@@ -200,9 +200,4 @@ public class estadisticasBuscaMinas extends JFrame{
 			ordenar(listaPuntajes, i);
 		}
 	}
-	
-	public static void main(String[] args) {
-		new estadisticasBuscaMinas(null, null);
-	}
-
 }

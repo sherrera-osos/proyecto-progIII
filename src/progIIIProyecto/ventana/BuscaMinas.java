@@ -412,7 +412,6 @@ public class BuscaMinas extends JFrame {
                 Puntaje p = new Puntaje("BuscaMinas", puntuacion, segundosTranscurridos, usuario.getCodigo());
                 
                 gestorBD.subirPuntaje(p);
-                System.out.println("Puntuación guardada para usuario: " + usuario.getNombre());
                 
             } catch (Exception e) {
                 System.err.println("Error al guardar puntaje: " + e.getMessage());
@@ -428,11 +427,5 @@ public class BuscaMinas extends JFrame {
                 System.err.println("Error al guardar logro: " + e.getMessage());
             }
         }
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new BuscaMinas(null, null); 
-        });
     }
 }

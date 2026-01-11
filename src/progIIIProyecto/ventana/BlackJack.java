@@ -144,9 +144,6 @@ public class BlackJack extends JFrame {
 				if (!btnStay.isEnabled()) {
 					sumaDealer = reduceAsDealer();
 					sumaJugador = reduceAsJugador();
-					System.out.println("STAY: ");
-					System.out.println(sumaDealer);
-					System.out.println(sumaJugador);
 
 					String mensaje = "";
 					if (sumaJugador > 21) {
@@ -160,23 +157,6 @@ public class BlackJack extends JFrame {
 					} else if (sumaDealer > sumaJugador) {
 						mensaje = "Has perdido";
 					}
-
-//					if (!puntuacionSumada) {
-//						partidasTotales++; // Sumamos una partida cada vez que termina una mano
-//						
-//						if (mensaje.equals("¡HAS GANADO!")) {
-//							contadorVictorias++;
-//							// Si el record ahora es mejor que el maximo, lo actualizamos
-//							if (contadorVictorias > marcadorMaximo) {
-//								marcadorMaximo = contadorVictorias;
-//							}
-//						} else if (mensaje.equals("Has perdido")) {
-//							contadorVictorias--;
-//						}
-//
-//						puntuacionSumada = true;
-//						comprobarLogros();
-//					}
 
 					g.setFont(new Font("Arial", Font.PLAIN, 30));
 					g.setColor(Color.white);
@@ -243,19 +223,11 @@ public class BlackJack extends JFrame {
 		                } catch (InterruptedException ex) {
 		                    ex.printStackTrace();
 		                }
-						System.out.println("DEBUG - Usuario: " + usuario.getCodigo());
-						System.out.println("DEBUG - Marcador: " + marcadorMaximo);
-						System.out.println("DEBUG - Partidas: " + partidasTotales);
 						
 						Puntaje p = new Puntaje(siguienteID, "BlackJack", marcadorMaximo, partidasTotales, usuario.getCodigo());
-						
-						System.out.println("VOY A GUARDAR: " + partidasTotales);
 						gestor.subirPuntaje(p);
-						System.out.println("Record guardado: " + marcadorMaximo);
+
 					}
-					
-					
-					
 					dispose(); // Solo cierra BlackJack
 
 					ventanaConJuegos.setVisible(true);
@@ -337,9 +309,6 @@ public class BlackJack extends JFrame {
 		panelJuego.repaint();
 	}
 
-	
-	
-	
 	private void actualizarEstadisticas() {
 	    if (puntuacionSumada) return; // Si ya se sumó en esta ronda, no hacemos nada
 
@@ -395,12 +364,6 @@ public class BlackJack extends JFrame {
 		cantAsDealer += carta.isAs() ? 1 : 0;
 		manoDealer.add(carta);
 
-		System.out.println("DEALER:");
-		System.out.println(cartaEscondida);
-		System.out.println(manoDealer);
-		System.out.println(sumaDealer);
-		System.out.println(cantAsDealer);
-
 		// Jugador
 		manoJugador = new ArrayList<BlackJack.Carta>();
 		sumaJugador = 0;
@@ -413,10 +376,6 @@ public class BlackJack extends JFrame {
 			manoJugador.add(carta);
 		}
 
-		System.out.println("JUGADOR:");
-		System.out.println(manoJugador);
-		System.out.println(sumaJugador);
-		System.out.println(cantAsJugador);
 	}
 
 	private void construirMazo() {
@@ -430,9 +389,6 @@ public class BlackJack extends JFrame {
 				mazo.add(carta);
 			}
 		}
-
-		System.out.println("Mazo creado");
-		System.out.println(mazo);
 	}
 
 	private void mezclarMazo() {
@@ -443,10 +399,6 @@ public class BlackJack extends JFrame {
 			mazo.set(i, rCarta);
 			mazo.set(r, estaCarta);
 		}
-
-		System.out.println("Despues de mezclar");
-		System.out.println(mazo);
-		System.out.println("a");
 	}
 
 	private int reduceAsJugador() {
@@ -465,11 +417,6 @@ public class BlackJack extends JFrame {
 		}
 
 		return sumaDealer;
-	}
-
-	public static void main(String[] args) throws Exception {
-		BlackJack blackJack = new BlackJack(null, null);
-		blackJack.setVisible(true);
 	}
 
 	private void comprobarLogros() {

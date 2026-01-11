@@ -374,7 +374,6 @@ public class GestorBD {
 				pstInsert.setInt(1, codigoUsuario);
 				pstInsert.setInt(2, codigoLogro);
 				pstInsert.executeUpdate();
-				System.out.println("¡Logro "+ "desbloqueado para el usuario "+ codigoUsuario+ "!");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -466,38 +465,8 @@ public class GestorBD {
 	    try (Connection con = DriverManager.getConnection(CONNECTION_STRING); 
 	         Statement st = con.createStatement()) {
 	        st.executeUpdate(sql);
-	        System.out.println("¡Tabla de BlackJack reseteada!");
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	}
-	
-	
-	
-	// Este main se quita después
-
-	public static void main(String[] args) {
-//		GestorBD gestorBD = new GestorBD();
-//		gestorBD.vaciarPuntajesBlackJack();
-		
-	// revertir
-		
-//		System.out.println(gestorBD.comprobarUsuario("Usuario2", "Usuario1",null));
-		
-//   	gestorBD.subirPuntaje(new Puntaje("2048", 850, 1003, 22282512));
-
-//		ArrayList<Puntaje> listaPuntajes = gestorBD.bajarPuntajesDeJuego("Juego1");
-//		for (Puntaje puntaje : listaPuntajes) {
-//			System.out.println(puntaje.toString());
-//		}
-
-		//    	Puntaje puntajePrueba = new Puntaje("Juego1", 320, 60, 940119315);
-		//    	System.out.println(puntajePrueba);
-		//    	gestorBD.subirPuntaje(puntajePrueba);
-
-		//    	ArrayList<Usuario> listaUsuarios = gestorBD.bajarUsuarios();
-		//		for (Usuario usuario : listaUsuarios) {
-		//			System.out.println(usuario.toString());
-		//		}
 	}
 }

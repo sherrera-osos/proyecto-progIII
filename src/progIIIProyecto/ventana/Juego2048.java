@@ -307,7 +307,6 @@ public class Juego2048  extends JFrame {
 				}
 			}
 		}
-		System.out.println("tablero lleno");
 		return true;
 	}
 	
@@ -367,7 +366,6 @@ public class Juego2048  extends JFrame {
 					}
 					
 					if(e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP){
-						// System.out.println("Arriba");
 						for(int i=1;i<tablero.length;i++) {
 							for(int j=0;j<tablero[i].length;j++) {
 								
@@ -411,7 +409,6 @@ public class Juego2048  extends JFrame {
 					}
 					
 					if (e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN) {
-						// System.out.println("Baja");
 						for (int i = tablero.length - 2; i >= 0; i--) {  // Ahora comenzamos desde la penultima fila
 					        for (int j = 0; j < tablero[i].length; j++) {
 					        	
@@ -455,8 +452,6 @@ public class Juego2048  extends JFrame {
 					}
 					
 					if(e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT){
-						
-						//System.out.println("izquierda");
                         
 						for(int i=0; i<tablero.length; i++) {
                             // Recorremos las columnas (j) empezando en la segunda (j=1)
@@ -590,7 +585,6 @@ public class Juego2048  extends JFrame {
 				try {
 					cronometro.sleep(1000);
 				} catch (InterruptedException e1) {
-					e1.printStackTrace();
 					return; // Al reiniciar, nos salimos
 				}
 			}
@@ -686,9 +680,4 @@ public class Juego2048  extends JFrame {
 	    	bd.asignarLogroAUsuario(id, 3);
 	    }
 	}
-	
-	public static void main(String[] args) {
-		Juego2048 j2028 = new Juego2048(null, null);
-	}
-
 }

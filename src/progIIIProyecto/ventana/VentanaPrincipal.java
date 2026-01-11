@@ -26,7 +26,7 @@ public class VentanaPrincipal extends JFrame{
 	public VentanaPrincipal() {
 		ventanaActual = this;
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setTitle("Proyecto ProgIII"); //NOMBRE PROVISIONAL 
+		setTitle("Proyecto ProgIII");
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 
@@ -34,7 +34,6 @@ public class VentanaPrincipal extends JFrame{
 		PanelConFondo panelConFondo = new PanelConFondo(imagePath);
 		
 		panelConFondo.setLayout(new BorderLayout());
-		//panelConFondo.setBackground(Color.CYAN); PARA VERIFICAR QUE SI SE ESTABA MOSTRANDO EL PANEL
 		
 		setContentPane(panelConFondo);
 		
@@ -70,8 +69,7 @@ public class VentanaPrincipal extends JFrame{
 						new VentanaConJuegos(usuarioInvitado);
 					}
 				});
-                         
-               // en el futuro se podria añadir una funcionalidad para meter el usuario después de darle a este boton
+
 			}
 		});
 		
@@ -99,15 +97,6 @@ public class VentanaPrincipal extends JFrame{
 		btnUsuario.setBackground(new Color(0, 153, 255));
 		pAbajo.add(btnUsuario);
 		pAbajo.add(botonEntrar);
-		
-//		btnUsuario.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
 		
 		btnUsuario.addActionListener((e)->{
 			setVisible(false);

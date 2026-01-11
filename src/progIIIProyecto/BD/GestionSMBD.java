@@ -55,8 +55,6 @@ public class GestionSMBD {
 			stmt.execute(sqlThemes);
 			stmt.execute(sqlThemeColors);
 			
-			System.out.println("TABLAS CREADAS CORRECTAMENTE");
-			
 		} catch (SQLException e) {
 			System.err.println("ERROR CREANDO LAS TABLAS");
 			e.printStackTrace();
@@ -77,8 +75,7 @@ public class GestionSMBD {
 			pstmt.setString(2, desc);
 			
 			pstmt.executeUpdate();
-			
-			System.out.println("Theme insertado");
+
 		} catch (SQLException e) {
 			System.err.println("Error insertando theme");
 	        e.printStackTrace();
@@ -127,7 +124,6 @@ public class GestionSMBD {
 			pstmt.setInt(5, b);
 
 			pstmt.executeUpdate();
-			System.out.println("Color añadido: "+element);
 			
 		} catch (SQLException e) {
 			System.err.println("Error insertando color");
@@ -230,108 +226,11 @@ public class GestionSMBD {
 	         Statement stmt = conn.createStatement()) {
 
 	        stmt.execute(sql);
-	        System.out.println("Tabla eliminada correctamente: " + nombreTabla);
 
 	    } catch (SQLException e) {
 	        System.err.println("Error al borrar la tabla " + nombreTabla);
 	        e.printStackTrace();
 	    }
-	}
-	
-	
-	public static void main(String[] args) {
-		
-		GestionSMBD gestionSMBD = new GestionSMBD(); //CARGAR DRIVER
-			
-		gestionSMBD.crearTablas();
-		
-		
-		Map<String, Color> ghost = new HashMap<>();
-
-		ghost.put("background_main", new Color(28, 0, 51));
-		ghost.put("menu_bar", new Color(28, 0, 51));
-		ghost.put("panel_principal", new Color(28, 0, 51));
-		ghost.put("panel_botones", new Color(28, 0, 51));
-		ghost.put("button_primary", new Color(28, 0, 51));
-		ghost.put("button_secondary", new Color(28, 0, 51));
-		ghost.put("button_text", Color.WHITE);
-		
-		Map<String, Color> fuego = new HashMap<>();
-		
-		fuego.put("background_main", new Color(200, 55, 40));
-		fuego.put("menu_bar", new Color(200, 55, 40));
-		fuego.put("panel_principal", new Color(200, 55, 40));
-		fuego.put("panel_botones", new Color(78, 26, 4));
-		fuego.put("button_primary", new Color(255, 106, 0));
-		fuego.put("button_secondary", new Color(255, 143, 51));
-		fuego.put("button_text", Color.WHITE);
-		
-		Map<String, Color> agua = new HashMap<>();
-		
-		agua.put("background_main", new Color(0, 168, 232));
-		agua.put("menu_bar", new Color(0, 168, 232));
-		agua.put("panel_principal", new Color(0, 168, 232));
-		agua.put("panel_botones", new Color(1, 58, 99));
-		agua.put("button_primary", new Color(0, 168, 232));
-		agua.put("button_secondary", new Color(0, 168, 232));
-		agua.put("button_text", Color.WHITE);
-		
-		Map<String, Color> electrico = new HashMap<>();
-		
-		electrico.put("background_main", new Color(255, 234, 0));
-		electrico.put("menu_bar", new Color(45, 45, 45));
-		electrico.put("panel_principal", new Color(255, 234, 0));
-		electrico.put("panel_botones", new Color(45, 45, 45));
-		electrico.put("button_primary", new Color(255, 234, 0));
-		electrico.put("button_secondary", new Color(255, 234, 0));
-		electrico.put("button_text", Color.BLACK);
-		
-		Map<String, Color> normal = new HashMap<>();
-		
-		normal.put("background_main", Color.LIGHT_GRAY);
-		normal.put("menu_bar", Color.LIGHT_GRAY);
-		normal.put("panel_principal", Color.LIGHT_GRAY);
-		normal.put("panel_botones", Color.LIGHT_GRAY);
-		normal.put("button_primary", Color.LIGHT_GRAY);
-		normal.put("button_secondary", Color.LIGHT_GRAY);
-		normal.put("button_text", Color.BLACK);
-		
-		Map<String, Color> bicho = new HashMap<>();
-		
-		bicho.put("background_main", new Color(121, 163, 29));
-		bicho.put("menu_bar", new Color(121, 163, 29));
-		bicho.put("panel_principal", new Color(121, 163, 29));
-		bicho.put("panel_botones", new Color(121, 163, 29));
-		bicho.put("button_primary", new Color(121, 163, 29));
-		bicho.put("button_secondary", new Color(121, 163, 29));
-		bicho.put("button_text", Color.BLACK);
-		
-		Map<String, Color> planta = new HashMap<>();
-		
-		planta.put("background_main", new Color(31, 156, 84));
-		planta.put("menu_bar", new Color(31, 156, 84));
-		planta.put("panel_principal", new Color(31, 156, 84));
-		planta.put("panel_botones", new Color(31, 156, 84));
-		planta.put("button_primary", new Color(31, 156, 84));
-		planta.put("button_secondary", new Color(31, 156, 84));
-		planta.put("button_text", Color.WHITE);
-		
-		
-		gestionSMBD.insertarThemeCompleto("ghost", "Tema fantasma por defecto", ghost);
-		gestionSMBD.insertarThemeCompleto("fuego", "Tema fuego", fuego);
-		gestionSMBD.insertarThemeCompleto("agua", "Tema agua", agua);
-		gestionSMBD.insertarThemeCompleto("electrico", "Tema electrico", electrico);
-		gestionSMBD.insertarThemeCompleto("normal", "Tema normal", normal);
-		gestionSMBD.insertarThemeCompleto("bicho", "Tema bicho", bicho);
-		gestionSMBD.insertarThemeCompleto("planta", "Tema planta", planta);
-
-		gestionSMBD.mostrarTodosLosThemes();
-		
-		
-//		gestionSMBD.borrarTabla("theme_colors");
-//		gestionSMBD.borrarTabla("themes");
-//		gestionSMBD.borrarTabla("colors");
-//		
 	}
 
 }

@@ -186,10 +186,4 @@ public class estadisticas2048 extends JFrame{
             preferencia(lista, i);
         }
 	}
-	
-
-	public static void main(String[] args) {
-		new estadisticas2048(null, null);
-	}
-
 }

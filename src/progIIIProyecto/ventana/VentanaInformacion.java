@@ -10,9 +10,6 @@ import javax.swing.JTextArea;
 
 public class VentanaInformacion extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public VentanaInformacion(JFrame previo) {

@@ -186,9 +186,4 @@ public class VentanaEjemploEstadisticas extends JFrame{
 			ordenar(listaPuntajes, i);
 		}
 	}
-	
-	public static void main(String[] args) {
-		new VentanaEjemploEstadisticas(null, null);
-	}
-
 }

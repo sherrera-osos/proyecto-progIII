@@ -151,7 +151,6 @@ public class VentanaPerfil extends JFrame{
 					int tlf = 0;
 					if(!txtTelefono.getText().isEmpty()) {
 						try {
-							System.out.println(txtTelefono.getText());
 							tlf = Integer.parseInt(txtTelefono.getText());
 						} catch (Exception e1) {
 							esTlfInt = false;
